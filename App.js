@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import { AppLoading } from 'expo';
 import ReduxThunk from 'redux-thunk';
 
+import HomeScreen from './src/screens/HomeScreen';
 import DashboardNavigator from './src/navigation/DashboardNavigator';
 import authReducer from './src/redux/reducers/auth';
 import userReducer from './src/redux/reducers/user';

@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         opacity: 0.32,
     },
     titleHeader: {
-        marginTop: '15%',
+        marginTop: '10%',
         fontFamily: 'Quicksand',
         fontSize: 20,
         fontWeight: '700',

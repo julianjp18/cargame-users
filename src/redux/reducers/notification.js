@@ -6,7 +6,7 @@ export default (state = initialState, action) => {
     switch (action.type) {
         case SHOW_NOTIFICATIONS:
             return {
-                userNotifications: action.userNotifications,
+                driverNotifications: action.driverNotifications,
             };
         default:
             return state;

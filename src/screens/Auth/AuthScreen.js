@@ -7,8 +7,9 @@ import {
   Alert,
   Image,
   ScrollView,
+  KeyboardAvoidingView,
 } from "react-native";
-import { KeyboardAwareView } from "react-native-keyboard-aware-view";
+
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../../components/UI/Button";
 import TextInput from "../../components/UI/Input";
@@ -46,11 +47,31 @@ const formReducer = (state, action) => {
 const AuthScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(
+    useSelector((state) => state.auth.isSignUp)
+  );
   const dispatch = useDispatch();
-
-  const signUpChecked = useSelector((state) => state.auth.isSignUp);
   const userToken = useSelector((state) => state.auth.token);
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert("¡Error en la comunicaci{on intentalo de nuevo!", error, [
+        { text: "Está bien" },
+      ]);
+    }
+  }, [error]);
+
+  const inputChangeHandler = useCallback(
+    (inputIdentifier, inputValue, inputValidity) => {
+      dispatchFormState({
+        type: FORM_INPUT_UPDATE,
+        value: inputValue,
+        isValid: inputValidity,
+        input: inputIdentifier,
+      });
+    },
+    [dispatchFormState]
+  );
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
@@ -63,16 +84,6 @@ const AuthScreen = (props) => {
     },
     formIsValid: false,
   });
-
-  useEffect(() => {
-    signUpChecked ? setIsSignUp(signUpChecked) : "";
-  }, []);
-
-  useEffect(() => {
-    if (error) {
-      Alert.alert("¡Un problema ha ocurrido!", error, [{ text: "Está bien" }]);
-    }
-  }, [error]);
 
   const authHandler = async () => {
     let action;
@@ -93,38 +104,30 @@ const AuthScreen = (props) => {
       nextPage = "ServicesList";
     }
     if (!passwordError) {
+      const controller = new AbortController();
       setError(null);
       setIsLoading(true);
       try {
         dispatch(action);
+        controller.abort();
         props.navigation.navigate(nextPage);
       } catch (err) {
         setError(err.message);
       }
       setIsLoading(false);
+      controller.abort();
     } else {
-      setError("¡Error! Las contraseñas no coinciden. Intentalo nuevamente.");
+      setError("¡Precación! Las contraseñas no coinciden. Intentalo nuevamente.");
     }
   };
 
-  const inputChangeHandler = useCallback(
-    (inputIdentifier, inputValue, inputValidity) => {
-      dispatchFormState({
-        type: FORM_INPUT_UPDATE,
-        value: inputValue,
-        isValid: inputValidity,
-        input: inputIdentifier,
-      });
-    },
-    [dispatchFormState]
-  );
   return !userToken ? (
     <View style={styles.mainContainer}>
       <View style={styles.logoContainer}>
         <Image style={styles.logo} source={shortBrandAzulUrl} />
       </View>
       <View style={styles.authContainer}>
-        <KeyboardAwareView animated={true}>
+        <KeyboardAvoidingView style={styles.container} behavior="padding">
           <ScrollView>
             <View style={styles.scrollViewContainer}>
               <TextInput
@@ -137,7 +140,7 @@ const AuthScreen = (props) => {
                   <AntDesign name="user" size={20} color={primaryColor} />
                 }
                 autoCapitalize="none"
-                errorText="¡error! Por favor ingresa un correo válido."
+                errorText="¡Precación! Por favor ingresa un correo válido."
                 onInputChange={inputChangeHandler}
                 initialValue=""
               />
@@ -152,7 +155,7 @@ const AuthScreen = (props) => {
                 }
                 minLength={6}
                 autoCapitalize="none"
-                errorText={`¡error! Por favor ingresa una contraseña válida. Debe contener mínimo 6 carácteres
+                errorText={`¡Precación! Por favor ingresa una contraseña válida. Debe contener mínimo 6 carácteres
                                         `}
                 onInputChange={inputChangeHandler}
                 initialValue=""
@@ -169,7 +172,7 @@ const AuthScreen = (props) => {
                   }
                   minLength={6}
                   autoCapitalize="none"
-                  errorText={`¡error! Por favor ingresa una contraseña válida. Debe contener mínimo 6 carácteres
+                  errorText={`¡Precación! Por favor ingresa una contraseña válida. Debe contener mínimo 6 carácteres
                                             `}
                   onInputChange={inputChangeHandler}
                   initialValue=""
@@ -188,13 +191,13 @@ const AuthScreen = (props) => {
                 <ActivityIndicator size="large" color={primaryColor} />
               ) : (
                 <Button
-                  title={isSignUp ? "Sesion" : "Ingresar"}
+                  title={isSignUp ? "Quiero ser socio" : "INGRESAR"}
                   onPress={authHandler}
                 />
               )}
             </View>
           </ScrollView>
-        </KeyboardAwareView>
+        </KeyboardAvoidingView>
       </View>
       <Image style={styles.mainCarga} source={shortMainCargaUrl} />
     </View>
@@ -217,13 +220,13 @@ const styles = StyleSheet.create({
     height: 150,
   },
   authContainer: {
-    paddingLeft: "8%",
+    paddingLeft: "5%",
     paddingRight: "5%",
     width: "100%",
-    height: "45%",
+    height: "58%",
   },
   forgotPasswordContainer: {
-    marginTop: "1%",
+    marginTop: "6%",
   },
   forgotPassword: {
     textAlign: "center",
@@ -247,7 +250,8 @@ const styles = StyleSheet.create({
     marginTop: "2%",
   },
   mainCarga: {
-    marginLeft: "-15%",
+    marginTop:"-20%",
+    marginLeft: "-20%",
   },
 });
 

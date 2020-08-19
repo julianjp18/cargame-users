@@ -3,9 +3,9 @@ import {
   SHOW_USER,
   CHANGE_PHONE_NUMBER,
   CHANGE_PROFILE_PICTURE,
-} from "../actions/users";
+} from '../actions/users';
 
-const initialState = null;
+const initialState = null
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -31,6 +31,6 @@ export default (state = initialState, action) => {
         profilePicture: action.profilePicture,
       };
     default:
-      return state;
+        return state;
   }
 };

@@ -1,12 +1,9 @@
-// Definicion de constantes requeridas para la implementacion del menu de navegacion
-// Autor: Julian Perez
-// Modificado: Flavio Cortes
-// Fecha Julio 15/2020
-
 export const shortBackgroundImageUrl = require('../../assets/background.png');
 export const shortBackgroundBluImageUrl = require('../../assets/extras/backazul.png');
 export const shortBrandAzulUrl = require('../../assets/logos/logo-cargame-azul.png');
 export const shortBrandPuntosUrl = require('../../assets/extras/fondopuntos.png');
+export const shortBrandSoatUrl = require('../../assets/extras/soat.png');
+export const shortBrandFondoAzulUrl = require('../../assets/extras/moto.png');
 export const shortMainCargaUrl = require('../../assets/extras/main-carga.png');
 export const whiteSquareUrl = require('../../assets/white_square.png');
 export const planeSquareUrl = require('../../assets/extras/plane_and_square.png');
@@ -20,32 +17,31 @@ export const secondaryFont = 'Quicksand';
 
 export const CATEGORIES_LIST = [
     {
-        id: 'package',
-        name: 'Envía una carga o un paquete',
-        avatar_url: truckSquareUrl,
-        subtitle: '',
-        routeName: 'SendPackages',
+      id: 'paquete',
+      name: 'Envíar una carga o paquete',
+      avatar_url: truckSquareUrl,
+      subtitle: '',
+      routeName: 'HomeDriver', 
     },
     {
-        id: 'document',
-        name: 'Envíar un documento',
-        avatar_url: carSquareUrl,
-        subtitle: '',
-        routeName: 'SendDocument',
+      id: 'documento',
+      name: 'Envíar un documento',
+      avatar_url: carSquareUrl,
+      subtitle: '',
+      routeName: 'HomeDriver',
     },
     {
-        id: 'craneService',
+        id: 'grua',
         name: 'Solicita un servicio de grúa',
         avatar_url: motocycleSquareUrl,
         subtitle: '',
-        routeName: 'ServiceCrane',
+        routeName: 'HomeDriver',
     },
     {
-        id: 'transport',
-        name: 'Solicita servicio puerta a puerta',
+        id: 'puerta',
+        name: 'Solicitar transporte puerta a puerta',
         avatar_url: craneSquareUrl,
         subtitle: '',
-        routeName: 'ServiceTransport',
+        routeName: 'HomeDriver',
     },
-   
 ];

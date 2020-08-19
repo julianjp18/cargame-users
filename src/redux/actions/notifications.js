@@ -1,13 +1,14 @@
 import { firestoreDB } from '../../constants/Firebase';
 export const SHOW_NOTIFICATIONS = 'SHOW_NOTIFICATIONS';
 
-export const showUserNotifications = (userId) => dispatch => {
+export const showDriverNotifications = (userId) => dispatch => {
 
     const data = firestoreDB
-    .collection("Notifications_Users");
+    .collection("OffersNotificationCenter")
+    .get();
 
     dispatch({
         type: SHOW_NOTIFICATIONS,
-        userNotifications: data
+        driverNotifications: data
     });
 };

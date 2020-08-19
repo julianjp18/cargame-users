@@ -7,8 +7,9 @@ import {
 } from "../constants/Colors";
 import { whiteSquareUrl, shortBrandAzulUrl } from "../constants/Utils";
 import { View, Image, Text, StyleSheet } from "react-native";
+import { AntDesign } from '@expo/vector-icons';
 
-const WelcomeHeader = (props) => (
+const WelcomeServicio = (props) => (
   <LinearGradient
     start={{ x: -1, y: 0 }}
     end={{ x: 1, y: 0 }}
@@ -19,11 +20,15 @@ const WelcomeHeader = (props) => (
   >
     <View style={styles.row}>
       <View style={styles.col1}>
-        <Text style={styles.titleHeader}>Hola! Que deseas hacer hoy?</Text>
+        <Text style={styles.titleHeader}>Describe el servicio lo más detallado posible</Text>
       </View>
       <View style={styles.col2}>
-        <Image style={styles.whiteSquare} source={whiteSquareUrl} />
-        <Image style={styles.logo} source={shortBrandAzulUrl} />
+        <AntDesign
+          name="back"
+          size={30}
+          color="white"
+          onPress={() => props.navigation.navigate('ServicesList')}
+        />
       </View>
     </View>
   </LinearGradient>
@@ -32,40 +37,29 @@ const WelcomeHeader = (props) => (
 const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
-    height: "24%",
     width: "100%",
   },
   col1: {
-    width: '50%',
+    marginTop: (Platform.OS) === 'ios' ? '5%' : '2%',
+    width: '80%',
     height: '100%',
   },
+  col2: {
+    width: '20%',
+    height: '100%',
+    paddingTop: '15%',
+  },
   titleHeader: {
-    marginTop: (Platform.OS) === 'ios' ? '18%' : '35%',
+    marginTop: (Platform.OS) === 'ios' ? '10%' : '10%',
+    marginBottom: '5%',
     textAlignVertical: "bottom",
-    paddingLeft: "10%",
+    paddingLeft:"10%",
     fontFamily: "Ruda",
-    fontSize: (Platform.OS) === 'ios' ? 22 : 24,
+    fontSize: 24,
     fontWeight: "700",
     color: textAccentColor,
-    lineHeight: (Platform.OS) === 'ios' ? 20 : 24
-  },
-  col2: {
-    width: "50%",
-    height: "100%",
-  },
-  logo: {
-    position: 'absolute',
-    right: '5%',
-    top: '170%',
-    width: '50%',
-    height: '300%',
-  },
-  whiteSquare: {
-    position: "absolute",
-    top: "180%",
-    right: 0,
-    bottom: 0,
+    lineHeight: 24,
   },
 });
 
-export default WelcomeHeader;
+export default WelcomeServicio;

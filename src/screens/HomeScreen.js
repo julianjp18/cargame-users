@@ -28,7 +28,7 @@ const HomeScreen = (props) => {
       </View>
       <View style={styles.infoContainer}>
         <Text style={styles.title}>
-          Ahora puedes envíar y recibir paquetes fácilmente.
+          Ahora puedes enviar y recibir paquetes fácilmente.
         </Text>
         <Text style={styles.subtitle}>
           Ayudamos a nuestros clientes a conectar directamente con
@@ -127,9 +127,9 @@ const styles = StyleSheet.create({
     paddingTop: "1%",
   },
   mainCarga: {
-    margin: 7,
+    margin: 0,
     paddingHorizontal: 0,
-    marginLeft: "-13%",
+    marginLeft: "-15%",
   },
 });
 

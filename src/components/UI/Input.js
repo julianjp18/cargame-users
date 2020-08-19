@@ -1,5 +1,5 @@
 import React, { useReducer, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TextInput as TextArea } from 'react-native';
 import { Input } from 'react-native-elements';
 import { primaryColor } from '../../constants/Colors';
 
@@ -67,22 +67,41 @@ const TextInput = props => {
   return (
     <View style={styles.formControl}>
       <Text style={styles.label}>{props.label}</Text>
-      <Input
-        {...props}
-        labelStyle={styles.disabledLabel}
-        containerStyle={styles.mainContainer}
-        inputContainerStyle={styles.inputContainer}
-        inputStyle={styles.input}
-        value={inputState.value}
-        onChangeText={textChangeHandler}
-        onBlur={lostFocusHandler}
-        errorMessage={!inputState.isValid && inputState.touched ? props.errorText : ''}
-      />
+      {props.isTextArea ? (
+        <TextArea
+          {...props}
+          style={styles.textAreaInput}
+          multiline
+          editable
+          maxLength={80}
+        />
+      ) : (
+        <Input
+          {...props}
+          labelStyle={styles.disabledLabel}
+          containerStyle={styles.mainContainer}
+          inputContainerStyle={styles.inputContainer}
+          inputStyle={styles.input}
+          value={inputState.value}
+          onChangeText={textChangeHandler}
+          onBlur={lostFocusHandler}
+          errorMessage={!inputState.isValid && inputState.touched ? props.errorText : ''}
+        />
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  textAreaInput: {
+    marginHorizontal: '2%',
+    paddingTop: "5%",
+    paddingBottom: "15%",
+    paddingHorizontal: "2%",
+    borderWidth: 2,
+    borderColor: primaryColor,
+    borderRadius: 15,
+  },
   mainContainer: {
     paddingBottom: 0,
     marginBottom: 0
@@ -111,6 +130,7 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: 'Quicksand',
     fontWeight: 'bold',
+    paddingLeft: 15,
     marginVertical: 1,
     color: primaryColor
   },
