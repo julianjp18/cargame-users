@@ -8,6 +8,7 @@ import UserDashboardScreen from '../screens/Users/UserDashboardScreen';
 import AuthScreen from '../screens/Auth/AuthScreen';
 import HomeScreen from '../screens/HomeScreen';
 import UserHomeScreen from '../screens/Users/UserHomeScreen';
+import UserDestinationScreen from '../screens/Users/UserDestinationScreen';
 import RegisterScreen from '../screens/Auth/RegisterScreen';
 import { accentColor, primaryColor } from '../constants/Colors';
 import UserProfileScreen from '../screens/Users/UserProfileScreen';
@@ -114,6 +115,13 @@ const MainNavigator = createSwitchNavigator({
         screen: UserDashboardScreen,
         navigationOptions: {
             headerTitle: 'Home - driver',
+            headerShown: false
+        }
+    },
+    DestinationList: {
+        screen: UserDestinationScreen,
+        navigationOptions: {
+            headerTitle: 'Destination',
             headerShown: false
         }
     },

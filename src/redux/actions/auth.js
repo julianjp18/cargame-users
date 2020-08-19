@@ -5,7 +5,7 @@ export const LOGOUT = 'LOGOUT';
 export const IS_SIGNUP = 'IS_SIGNUP';
 export const CHANGE_TYPE_SERVICE_SELECTED = 'CHANGE_TYPE_SERVICE_SELECTED';
 
-const API_KEY = 'AIzaSyCaZhTD1MZEREJaZrkL3nJQRO4jbpeNV2U';
+const API_KEY = 'AIzaSyAx3ZM1YpfTSiV4dennpgT3hiZcJ2959s8';
 const API_URL = 'https://identitytoolkit.googleapis.com/v1/accounts:';
 
 export const authenticate = (userId, token, email) => {
@@ -37,7 +37,7 @@ export const signup = (email, password) => {
 
         if (!response.ok) {
             const errorId = resData.error.message;
-            let message = '¡UPS! Algo ocurrió.';
+            let message = '¡Precaución! Algo ocurrió.';
             if (errorId === 'EMAIL_EXISTS') {
                 message = 'El correo electrónico se encuentra en uso. Intentalo nuevamente.'
             } else if (errorId === 'OPERATION_NOT_ALLOWED') {
@@ -76,7 +76,7 @@ export const signin = (email, password) => {
             
             const errorResData = await response.json();
             const errorId = errorResData.error.message;
-            let message = '¡UPS! Algo ocurrió. Por favor intentalo nuevamente.';
+            let message = '¡Precaución! Algo ocurrió. Por favor intentalo nuevamente.';
             if (errorId === 'EMAIL_NOT_FOUND') {
                 message = 'No reconocemos este correo electrónico. Intentalo nuevamente.'
             } else if (errorId === 'INVALID_PASSWORD') {

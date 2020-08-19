@@ -31,7 +31,7 @@ export const createUser = ({ userId, name, numberId, phone, referidNumber }) => 
 };
 
 export const showUser = (userId) => async dispatch => {
-    console.log('clave de usuario activo: '+ userId);
+    console.log('Clave de usuario activo: '+ userId);
     const data = await firestoreDB
         .collection('Users')
         .doc(userId)

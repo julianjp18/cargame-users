@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View, Image, YellowBox } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { ListItem } from "react-native-elements";
@@ -21,9 +21,12 @@ const selectedCategoryItem = (navigation, dispatch, categoryId, routeName) => {
 const UserDashboardScreen = (props) => {
   YellowBox.ignoreWarnings(["Setting a timer"]);
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
   const userId = useSelector((state) => state.auth.userId);
-  !user && dispatch(userActions.showUser(userId));
+  useEffect(() => {
+    dispatch(userActions.showUser(userId));
+  }, []);
+  const user = useSelector((state) => state.user);
+  console.log(user);
   !user && dispatch(driverNotificationsAction.showDriverNotifications(userId));
 
   return (
@@ -85,16 +88,12 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   brandImageContainer: {
-    marginTop: '5%',
-    alignItems: 'flex-end',
-    justifyContent: 'center'
+    marginTop: "5%",
+    alignItems: "flex-end",
+    justifyContent: "center",
   },
-  brandImage: {
-    
-  },
-  categoriesContainer: {
-
-  },
+  brandImage: {},
+  categoriesContainer: {},
   titleListItem: {
     paddingTop: "2%",
     color: "white",
@@ -126,6 +125,5 @@ const styles = StyleSheet.create({
     height: "100%",
   },
 });
-
 
 export default UserDashboardScreen;

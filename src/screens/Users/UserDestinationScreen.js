@@ -1,32 +1,21 @@
-// Fecha  : Ultima revision Agosto 19 - 2020
-// Autor  : Flavio Cortes
-// Detalle: formulario de ofertas
-
 import React, { useState, useEffect, useReducer, useCallback } from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  Picker,
-  Platform,
-  ActivityIndicator,
-  Alert,
-} from "react-native";
+import { StyleSheet, View, Text, ActivityIndicator, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import WelcomeServicio from "../../components/WelcomeServicio";
-import TextInput from "../../components/UI/Input";
-import { primaryColor, accentColor } from "../../constants/Colors";
-import { ScrollView } from "react-native-gesture-handler";
-import moment from "moment";
-import Button from "../../components/UI/Button";
 import { LinearGradient } from "expo-linear-gradient";
-import * as offerActions from "../../redux/actions/offers";
+import {
+  primaryColor,
+  accentColor,
+  textAccentColor,
+} from "../../constants/Colors";
+import WelcomeServicio from "../../components/WelcomeServicio";
+import { ScrollView } from "react-native-gesture-handler";
+import TextInput from "../../components/UI/Input";
+import Button from "../../components/UI/Button";
 
-const FORM_OFFER_INPUT_UPDATE = "FORM_INPUT_UPDATE";
+const FORM_DESTINATION = "FORM_DESTINATION";
 
 const formReducer = (state, action) => {
-  if (action.type == FORM_OFFER_INPUT_UPDATE) {
+  if (action.type == FORM_DESTINATION) {
     const updatedValues = {
       ...state.inputValues,
       [action.input]: action.value,
@@ -61,56 +50,34 @@ const linearGradientTitle = (title) => (
   </View>
 );
 
-const UserHomeScreen = (props) => {
+const UserDestinationScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.auth.userId);
-  const [selectedValue, setSelectedValue] = useState("manana");
-  moment.locale();
-  const [date, setDate] = useState(new Date());
-  const [mode] = useState("date");
-  const [show, setShow] = useState(false);
+
+  const [] = useState(false);
   const typeServiceId = useSelector((state) => state.auth.typeServiceSelected);
-
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
-    setDate(currentDate);
-  };
-
-  const showDatePickerModal = () => {
-    setShow(!show);
-  };
 
   // carga los datos iniciales del formulario
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
-      description: "",
-      timezone: "",
-      collectedDate: "",
-      contact: "",
-      movil: "",
+      currentAddress: "",
+      destinationAddress: "",
     },
     inputValidation: {
-      description: false,
-      timezone: false,
-      collectedDate: false,
-      contact: false,
-      movil: false,
+      currentAddress: false,
+      destinationAddress: false,
     },
     formIsValid: false,
   });
 
   // mapea los campos del formulario de oferta
-  const registerHandler = async () => {
+  const destinationHandler = async () => {
     const action = offerActions.createOffer({
       userId,
-      description: formState.inputValues.description,
-      timezone: formState.inputValues.timezone,
-      collectedDate: formState.inputValues.collectedDate,
-      contact: formState.inputValues.contact,
-      movil: formState.inputValues.movil,
+      currentAddress: formState.inputValues.currentAddress,
+      destinationAddres: formState.inputValues.destinationAddress,
     });
 
     setError(null);
@@ -146,9 +113,8 @@ const UserHomeScreen = (props) => {
     }
   }, [error]);
 
-  // definicion del formulario de ofertas.
   return typeServiceId ? (
-    <View style={styles.homeContainer}>
+    <View style={styles.supportContainer}>
       <WelcomeServicio navigation={props.navigation} />
       <ScrollView>
         <View style={styles.inputTextAreaContainer}>
@@ -163,39 +129,7 @@ const UserHomeScreen = (props) => {
           />
         </View>
 
-        <View style={styles.arriveDateContainer}>
-          <Text style={styles.label}>Franja horaria</Text>
-          <Picker
-            id="timezone"
-            selectedValue={selectedValue}
-            style={styles.TravelContent}
-            onValueChange={(itemValue) =>
-              setSelectedValue(itemValue)
-            }
-          >
-            <Picker.Item label="Mañana" value="manana" />
-            <Picker.Item label="Tarde" value="tarde" />
-          </Picker>
-
-          {linearGradientTitle("Fecha de recogida")}
-          <Text onPress={showDatePickerModal} style={styles.dateTravelContent}>
-            {moment(date).format("ll")}
-          </Text>
-          {show && (
-            <DateTimePicker
-              id="collectedDate"
-              testID="pickup-date"
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              display="default"
-              onChange={onChange}
-            />
-          )}
-        </View>
-
         <View style={styles.userInfoContainer}>
-          {linearGradientTitle("Datos de quien recibe")}
           <View style={styles.userInfoContent}>
             <TextInput
               id="contact"
@@ -225,7 +159,7 @@ const UserHomeScreen = (props) => {
             {isLoading ? (
               <ActivityIndicator size="large" color={primaryColor} />
             ) : (
-              <Button title="Siguiente" onPress={registerHandler} />
+              <Button title="Siguiente" onPress={destinationHandler} />
             )}
           </View>
         </View>
@@ -238,67 +172,77 @@ const UserHomeScreen = (props) => {
   );
 };
 
-// CSS de la formula.
 const styles = StyleSheet.create({
-  homeContainer: {
+  supportContainer: {
     height: "100%",
   },
-  inputTextAreaContainer: {
-    marginTop: "4%",
-    marginHorizontal: "2%",
+  logoContainer: {
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    padding: 0,
   },
-  linearGradientTitleContainer: {
-    marginTop: "3%",
-    borderTopWidth: 8,
-    borderBottomWidth: 8,
-    borderColor: "#87ceeb",
+  logo: {
+    height: 150,
+    width: 150,
+    marginTop: "10%",
   },
-  linearGradientTitle: {
-    paddingVertical: "3%",
-    paddingLeft: "5%",
-    fontWeight: "bold",
+  mainCargaContainer: {
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    height: "40%",
+    paddingTop: "15%",
+    marginBottom: "8%",
+  },
+  mainCarga: {
+    marginRight: "2%",
+    width: "100%",
+    position: "absolute",
+    top: "-20%",
+  },
+  linearGradientContainer: {
+    paddingTop: "5%",
+    paddingBottom: "5%",
+  },
+  row1: {
+    flexDirection: "row",
+    width: "100%",
+    position: "relative",
+    top: 0,
+  },
+  row1Col1: {
+    width: "30%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  supportIcon: {
+    opacity: 0.32,
+  },
+  row1Col2: {
+    width: "70%",
+    paddingRight: "2%",
+  },
+  infoText: {
+    paddingTop: "5%",
+    color: textAccentColor,
+    fontFamily: "Ruda",
     fontSize: 20,
-    color: "#ffffff",
+    lineHeight: 30,
   },
-  userInfoContent: {
-    marginTop: "1%",
-    marginHorizontal: "2%",
+  extraInfo: {
+    paddingHorizontal: "5%",
+    paddingTop: "1%",
   },
-  dateTravelContent: {
-    textAlign: "center",
-    paddingVertical: "4%",
-    paddingHorizontal: "30%",
-    marginTop: "3%",
-    marginBottom: "15%",
-    marginHorizontal: "2%",
-    borderColor: primaryColor,
-    borderWidth: 1,
-    borderRadius: 15,
-  },
-  TravelContent: {
+  extraInfoText: {
+    color: textAccentColor,
     fontFamily: "Quicksand",
-    fontWeight: "bold",
-    color: primaryColor,
-    marginTop: Platform.OS === "ios" ? "-18%" : "-1%",
-    marginBottom: Platform.OS === "ios" ? "-18%" : "2%",
-    paddingLeft: "4%",
+    fontSize: 18,
+    lineHeight: 19,
   },
-  label: {
-    fontFamily: "Quicksand",
-    fontWeight: "bold",
-    paddingLeft: 17,
-    marginVertical: 3,
-    color: primaryColor,
-  },
-  franja: {
-    marginTop: "3%",
-    marginLeft: "2%",
-  },
-  userBoton: {
-    paddingVertical: "4%",
-    paddingHorizontal: "15%",
-    marginTop: "-8%",
+  row2: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: "5%",
   },
 });
 
-export default UserHomeScreen;
+export default UserDestinationScreen;

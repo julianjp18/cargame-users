@@ -47,7 +47,7 @@ const formReducer = (state, action) => {
 const AuthScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-  const [isSignUp, setIsSignUp] = useState(
+  const [isSignUp] = useState(
     useSelector((state) => state.auth.isSignUp)
   );
   const dispatch = useDispatch();
@@ -55,7 +55,7 @@ const AuthScreen = (props) => {
 
   useEffect(() => {
     if (error) {
-      Alert.alert("¡Error en la comunicaci{on intentalo de nuevo!", error, [
+      Alert.alert("¡Error en la comunicación intentalo de nuevo!", error, [
         { text: "Está bien" },
       ]);
     }
@@ -117,7 +117,9 @@ const AuthScreen = (props) => {
       setIsLoading(false);
       controller.abort();
     } else {
-      setError("¡Precación! Las contraseñas no coinciden. Intentalo nuevamente.");
+      setError(
+        "¡Precación! Las contraseñas no coinciden. Intentalo nuevamente."
+      );
     }
   };
 
@@ -250,7 +252,7 @@ const styles = StyleSheet.create({
     marginTop: "2%",
   },
   mainCarga: {
-    marginTop:"-20%",
+    marginTop: "-20%",
     marginLeft: "-20%",
   },
 });
