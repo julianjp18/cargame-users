@@ -3,6 +3,8 @@ export const shortBackgroundBluImageUrl = require('../../assets/extras/backazul.
 export const shortBrandAzulUrl = require('../../assets/logos/logo-cargame-azul.png');
 export const shortBrandPuntosUrl = require('../../assets/extras/fondopuntos.png');
 export const shortBrandSoatUrl = require('../../assets/extras/soat.png');
+
+export const shortMapaUrl = require('../../assets/extras/mapa.png');
 export const shortBrandFondoAzulUrl = require('../../assets/extras/moto.png');
 export const shortMainCargaUrl = require('../../assets/extras/main-carga.png');
 export const whiteSquareUrl = require('../../assets/white_square.png');

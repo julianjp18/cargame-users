@@ -103,7 +103,7 @@ const UserHomeScreen = (props) => {
   });
 
   // mapea los campos del formulario de oferta
-  const registerHandler = async () => {
+  const homedestinationHandler = async () => {
     const action = offerActions.createOffer({
       userId,
       description: formState.inputValues.description,
@@ -225,7 +225,7 @@ const UserHomeScreen = (props) => {
             {isLoading ? (
               <ActivityIndicator size="large" color={primaryColor} />
             ) : (
-              <Button title="Siguiente" onPress={registerHandler} />
+              <Button title="Siguiente" onPress={homedestinationHandler} />
             )}
           </View>
         </View>

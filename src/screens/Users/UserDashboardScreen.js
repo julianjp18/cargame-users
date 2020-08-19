@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View, Image, YellowBox } from "react-native";
+import { StyleSheet, View, Image,  ImageBackground, YellowBox } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { ListItem } from "react-native-elements";
-import { textSecondaryColor, darkGrey } from "../../constants/Colors";
+import { darkGrey } from "../../constants/Colors";
 import { CATEGORIES_LIST } from "../../constants/Utils";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import TouchableScale from "react-native-touchable-scale";

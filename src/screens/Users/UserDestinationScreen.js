@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useReducer, useCallback } from "react";
-import { StyleSheet, View, Text, ActivityIndicator, Alert } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  ActivityIndicator,
+  Alert,
+  Image,
+  ImageBackground,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import {
@@ -7,10 +15,13 @@ import {
   accentColor,
   textAccentColor,
 } from "../../constants/Colors";
+import { shortMapaUrl } from "./../../constants/Utils";
 import WelcomeServicio from "../../components/WelcomeServicio";
 import { ScrollView } from "react-native-gesture-handler";
 import TextInput from "../../components/UI/Input";
 import Button from "../../components/UI/Button";
+import * as offerActions from "../../redux/actions/offers";
+
 
 const FORM_DESTINATION = "FORM_DESTINATION";
 
@@ -50,6 +61,7 @@ const linearGradientTitle = (title) => (
   </View>
 );
 
+
 const UserDestinationScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
@@ -85,7 +97,7 @@ const UserDestinationScreen = (props) => {
 
     try {
       dispatch(action);
-      props.navigation.navigate("DestinationList");
+      props.navigation.navigate("WaitingList");
     } catch (err) {
       setError(err.message);
       setIsLoading(false);
@@ -116,54 +128,47 @@ const UserDestinationScreen = (props) => {
   return typeServiceId ? (
     <View style={styles.supportContainer}>
       <WelcomeServicio navigation={props.navigation} />
-      <ScrollView>
-        <View style={styles.inputTextAreaContainer}>
-          <TextInput
-            id="description"
-            label="Descripción (*)"
-            keyboardType="default"
-            maxLength={2000}
-            placeholder="Aquí debes escribir que vas a enviar incluyendo tamaños y medidas. Ej: 1 cama doble, 1 nevera grande, 2 cajas medianas de 30 x 40cm.."
-            onInputChange={inputChangeHandler}
-            isTextArea
-          />
-        </View>
 
-        <View style={styles.userInfoContainer}>
-          <View style={styles.userInfoContent}>
-            <TextInput
-              id="contact"
-              label="Nombres y apellidos de quien recibe(*)"
-              keyboardType="default"
-              minLength={5}
-              required
-              autoCapitalize="words"
-              errorText="¡Precaución! Por favor ingresa tu nombre y apellido correctamente."
-              onInputChange={inputChangeHandler}
-              initialValue=""
-            />
-            <TextInput
-              id="movil"
-              label="Celular (*)"
-              keyboardType="numeric"
-              required
-              minLength={10}
-              maxLength={10}
-              autoCapitalize="none"
-              errorText="¡Precaución! Por favor ingresa un número de celular correcto."
-              onInputChange={inputChangeHandler}
-              initialValue=""
-            />
-          </View>
-          <View style={styles.userBoton}>
-            {isLoading ? (
-              <ActivityIndicator size="large" color={primaryColor} />
-            ) : (
-              <Button title="Siguiente" onPress={destinationHandler} />
-            )}
-          </View>
+      <ImageBackground source={shortMapaUrl} style={styles.image}>
+        <View style={styles.categoriesContainer}>
+          <ScrollView>
+            <View style={styles.userInfoContainer}>
+              <View style={styles.userInfoContent}>
+                <TextInput
+                  id="currentAddress"
+                  label="Dirección de recogida(*)"
+                  keyboardType="default"
+                  minLength={5}
+                  required
+                  autoCapitalize="words"
+                  errorText="¡Precaución! Por favor ingresa una dirección válida."
+                  onInputChange={inputChangeHandler}
+                  initialValue=""
+                />
+                <TextInput
+                  id="destinationAddress"
+                  label="Dirección de destino (*)"
+                  keyboardType="numeric"
+                  required
+                  minLength={10}
+                  maxLength={10}
+                  autoCapitalize="none"
+                  errorText="¡Precaución! Por favor ingresa una dirección válida."
+                  onInputChange={inputChangeHandler}
+                  initialValue=""
+                />
+              </View>
+              <View style={styles.userBoton}>
+                {isLoading ? (
+                  <ActivityIndicator size="large" color={primaryColor} />
+                ) : (
+                  <Button title="Solicitar oferta" onPress={destinationHandler} />
+                )}
+              </View>
+            </View>
+          </ScrollView>
         </View>
-      </ScrollView>
+      </ImageBackground>
     </View>
   ) : (
     <View>
@@ -174,7 +179,23 @@ const UserDestinationScreen = (props) => {
 
 const styles = StyleSheet.create({
   supportContainer: {
+    backgroundColor: "transparent",
     height: "100%",
+  },
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
+  brandImageContainer: {
+    marginTop: "5%",
+    alignItems: "flex-end",
+    justifyContent: "center",
+  },
+  categoriesContainer: {
+    marginTop: "100%",
+    backgroundColor: "rgba(255,255,255,0.7)",
+    height: "40%",
   },
   logoContainer: {
     justifyContent: "flex-end",
@@ -242,6 +263,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingTop: "5%",
+  },
+  userBoton: {
+    paddingVertical: "4%",
+    paddingHorizontal: "15%",
+    marginTop: "-6%",
   },
 });
 

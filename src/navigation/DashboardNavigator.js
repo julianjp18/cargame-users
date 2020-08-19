@@ -9,6 +9,7 @@ import AuthScreen from '../screens/Auth/AuthScreen';
 import HomeScreen from '../screens/HomeScreen';
 import UserHomeScreen from '../screens/Users/UserHomeScreen';
 import UserDestinationScreen from '../screens/Users/UserDestinationScreen';
+import UserWaitingScreen from '../screens/Users/UserWaitingScreen';
 import RegisterScreen from '../screens/Auth/RegisterScreen';
 import { accentColor, primaryColor } from '../constants/Colors';
 import UserProfileScreen from '../screens/Users/UserProfileScreen';
@@ -122,6 +123,13 @@ const MainNavigator = createSwitchNavigator({
         screen: UserDestinationScreen,
         navigationOptions: {
             headerTitle: 'Destination',
+            headerShown: false
+        }
+    },
+    WaitingList: {
+        screen: UserWaitingScreen,
+        navigationOptions: {
+            headerTitle: 'Esperando..',
             headerShown: false
         }
     },
