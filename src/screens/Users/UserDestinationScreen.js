@@ -5,7 +5,6 @@ import {
   Text,
   ActivityIndicator,
   Alert,
-  Image,
   ImageBackground,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +15,7 @@ import {
   textAccentColor,
 } from "../../constants/Colors";
 import { shortMapaUrl } from "./../../constants/Utils";
-import WelcomeServicio from "../../components/WelcomeServicio";
+import WelcomeDestino from "../../components/WelcomeDestino";
 import { ScrollView } from "react-native-gesture-handler";
 import TextInput from "../../components/UI/Input";
 import Button from "../../components/UI/Button";
@@ -127,7 +126,7 @@ const UserDestinationScreen = (props) => {
 
   return typeServiceId ? (
     <View style={styles.supportContainer}>
-      <WelcomeServicio navigation={props.navigation} />
+      <WelcomeDestino navigation={props.navigation} />
 
       <ImageBackground source={shortMapaUrl} style={styles.image}>
         <View style={styles.categoriesContainer}>

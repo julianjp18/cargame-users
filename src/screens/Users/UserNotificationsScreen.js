@@ -7,25 +7,10 @@ import { textSecondaryColor, darkGrey, primaryColor, } from "../../constants/Col
 import DriverHeader from "../../components/DriverHeader";
 import { AntDesign } from "@expo/vector-icons";
 
-const UserNotificationsScreen = () => {
-  const [userNotifications, setUserNotifications] = useState("");
-
-  useEffect(() => {
-    const notifications = useSelector(
-      (state) => state.notifications.userNotifications
-    );
-    console.log("este lo puse , ", notifications);
-    const newUserNotifications = [];
-    notifications.then((allNotifications) => {
-      allNotifications.forEach((notification) => {
-        newUserNotifications.push(notification.data());
-      });
-    });
-    setUserNotifications(newUserNotifications);
-  }, []);
-
-  const user = useSelector((state) => state.user);
-
+const UserNotificationsScreen = (props) => {
+  const notifications = useSelector(state => state.notifications.driverNotifications);
+  const user = useSelector(state => state.user);
+  
   return (
     <View style={styles.servicesContainer}>
       <DriverHeader
@@ -36,6 +21,22 @@ const UserNotificationsScreen = () => {
       {user && (
         <ScrollView>
           <View style={styles.infoContainer}>
+            {notifications.map((notification) => (
+              <ListItem
+                key={notification.message}
+                containerStyle={styles.listContainer}
+                bottomDivider
+                leftIcon={
+                  <AntDesign
+                    name="bells"
+                    size={24}
+                    color={primaryColor}
+                  />
+                }
+                title={notification.message}
+                titleStyle={styles.titleListItem}
+              />
+            ))}
             <TouchableOpacity>
               <ListItem
                 containerStyle={styles.listContainer}
@@ -49,7 +50,12 @@ const UserNotificationsScreen = () => {
                   />
                 }
                 rightIcon={
-                  <AntDesign name="right" size={24} color={primaryColor} />
+                  <AntDesign
+                    name="right"
+                    size={24}
+                    color={primaryColor}
+                    onPress={() => props.navigation.navigate('Services')}
+                  />
                 }
                 title="¡Bienvenido a Cargame! Consulta con Soporte si tienes alguna duda."
                 titleStyle={styles.titleListItem}
@@ -64,54 +70,54 @@ const UserNotificationsScreen = () => {
 
 const styles = StyleSheet.create({
   servicesContainer: {
-    backgroundColor: "transparent",
-    height: "100%",
+    backgroundColor: 'transparent',
+    height: '100%'
   },
   nameListContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: "5%",
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: '5%'
   },
   nameListText: {
     color: darkGrey,
-    fontFamily: "Quicksand",
+    fontFamily: 'Quicksand',
     fontSize: 20,
-    fontWeight: "700",
-    lineHeight: 24,
+    fontWeight: '700',
+    lineHeight: 24
   },
   title: {
-    paddingTop: "2%",
+    paddingTop: '2%',
     color: textSecondaryColor,
-    fontFamily: "Quicksand",
+    fontFamily: 'Quicksand',
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
     lineHeight: 22,
-    textAlign: "center",
+    textAlign: 'center',
   },
   titleListItem: {
     color: darkGrey,
-    fontFamily: "Quicksand",
+    fontFamily: 'Quicksand',
+    fontWeight: '600',
     fontSize: 14,
-    lineHeight: 24,
+    lineHeight: 24
   },
   subtitleListItem: {
     color: darkGrey,
-    fontFamily: "Quicksand",
+    fontFamily: 'Quicksand',
     fontSize: 14,
-    lineHeight: 24,
+    lineHeight: 24
   },
   listContainer: {
-    backgroundColor: "transparent",
-    paddingBottom: "4%",
+    backgroundColor: 'transparent',
+    paddingBottom: '4%'
   },
   mainCargaContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   mainCarga: {
-    width: "30%",
+    width: '30%',
     height: 100,
   },
 });
-
 export default UserNotificationsScreen;
