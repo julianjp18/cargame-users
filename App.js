@@ -41,6 +41,7 @@ export default function App() {
         startAsync={fecthFonts}
         onFinish={() => setFontLoaded(true)}
       />
+      
     );
   }
 

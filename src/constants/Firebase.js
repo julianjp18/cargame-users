@@ -12,7 +12,7 @@ try{
         appId: "1:950532818245:web:f583866904f66124bd2a2c",
         measurementId: "G-WJ6SMF3D9Y"
       };
-    
+      
     firebase.initializeApp(firebaseConfig);
     firebase.analytics();
 } catch (err){
