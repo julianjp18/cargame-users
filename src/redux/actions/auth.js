@@ -5,7 +5,7 @@ export const LOGOUT = 'LOGOUT';
 export const IS_SIGNUP = 'IS_SIGNUP';
 export const CHANGE_TYPE_SERVICE_SELECTED = 'CHANGE_TYPE_SERVICE_SELECTED';
 
-const API_KEY = 'AIzaSyAx3ZM1YpfTSiV4dennpgT3hiZcJ2959s8';
+const API_KEY = 'AIzaSyCaZhTD1MZEREJaZrkL3nJQRO4jbpeNV2U';
 const API_URL = 'https://identitytoolkit.googleapis.com/v1/accounts:';
 
 export const authenticate = (userId, token, email) => {
@@ -112,5 +112,6 @@ export const setTypeService = (service) => {
 };
 
 export const logout = () => {
+    AsyncStorage.clear();
     return { type: LOGOUT };
 };

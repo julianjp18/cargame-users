@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View, Image,  ImageBackground, YellowBox } from "react-native";
+import { StyleSheet, View, Image, YellowBox } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { ListItem } from "react-native-elements";
+import { ListItem, Avatar } from "react-native-elements";
 import { darkGrey } from "../../constants/Colors";
 import { CATEGORIES_LIST } from "../../constants/Utils";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
@@ -10,8 +10,10 @@ import WelcomeHeader from "../../components/WelcomeHeader";
 import { shortBrandSoatUrl } from "./../../constants/Utils";
 import { setTypeService } from "../../redux/actions/auth";
 
+import * as authActions from '../../redux/actions/auth';
 import * as userActions from "../../redux/actions/users";
 import * as driverNotificationsAction from "../../redux/actions/notifications";
+import { getUserInfo } from '../utils/helpers';
 
 const selectedCategoryItem = (navigation, dispatch, categoryId, routeName) => {
   dispatch(setTypeService(categoryId));
@@ -21,13 +23,20 @@ const selectedCategoryItem = (navigation, dispatch, categoryId, routeName) => {
 const UserDashboardScreen = (props) => {
   YellowBox.ignoreWarnings(["Setting a timer"]);
   const dispatch = useDispatch();
-  const userId = useSelector((state) => state.auth.userId);
-  useEffect(() => {
-    dispatch(userActions.showUser(userId));
-  }, []);
-  const user = useSelector((state) => state.user);
-  console.log(user);
-  !user && dispatch(driverNotificationsAction.showDriverNotifications(userId));
+  const userAuth = useSelector(state => state.auth);
+
+  getUserInfo().then((data) => {
+    const userInfo = JSON.parse(data);
+
+    if (!userInfo.token) {
+      dispatch(authActions.logout());
+      props.navigation.navigate('Index');
+    }
+  });
+  
+  useEffect(() =>{
+    dispatch(userActions.showUser(userAuth.userId));
+  },[userAuth]);
 
   return (
     <View style={styles.servicesContainer}>
@@ -58,13 +67,9 @@ const UserDashboardScreen = (props) => {
                 activeScale={0.95}
                 linearGradientProps={{
                   colors: ["#18A7C8", "#1D509E"],
-                  start: [1, 0],
-                  end: [0.2, 0],
+                  start: { x: 1, y: 0 },
+                  end: { x: 0.2, y: 0 },
                 }}
-                containerStyle={styles.listContainer}
-                title={category.name}
-                titleStyle={styles.titleListItem}
-                subtitle={category.subtitle}
                 rightAvatar={{
                   source: category.avatar_url,
                   containerStyle: styles.avatarContainer,
@@ -72,8 +77,17 @@ const UserDashboardScreen = (props) => {
                   rounded: true,
                 }}
                 bottomDivider
-                chevron
-              />
+              >
+                <ListItem.Content style={styles.listContainer}>
+                  <ListItem.Title style={styles.titleListItem}>
+                    {category.name}
+                  </ListItem.Title>
+                  <ListItem.Subtitle >
+                    {category.subtitle}
+                  </ListItem.Subtitle>
+                </ListItem.Content>
+                <ListItem.Chevron color="white" />
+              </ListItem>
             </TouchableOpacity>
           ))}
         </ScrollView>
@@ -92,8 +106,12 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     justifyContent: "center",
   },
-  brandImage: {},
-  categoriesContainer: {},
+  brandImage: {
+    
+  },
+  categoriesContainer: {
+    paddingTop: "6%",
+  },
   titleListItem: {
     paddingTop: "2%",
     color: "white",
@@ -110,15 +128,16 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   listContainer: {
-    flexDirection: "row",
-    marginTop: "3%",
-    paddingTop: "3%",
+    flexDirection: "column",
+    marginTop: "1%",
+    paddingTop: "7%",
     backgroundColor: "transparent",
-    paddingBottom: "-2%",
+    paddingBottom: "-5%",
+    height: "9%",
   },
   avatarContainer: {
     height: "100%",
-    width: "30%",
+    width: "16%",
   },
   avatar: {
     width: "100%",
