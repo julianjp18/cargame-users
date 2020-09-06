@@ -4,13 +4,14 @@ export const SHOW_USER = 'SHOW_USER';
 export const CHANGE_PHONE_NUMBER = 'CHANGE_PHONE_NUMBER';
 export const CHANGE_PROFILE_PICTURE = 'CHANGE_PROFILE_PICTURE';
 
-export const createUser = ({ userId, name, numberId, phone, referidNumber }) => {
+export const createUser = ({ userId, name, lastname, numberId, phone, referidNumber = ''}) => {
     return async dispatch => {
         firestoreDB
             .collection('Users')
             .doc(userId)
             .set({
                 name,
+                lastname,
                 numberId,
                 phone,
                 referidNumber,
@@ -22,30 +23,34 @@ export const createUser = ({ userId, name, numberId, phone, referidNumber }) => 
             userId,
             id: name,
             name,
+            lastname,
             numberId,
             phone,
-            referidNumber,
+            referidNumber: referidNumber ? referidNumber : '',
             profilePicture: null,
         });
     };
 };
 
 export const showUser = (userId) => async dispatch => {
-    console.log('Clave de usuario activo: '+ userId);
-    const data = await firestoreDB
-        .collection('Users')
-        .doc(userId)
-        .get().then((doc) => doc.data());
-    dispatch({
-        type: SHOW_USER,
-        userId,
-        id: data.numberId,
-        name: data.name,
-        numberId: data.numberId,
-        phone: data.phone,
-        referidNumber: data.referidNumber,
-        profilePicture: data.profilePicture,
-    });
+    if(userId) {
+        console.log('Clave de usuario activo cargame : '+ userId);
+        const data = await firestoreDB
+            .collection('Users')
+            .doc(userId)
+            .get().then((doc) => doc.data());
+
+        dispatch({
+            type: SHOW_USER,
+            userId,
+            id: data.numberId,
+            name: data.name,
+            numberId: data.numberId,
+            phone: data.phone,
+            referidNumber: data.referidNumber,
+            profilePicture: data.profilePicture,
+        });
+    }
 };
 
 export const changePhoneNumber = (phoneNumber, userId) => async dispatch => {
