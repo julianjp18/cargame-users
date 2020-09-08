@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import React from "react";
+import { StyleSheet, View } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { ListItem } from "react-native-elements";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
@@ -7,9 +7,20 @@ import { textSecondaryColor, darkGrey, primaryColor, } from "../../constants/Col
 import DriverHeader from "../../components/DriverHeader";
 import { AntDesign } from "@expo/vector-icons";
 
+import * as authActions from '../../redux/actions/auth';
+import { getUserInfo } from '../utils/helpers';
+
 const UserNotificationsScreen = (props) => {
-  const notifications = useSelector(state => state.notifications.driverNotifications);
+  const dispatch = useDispatch();
+  
   const user = useSelector(state => state.user);
+  getUserInfo().then((data) => {
+    const userInfo = JSON.parse(data);
+    if (!userInfo.token) {
+      dispatch(authActions.logout());
+      props.navigation.navigate('Index');
+    }
+  });
   
   return (
     <View style={styles.servicesContainer}>

@@ -4,14 +4,13 @@ export const SHOW_USER = 'SHOW_USER';
 export const CHANGE_PHONE_NUMBER = 'CHANGE_PHONE_NUMBER';
 export const CHANGE_PROFILE_PICTURE = 'CHANGE_PROFILE_PICTURE';
 
-export const createUser = ({ userId, name, lastname, numberId, phone, referidNumber = ''}) => {
+export const createUser = ({ userId, name, numberId, phone, referidNumber = '' }) => {
     return async dispatch => {
         firestoreDB
             .collection('Users')
             .doc(userId)
             .set({
                 name,
-                lastname,
                 numberId,
                 phone,
                 referidNumber,
@@ -23,7 +22,6 @@ export const createUser = ({ userId, name, lastname, numberId, phone, referidNum
             userId,
             id: name,
             name,
-            lastname,
             numberId,
             phone,
             referidNumber: referidNumber ? referidNumber : '',
@@ -34,7 +32,6 @@ export const createUser = ({ userId, name, lastname, numberId, phone, referidNum
 
 export const showUser = (userId) => async dispatch => {
     if(userId) {
-        console.log('Clave de usuario activo cargame : '+ userId);
         const data = await firestoreDB
             .collection('Users')
             .doc(userId)
@@ -82,7 +79,7 @@ export const changeProfilePicture = (profilePicture, userId) => async dispatch =
         profilePicture,
     }
    
-    const updateData = await firestoreDB.collection('Users').doc(userId).set(newData);
+    const New = await firestoreDB.collection('Users').doc(userId).set(newData);
     dispatch({
         type: CHANGE_PROFILE_PICTURE,
         userId,
