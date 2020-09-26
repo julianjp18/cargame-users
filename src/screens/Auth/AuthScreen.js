@@ -18,6 +18,7 @@ import * as authActions from "../../redux/actions/auth";
 import { shortBrandAzulUrl, shortMainCargaUrl } from "../../constants/Utils";
 
 import { primaryColor, textPrimaryColor } from "../../constants/Colors";
+import { normalizeLength } from "../../styles/layout";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -118,17 +119,24 @@ const AuthScreen = (props) => {
       controller.abort();
     } else {
       setError(
-        "¡Precación! Las contraseñas no coinciden. Intentalo nuevamente."
+        "¡Precaución! Las contraseñas no coinciden. Intentalo nuevamente."
       );
     }
   };
 
   return !userToken ? (
     <View style={styles.mainContainer}>
+      <AntDesign
+        name="arrowleft"
+        style={styles.backButton}
+        size={40}
+        color={primaryColor}
+        onPress={() => props.navigation.navigate('Index')}
+      />
       <View style={styles.logoContainer}>
         <Image style={styles.logo} source={shortBrandAzulUrl} />
       </View>
-      <View style={styles.authContainer}>
+      <View style={[styles.authContainer, isSignUp && styles.authSignUpContainer]}>
         <KeyboardAvoidingView style={styles.container} behavior="padding">
           <ScrollView>
             <View style={styles.scrollViewContainer}>
@@ -157,8 +165,7 @@ const AuthScreen = (props) => {
                 }
                 minLength={6}
                 autoCapitalize="none"
-                errorText={`¡Precación! Por favor ingresa una contraseña válida. Debe contener mínimo 6 carácteres
-                                        `}
+                errorText={`¡Precación! Por favor ingresa una contraseña válida. Debe contener mínimo 6 carácteres`}
                 onInputChange={inputChangeHandler}
                 initialValue=""
               />
@@ -174,8 +181,7 @@ const AuthScreen = (props) => {
                   }
                   minLength={6}
                   autoCapitalize="none"
-                  errorText={`¡Precación! Por favor ingresa una contraseña válida. Debe contener mínimo 6 carácteres
-                                            `}
+                  errorText={`¡Precación! Por favor ingresa una contraseña válida. Debe contener mínimo 6 carácteres`}
                   onInputChange={inputChangeHandler}
                   initialValue=""
                 />
@@ -193,7 +199,7 @@ const AuthScreen = (props) => {
                 <ActivityIndicator size="large" color={primaryColor} />
               ) : (
                 <Button
-                  title={isSignUp ? "Quiero ser socio" : "INGRESAR"}
+                  title={isSignUp ? "Quiero ser socio" : "Ingresar"}
                   onPress={authHandler}
                 />
               )}
@@ -210,51 +216,47 @@ const AuthScreen = (props) => {
 
 const styles = StyleSheet.create({
   mainContainer: {
-    height: "100%",
+    flex: 1,
+    minHeight: normalizeLength(300),
+  },
+  backButton: {
+    marginTop: normalizeLength(35),
+    marginLeft: normalizeLength(10)
   },
   logoContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: "15%",
+    flex: 1,
+    marginTop: normalizeLength(50),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   logo: {
-    width: 150,
-    height: 150,
+    width: normalizeLength(180),
+    height: normalizeLength(180),
   },
   authContainer: {
-    paddingLeft: "5%",
-    paddingRight: "5%",
-    width: "100%",
-    height: "58%",
+    flex: 1,
+    marginTop: normalizeLength(90),
+    paddingHorizontal: normalizeLength(20),
+    minWidth: normalizeLength(380),
+    minHeight: normalizeLength(320)
+  },
+  authSignUpContainer: {
+    minHeight: normalizeLength(390)
   },
   forgotPasswordContainer: {
-    marginTop: "6%",
+    marginTop: normalizeLength(6),
   },
   forgotPassword: {
-    textAlign: "center",
+    textAlign: 'center',
     color: textPrimaryColor,
-    fontFamily: "Quicksand",
+    fontFamily: 'Quicksand',
   },
   btnActionContainer: {
-    marginTop: "5%",
-  },
-  changeTextContainer: {
-    marginVertical: "3%",
-  },
-  changeText: {
-    color: textPrimaryColor,
-    fontSize: 14,
-    fontWeight: "700",
-    lineHeight: 20,
-    textAlign: "center",
-  },
-  btnSwitchContainer: {
-    marginTop: "2%",
+    marginTop: normalizeLength(15),
   },
   mainCarga: {
-    marginTop: "-20%",
-    marginLeft: "-20%",
-  },
+    marginLeft: normalizeLength(-50)
+  }
 });
 
 export default AuthScreen;

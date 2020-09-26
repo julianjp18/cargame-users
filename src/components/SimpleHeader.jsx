@@ -5,11 +5,11 @@ import {
   accentColor,
   textAccentColor,
 } from "../constants/Colors";
-import { whiteSquareUrl, shortBrandAzulUrl } from "../constants/Utils";
-import { View, Image, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { normalizeLength } from "../styles/layout";
+import { Ionicons } from '@expo/vector-icons';
 
-const WelcomeHeader = (props) => (
+const SimpleHeader = ({ title, hasNext, current, final, previusButton }) => (
   <LinearGradient
     start={{ x: -1, y: 0 }}
     end={{ x: 1, y: 0 }}
@@ -18,13 +18,20 @@ const WelcomeHeader = (props) => (
     <View style={styles.row}>
       <View style={styles.col1}>
         <Text style={styles.titleHeader}>
-          {`Hola!
-Que deseas hacer hoy?`}
+          {title}
         </Text>
       </View>
       <View style={styles.col2}>
-        <Image style={styles.whiteSquare} source={whiteSquareUrl} />
-        <Image style={styles.logo} source={shortBrandAzulUrl} />
+        <Ionicons
+          style={styles.backButton}
+          name="ios-arrow-back"
+          size={30}
+          color="white"
+          onPress={previusButton}
+        />
+        {hasNext && (
+          <Text style={styles.hasNextContainer}>{`${current} de ${final}`}</Text>
+        )}
       </View>
     </View>
   </LinearGradient>
@@ -33,11 +40,11 @@ Que deseas hacer hoy?`}
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
-    height: normalizeLength(160),
+    height: normalizeLength(130),
     minWidth: normalizeLength(300),
   },
   col1: {
-    width:  normalizeLength(200),
+    width:  normalizeLength(320),
     height: normalizeLength(200)
   },
   titleHeader: {
@@ -50,22 +57,18 @@ const styles = StyleSheet.create({
     color: textAccentColor
   },
   col2: {
-    minWidth:  normalizeLength(100),
-    minHeight: normalizeLength(100)
+    minWidth:  normalizeLength(80),
+    minHeight: normalizeLength(80),
+    paddingTop: normalizeLength(12)
   },
-  logo: {
-    position: 'absolute',
-    left: normalizeLength(50),
-    top: normalizeLength(65),
-    width: normalizeLength(120),
-    height: normalizeLength(120),
+  backButton: {
+    marginTop: normalizeLength(50)
   },
-  whiteSquare: {
-    position: 'absolute',
-    top: normalizeLength(60),
-    left: normalizeLength(30),
-    bottom: 0,
+  hasNextContainer: {
+    marginTop: normalizeLength(10),
+    marginLeft: normalizeLength(-20),
+    color: 'white'
   }
 });
 
-export default WelcomeHeader;
+export default SimpleHeader;

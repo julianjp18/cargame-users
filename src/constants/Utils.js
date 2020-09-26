@@ -23,28 +23,24 @@ export const CATEGORIES_LIST = [
       id: 'paquete',
       name: 'Envíar una carga o paquete',
       avatar_url: truckSquareUrl,
-      subtitle: '',
       routeName: 'HomeDriver', 
     },
     {
       id: 'documento',
       name: 'Envíar un documento',
       avatar_url: carSquareUrl,
-      subtitle: '',
       routeName: 'HomeDriver',
     },
     {
         id: 'grua',
         name: 'Solicita un servicio de grúa',
         avatar_url: motocycleSquareUrl,
-        subtitle: '',
         routeName: 'HomeDriver',
     },
     {
         id: 'puerta',
         name: 'Solicitar transporte puerta a puerta',
         avatar_url: craneSquareUrl,
-        subtitle: '',
         routeName: 'HomeDriver',
     },
 ];

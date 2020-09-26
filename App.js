@@ -8,7 +8,6 @@ import { Provider } from 'react-redux';
 import { AppLoading } from 'expo';
 import ReduxThunk from 'redux-thunk';
 
-import HomeScreen from './src/screens/HomeScreen';
 import DashboardNavigator from './src/navigation/DashboardNavigator';
 import authReducer from './src/redux/reducers/auth';
 import userReducer from './src/redux/reducers/user';
@@ -23,6 +22,20 @@ const fecthFonts = () => {
     'Ruda': require('./assets/fonts/Ruda-VariableFont_wght.ttf'),
   });
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center"
+  }
+});
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -52,17 +65,3 @@ export default function App() {
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  image: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center"
-  }
-});
