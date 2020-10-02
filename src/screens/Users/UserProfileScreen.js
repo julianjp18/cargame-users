@@ -1,34 +1,60 @@
-import React, { useState, useEffect } from "react";
-import { Text, StyleSheet, View, Image } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
-import { ListItem } from "react-native-elements";
-import {
-  textSecondaryColor,
-  darkGrey,
-  primaryColor,
-} from "../../constants/Colors";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import DriverHeader from "../../components/DriverHeader";
-import { AntDesign, FontAwesome } from "@expo/vector-icons";
-import { shortBrandOrangeGreyUrl } from "../../constants/Utils";
-import ImgPicker from "../../components/UI/ImagePicker";
-import * as MediaLibrary from "expo-media-library";
+import React, { useState, useEffect } from 'react';
+import { Text, StyleSheet, View, Image } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { Icon, ListItem } from 'react-native-elements';
+import { darkGrey, primaryColor } from '../../constants/Colors';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import UserHeader from '../../components/UserHeader';
+import { shortBrandOrangeGreyUrl } from '../../constants/Utils';
+import ImgPicker from '../../components/UI/ImagePicker';
+import * as MediaLibrary from 'expo-media-library';
 
-import * as userActions from "../../redux/actions/users";
+import * as userActions from '../../redux/actions/users';
+import * as authActions from '../../redux/actions/auth';
+import { getUserInfo } from '../../utils/helpers';
+import { normalizeLength } from '../../styles/layout';
 
-const UserProfileScreen = (props) => {
-  const user = useSelector((state) => state.user);
-  const userEmail = useSelector((state) => state.auth.email);
+const LogOutListItem = props => (
+  <TouchableOpacity>
+    <ListItem
+      onPress={() => {
+        props.dispatch(authActions.logout());
+        props.navigation.navigate('Auth');
+      }}
+      containerStyle={styles.listContainer}
+      topDivider
+    >
+      <Icon
+        name='logout'
+        type='antdesign'
+        color={primaryColor}
+      />
+      <ListItem.Content>
+        <ListItem.Title style={styles.titleListItem}>Cerrar sesión</ListItem.Title>
+      </ListItem.Content>
+    </ListItem>
+  </TouchableOpacity>
+);
+
+const UserProfileScreen = props => {
+  const user = useSelector(state => state.user);
+  const userEmail = useSelector(state => state.auth.email);
   const [error, setError] = useState();
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (error) {
-      Alert.alert("¡Ha ocurrido un error, contacte al admin!", error, [
-        { text: "Está bien" },
-      ]);
+      Alert.alert('¡Oh no, un error ha ocurrido!', error, [{ text: 'Está bien' }]);
     }
   }, [error]);
+
+  getUserInfo().then((data) => {
+    const userInfo = JSON.parse(data);
+    if (!userInfo.token) {
+      dispatch(authActions.logout());
+      props.navigation.navigate('Index');
+    }
+  });
 
   const imageTakeHandler = async (imagePath) => {
     if (imagePath) {
@@ -37,9 +63,7 @@ const UserProfileScreen = (props) => {
         const controller = new AbortController();
         setError(null);
         try {
-          await dispatch(
-            userActions.changeProfilePicture(asset.uri, user.userId)
-          );
+          await dispatch(userActions.changeProfilePicture(asset.uri, user.driverId));
           const savedImage = await MediaLibrary.saveToLibraryAsync(imagePath);
           controller.abort();
         } catch (err) {
@@ -47,7 +71,6 @@ const UserProfileScreen = (props) => {
         }
         controller.abort();
       } catch (err) {
-        console.log("yes ", err);
         throw err;
       }
     }
@@ -55,16 +78,18 @@ const UserProfileScreen = (props) => {
 
   return (
     <View style={styles.servicesContainer}>
-      <DriverHeader
+      <UserHeader
         title="Mi perfil"
         subtitle="Explora tu perfil aquí"
         leftIcon="user-o"
       />
-      {user && (
+      {user ? (
         <ScrollView>
           <View style={styles.infoContainer}>
             <View style={styles.nameListContainer}>
-              <Text style={styles.nameListText}>{user.name}</Text>
+              <Text style={styles.nameListText}>
+                {user.name}
+              </Text>
             </View>
             <View style={styles.row}>
               <View style={styles.col1}>
@@ -77,158 +102,135 @@ const UserProfileScreen = (props) => {
                 />
               </View>
             </View>
-            <ListItem
-              containerStyle={styles.listContainer}
-              title="Cédula de ciudadanía"
-              titleStyle={styles.titleListItem}
-              subtitle={user.numberId}
-              leftAvatar={
-                <AntDesign name="idcard" size={24} color={primaryColor} />
-              }
-              subtitleStyle={styles.subtitleListItem}
-              bottomDivider
-              topDivider
-            />
-            <TouchableOpacity>
-              <ListItem
-                containerStyle={styles.listContainer}
-                title="Número de telefono"
-                titleStyle={styles.titleListItem}
-                leftAvatar={
-                  <AntDesign name="phone" size={24} color={primaryColor} />
-                }
-                rightAvatar={
-                  <AntDesign
-                    name="right"
-                    size={24}
-                    color={darkGrey}
-                    onPress={() => props.navigation.navigate("EditPhoneNumber")}
-                  />
-                }
-                subtitle={user.phone}
-                subtitleStyle={styles.subtitleListItem}
-                bottomDivider
+            <ListItem containerStyle={styles.listContainer} topDivider bottomDivider>
+              <Icon
+                name='idcard'
+                type='antdesign'
+                color={primaryColor}
               />
-            </TouchableOpacity>
+              <ListItem.Content>
+                <ListItem.Title style={styles.titleListItem}>Cédula de ciudadanía</ListItem.Title>
+                <ListItem.Subtitle style={styles.subtitleListItem}>{user.numberId}</ListItem.Subtitle>
+              </ListItem.Content>
+            </ListItem>
             <TouchableOpacity>
-              <ListItem
-                containerStyle={styles.listContainer}
-                title="Correo electrónico"
-                titleStyle={styles.titleListItem}
-                leftAvatar={
-                  <AntDesign name="mail" size={24} color={primaryColor} />
-                }
-                subtitle={userEmail}
-                subtitleStyle={styles.subtitleListItem}
-                bottomDivider
-              />
+              <ListItem onPress={() => props.navigation.navigate('EditPhoneNumber')} containerStyle={styles.listContainer} bottomDivider>
+                <Icon
+                  name='phone'
+                  type='antdesign'
+                  color={primaryColor}
+                />
+                <ListItem.Content>
+                  <ListItem.Title style={styles.titleListItem}>Celular</ListItem.Title>
+                  <ListItem.Subtitle style={styles.subtitleListItem}>{user.phone}</ListItem.Subtitle>
+                </ListItem.Content>
+                <Icon
+                  name='angle-right'
+                  type='font-awesome'
+                  color={primaryColor}
+                />
+              </ListItem>
             </TouchableOpacity>
-            <ListItem
-              containerStyle={styles.listContainer}
-              title="Referido por"
-              titleStyle={styles.titleListItem}
-              leftAvatar={
-                <FontAwesome name="pencil" size={24} color={primaryColor} />
-              }
-              subtitle={user.referidNumber}
-              subtitleStyle={styles.subtitleListItem}
-              bottomDivider
-            />
-            <ListItem
-              containerStyle={styles.listContainer}
-              title="País"
-              titleStyle={styles.titleListItem}
-              leftAvatar={
-                <AntDesign name="earth" size={24} color={primaryColor} />
-              }
-              subtitle="Colombia"
-              subtitleStyle={styles.subtitleListItem}
-              bottomDivider
-            />
-            <TouchableOpacity>
-              <ListItem
-                containerStyle={styles.listContainer}
-                title="Mi billetera"
-                titleStyle={styles.titleListItem}
-                leftAvatar={
-                  <AntDesign name="wallet" size={24} color={primaryColor} />
-                }
-                rightAvatar={
-                  <AntDesign name="right" size={24} color={darkGrey} />
-                }
-                subtitleStyle={styles.subtitleListItem}
+            <ListItem containerStyle={styles.listContainer} bottomDivider>
+              <Icon
+                name='mail'
+                type='antdesign'
+                color={primaryColor}
               />
-            </TouchableOpacity>
+              <ListItem.Content>
+                <ListItem.Title style={styles.titleListItem}>Correo electrónico</ListItem.Title>
+                <ListItem.Subtitle style={styles.subtitleListItem}>{userEmail}</ListItem.Subtitle>
+              </ListItem.Content>
+            </ListItem>
+            <ListItem containerStyle={styles.listContainer} bottomDivider>
+              <Icon
+                name='pencil'
+                type='font-awesome'
+                color={primaryColor}
+              />
+              <ListItem.Content>
+                <ListItem.Title style={styles.titleListItem}>Referido por</ListItem.Title>
+                <ListItem.Subtitle style={styles.subtitleListItem}>
+                  {user.referidNumber ? user.referidNumber : 'No tiene código de referido'}
+                </ListItem.Subtitle>
+              </ListItem.Content>
+            </ListItem>
+            <ListItem containerStyle={styles.listContainer} bottomDivider>
+              <Icon
+                name='earth'
+                type='antdesign'
+                color={primaryColor}
+              />
+              <ListItem.Content>
+                <ListItem.Title style={styles.titleListItem}>País</ListItem.Title>
+                <ListItem.Subtitle style={styles.subtitleListItem}>Colombia</ListItem.Subtitle>
+              </ListItem.Content>
+            </ListItem>
+            <LogOutListItem
+              dispatch={dispatch}
+              navigation={props.navigation}
+            />
           </View>
         </ScrollView>
-      )}
+      ) : (<LogOutListItem dispatch={dispatch} navigation={props.navigation} />)}
+
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   servicesContainer: {
-    backgroundColor: "transparent",
-    height: "100%",
+    flex: 1,
+    backgroundColor: 'transparent',
+    minHeight: normalizeLength(300)
   },
   nameListContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    paddingTop: "5%",
-    paddingBottom: "1%",
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: normalizeLength(20),
+    paddingBottom: normalizeLength(20)
   },
   nameListText: {
     color: primaryColor,
-    fontFamily: "Quicksand",
-    fontSize: 20,
-    fontWeight: "700",
-    lineHeight: 24,
-  },
-  title: {
-    paddingTop: "1%",
-    color: textSecondaryColor,
-    fontFamily: "Quicksand",
-    fontSize: 18,
-    fontWeight: "700",
-    lineHeight: 22,
-    textAlign: "center",
+    fontFamily: 'Quicksand',
+    fontSize: normalizeLength(25),
+    fontWeight: '700'
   },
   row: {
-    flexDirection: "row",
-    width: "100%",
-    marginTop: "2%",
+    flexDirection: 'row',
+    minWidth: normalizeLength(300),
+    marginTop: normalizeLength(4)
   },
   col1: {
-    width: "50%",
-    alignItems: "center",
-    justifyContent: "center",
+    minWidth: normalizeLength(180),
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   col2: {
-    width: "50%",
-    alignItems: "center",
-    justifyContent: "center",
+    minWidth: normalizeLength(200),
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   mainCarga: {
-    width: "60%",
-    height: 100,
+    width: normalizeLength(120),
+    height: normalizeLength(120),
   },
   titleListItem: {
     color: primaryColor,
-    fontFamily: "Quicksand",
-    fontSize: 14,
-    fontWeight: "700",
-    lineHeight: 24,
+    fontFamily: 'Quicksand',
+    fontSize: normalizeLength(14),
+    fontWeight: '700'
   },
   subtitleListItem: {
     color: darkGrey,
-    fontFamily: "Quicksand",
-    fontSize: 14,
-    lineHeight: 24,
+    fontFamily: 'Quicksand',
+    fontSize: normalizeLength(13),
+    lineHeight: 24
   },
   listContainer: {
-    backgroundColor: "transparent",
-    paddingBottom: "2%",
-  },
+    backgroundColor: 'transparent',
+    paddingBottom: normalizeLength(6)
+  }
 });
 
 export default UserProfileScreen;

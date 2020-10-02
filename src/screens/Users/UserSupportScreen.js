@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet, View, Image } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { shortBrandOrangeGreyUrl, shortMainCargaUrl } from '../../constants/Utils';
+import { shortBrandAzulUrl, shortMainCargaUrl } from '../../constants/Utils';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -11,85 +11,7 @@ import * as authActions from '../../redux/actions/auth';
 import { getUserInfo } from '../../utils/helpers';
 import { normalizeLength } from '../../styles/layout';
 
-const styles = StyleSheet.create({
-    supportContainer: {
-      flex: 1,
-      backgroundColor: 'transparent',
-      minHeight: normalizeLength(300)
-    },
-    logoContainer: {
-      flex: 1,
-      alignItems: 'flex-end',
-      minHeight: normalizeLength(150),
-      minWidth: normalizeLength(150),
-      paddingTop: normalizeLength(40)
-    },
-    logo: {
-      height: normalizeLength(150),
-      width: normalizeLength(150),
-    },
-    mainCargaContainer: {
-      flex: 1,
-      justifyContent: 'flex-end',
-      alignItems: 'flex-end',
-      minHeight: normalizeLength(300)
-    },
-    mainCarga: {
-      marginRight: normalizeLength(2),
-      minWidth: normalizeLength(400),
-      height: normalizeLength(400),
-      position: 'relative',
-      top: normalizeLength(50),
-      left: normalizeLength(75)
-    },
-    linearGradientContainer: {
-      paddingTop: normalizeLength(15),
-      paddingBottom: normalizeLength(10)
-    },
-    row1: {
-      flexDirection: 'row',
-      width: '100%',
-      position: 'relative',
-      top: 0,
-    },
-    row1Col1: {
-      width: '30%',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    supportIcon: {
-      opacity: 0.32
-    },
-    row1Col2: {
-      width: '70%',
-      paddingRight: normalizeLength(10)
-    },
-    infoText: {
-      paddingTop: normalizeLength(5),
-      color: textAccentColor,
-      fontFamily: 'Ruda',
-      fontSize: normalizeLength(18)
-    },
-    extraInfo: {
-      paddingHorizontal: normalizeLength(5),
-      paddingTop: normalizeLength(15)
-    },
-    extraInfoText: {
-      color: textAccentColor,
-      fontFamily: 'Quicksand',
-      fontSize: normalizeLength(15),
-      lineHeight: normalizeLength(15),
-      paddingHorizontal: normalizeLength(20)
-    },
-    row2: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingTop: normalizeLength(5),
-      paddingBottom: normalizeLength(10)
-    },
-  });  
-
-const UserSupportScreen = props => {
+const DriverSupportScreen = props => {
   const dispatch = useDispatch();
 
   getUserInfo().then((data) => {
@@ -105,7 +27,7 @@ const UserSupportScreen = props => {
       <View style={styles.logoContainer}>
         <Image
           style={styles.logo}
-          source={shortBrandOrangeGreyUrl}
+          source={shortBrandAzulUrl}
         />
       </View>
       <View style={styles.mainCargaContainer}>
@@ -167,4 +89,82 @@ const UserSupportScreen = props => {
   );
 };
 
-export default UserSupportScreen;
+const styles = StyleSheet.create({
+  supportContainer: {
+    flex: 1,
+    backgroundColor: 'transparent',
+    minHeight: normalizeLength(200)
+  },
+  logoContainer: {
+    flex: 1,
+    alignItems: 'flex-end',
+    minHeight: normalizeLength(150),
+    minWidth: normalizeLength(150),
+    paddingTop: normalizeLength(100)
+  },
+  logo: {
+    height: normalizeLength(200),
+    width: normalizeLength(150),
+  },
+  mainCargaContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    minHeight: normalizeLength(300)
+  },
+  mainCarga: {
+    marginRight: normalizeLength(2),
+    minWidth: normalizeLength(400),
+    height: normalizeLength(400),
+    position: 'relative',
+    top: normalizeLength(50),
+    left: normalizeLength(75)
+  },
+  linearGradientContainer: {
+    paddingTop: normalizeLength(15),
+    paddingBottom: normalizeLength(10)
+  },
+  row1: {
+    flexDirection: 'row',
+    width: '100%',
+    position: 'relative',
+    top: 0,
+  },
+  row1Col1: {
+    width: '30%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  supportIcon: {
+    opacity: 0.32
+  },
+  row1Col2: {
+    width: '70%',
+    paddingRight: normalizeLength(10)
+  },
+  infoText: {
+    paddingTop: normalizeLength(5),
+    color: textAccentColor,
+    fontFamily: 'Ruda',
+    fontSize: normalizeLength(18)
+  },
+  extraInfo: {
+    paddingHorizontal: normalizeLength(5),
+    paddingTop: normalizeLength(15)
+  },
+  extraInfoText: {
+    color: textAccentColor,
+    fontFamily: 'Quicksand',
+    fontSize: normalizeLength(15),
+    lineHeight: normalizeLength(15),
+    paddingHorizontal: normalizeLength(20)
+  },
+  row2: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: normalizeLength(5),
+    paddingBottom: normalizeLength(10)
+  },
+});
+
+export default DriverSupportScreen;

@@ -102,7 +102,7 @@ const AuthScreen = (props) => {
       }
     } else {
       action = authActions.signin(email, password);
-      nextPage = "ServicesList";
+      nextPage = "Dashboard";
     }
     if (!passwordError) {
       const controller = new AbortController();

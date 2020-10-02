@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { ListItem } from "react-native-elements";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { textSecondaryColor, darkGrey, primaryColor, } from "../../constants/Colors";
-import DriverHeader from "../../components/DriverHeader";
 import { AntDesign } from "@expo/vector-icons";
 
 import * as authActions from '../../redux/actions/auth';
@@ -24,11 +23,6 @@ const UserNotificationsScreen = (props) => {
   
   return (
     <View style={styles.servicesContainer}>
-      <DriverHeader
-        title="Notificaciones"
-        subtitle="Explora tus notificaciones"
-        leftIcon="bell-o"
-      />
       {user && (
         <ScrollView>
           <View style={styles.infoContainer}>

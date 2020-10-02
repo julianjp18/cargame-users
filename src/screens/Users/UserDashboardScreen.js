@@ -94,14 +94,14 @@ const styles = StyleSheet.create({
     paddingTop: normalizeLength(6),
   },
   linearGradientContainer: {
-    marginBottom: normalizeLength(4)
+    marginBottom: normalizeLength(2)
   },
   listContainer: {
     backgroundColor: 'transparent',
-    minHeight: normalizeLength(20)
+    minHeight: normalizeLength(18)
   },
   titleListItem: {
-    paddingTop: normalizeLength(12),
+    paddingTop: normalizeLength(5),
     color: 'white',
     fontWeight: 'bold',
     fontFamily: 'Ruda',
@@ -109,8 +109,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   avatarContainer: {
-    height: normalizeLength(90),
-    width: normalizeLength(90),
+    height: normalizeLength(80),
+    width: normalizeLength(80),
   },
 });
 

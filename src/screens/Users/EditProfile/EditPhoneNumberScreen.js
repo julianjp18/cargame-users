@@ -2,7 +2,6 @@ import React, { useReducer, useCallback, useState, useEffect } from "react";
 import { StyleSheet, View, ActivityIndicator, Alert } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { primaryColor } from "../../../constants/Colors";
-import DriverHeader from "../../../components/DriverHeader";
 import { AntDesign } from "@expo/vector-icons";
 import * as userActions from "../../../redux/actions/users";
 import TextInput from "../../../components/UI/Input";
@@ -95,11 +94,6 @@ const EditPhoneNumberScreen = (props) => {
 
   return (
     <View style={styles.servicesContainer}>
-      <DriverHeader
-        title={username}
-        subtitle="Edita tu número de teléfono"
-        leftIcon="user-o"
-      />
       <View style={styles.inputContainer}>
         <View style={styles.inputContent}>
           <TextInput

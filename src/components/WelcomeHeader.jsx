@@ -9,7 +9,7 @@ import { whiteSquareUrl, shortBrandAzulUrl } from "../constants/Utils";
 import { View, Image, Text, StyleSheet } from "react-native";
 import { normalizeLength } from "../styles/layout";
 
-const WelcomeHeader = (props) => (
+const WelcomeHeader = () => (
   <LinearGradient
     start={{ x: -1, y: 0 }}
     end={{ x: 1, y: 0 }}

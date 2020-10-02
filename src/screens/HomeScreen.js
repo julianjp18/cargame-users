@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, StyleSheet, View, Image } from "react-native";
+import { Text, StyleSheet, View, Image, YellowBox } from "react-native";
 import { useDispatch } from "react-redux";
 
 import Button from "../components/UI/Button";
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
 });
 
 const HomeScreen = (props) => {
+  YellowBox.ignoreWarnings(["Setting a timer"]);
   const dispatch = useDispatch();
   return (
     <View style={styles.mainContainer}>

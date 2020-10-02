@@ -71,8 +71,8 @@ const saveDataToStorage = (token, userId, expirationDate, email) => {
   AsyncStorage.setItem(
     'userData',
     JSON.stringify({
-      token: token,
-      userId, userId,
+      token,
+      userId,
       expirationDate: expirationDate.toISOString(),
       email: email,
     }))
