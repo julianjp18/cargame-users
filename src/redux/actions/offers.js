@@ -64,7 +64,6 @@ export const createOffer = ({
 
 // consulta por usuario de las ofertas disponibles
 export const showOffer = (userId) => async (dispatch) => {
-  console.log("clave de usuario activo: " + userId);
   const data = await firestoreDB
     .collection("OffersNotificationCenter")
     .doc(userId)

@@ -1,18 +1,20 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { ListItem } from "react-native-elements";
+import { ListItem, Icon } from "react-native-elements";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { textSecondaryColor, darkGrey, primaryColor, } from "../../constants/Colors";
-import { AntDesign } from "@expo/vector-icons";
 
 import * as authActions from '../../redux/actions/auth';
 import { getUserInfo } from '../utils/helpers';
+import UserHeader from "../../components/UserHeader";
 
 const UserNotificationsScreen = (props) => {
   const dispatch = useDispatch();
   
   const user = useSelector(state => state.user);
+  const notifications = useSelector(state => state.notifications.userNotifications);
+
   getUserInfo().then((data) => {
     const userInfo = JSON.parse(data);
     if (!userInfo.token) {
@@ -23,48 +25,43 @@ const UserNotificationsScreen = (props) => {
   
   return (
     <View style={styles.servicesContainer}>
+      <UserHeader
+        title="Notificaciones"
+        subtitle="Explora tus notificaciones"
+        leftIcon="bell-o"
+      />
       {user && (
         <ScrollView>
           <View style={styles.infoContainer}>
-            {notifications.map((notification) => (
-              <ListItem
-                key={notification.message}
-                containerStyle={styles.listContainer}
-                bottomDivider
-                leftIcon={
-                  <AntDesign
-                    name="bells"
-                    size={24}
-                    color={primaryColor}
-                  />
-                }
-                title={notification.message}
-                titleStyle={styles.titleListItem}
-              />
+            {notifications.length > 0 && notifications.map((notification) => (
+              <ListItem key={notification.message} containerStyle={styles.listContainer} bottomDivider>
+                <Icon
+                  name='bell'
+                  type='font-awesome'
+                  color={primaryColor}
+                />
+                <ListItem.Content>
+                  <ListItem.Title style={styles.titleListItem}>{notification.message}</ListItem.Title>
+                </ListItem.Content>
+              </ListItem>
             ))}
             <TouchableOpacity>
-              <ListItem
-                containerStyle={styles.listContainer}
-                bottomDivider
-                leftIcon={
-                  <AntDesign
-                    className=""
-                    name="bells"
-                    size={24}
-                    color={primaryColor}
-                  />
-                }
-                rightIcon={
-                  <AntDesign
-                    name="right"
-                    size={24}
-                    color={primaryColor}
-                    onPress={() => props.navigation.navigate('Services')}
-                  />
-                }
-                title="¡Bienvenido a Cargame! Consulta con Soporte si tienes alguna duda."
-                titleStyle={styles.titleListItem}
-              />
+              <ListItem onPress={() => props.navigation.navigate('Services')} containerStyle={styles.listContainer} bottomDivider>
+                <Icon
+                  reverse
+                  name='bell'
+                  type='font-awesome'
+                  color={primaryColor}
+                />
+                <ListItem.Content>
+                  <ListItem.Title style={styles.titleListItem}>¡Bienvenido a Cargame! Consulta con Soporte si tienes alguna duda.</ListItem.Title>
+                </ListItem.Content>
+                <Icon
+                  name='angle-right'
+                  type='font-awesome'
+                  color={primaryColor}
+                />
+              </ListItem>
             </TouchableOpacity>
           </View>
         </ScrollView>

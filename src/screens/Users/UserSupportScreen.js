@@ -101,9 +101,9 @@ const styles = StyleSheet.create({
     padding: 0
   },
   logo: {
-    height: 180,
-    width: 180,
-    marginTop: '1%'
+    height: normalizeLength(150),
+    width: normalizeLength(150),
+    marginTop: normalizeLength(13)
   },
   mainCargaContainer: {
     flex: 1,
@@ -117,8 +117,8 @@ const styles = StyleSheet.create({
     minWidth: normalizeLength(380),
     height: normalizeLength(395),
     position: 'relative',
-    top: Platform.OS === 'ios' ? normalizeLength(50): normalizeLength(60),
-    left: Platform.OS === 'ios' ? normalizeLength(70): normalizeLength(80),
+    top: normalizeLength(50),
+    left: normalizeLength(70),
   },
   linearGradientContainer: {
     paddingTop: normalizeLength(15),
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     top: 0,
   },
   row1Col1: {
-    width: '30%',
+    width: normalizeLength(100),
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     opacity: 0.32
   },
   row1Col2: {
-    width: '70%',
+    width: normalizeLength(250),
     paddingRight: normalizeLength(8)
   },
   infoText: {
@@ -162,8 +162,7 @@ const styles = StyleSheet.create({
   row2: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: normalizeLength(5),
-   
+    paddingVertical: normalizeLength(10),
   },
 });
 
