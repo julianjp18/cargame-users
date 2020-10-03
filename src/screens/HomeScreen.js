@@ -1,3 +1,6 @@
+// HomeScreen : Pantalla principal 
+// Descripcion: Ruta inicial de cargame usuarios
+// Fecha      : Octubre 2020.
 import React from "react";
 import { Text, StyleSheet, View, Image, YellowBox } from "react-native";
 import { useDispatch } from "react-redux";
