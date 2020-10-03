@@ -12,6 +12,7 @@ import DashboardNavigator from './src/navigation/DashboardNavigator';
 import authReducer from './src/redux/reducers/auth';
 import userReducer from './src/redux/reducers/user';
 import notificationReducer from './src/redux/reducers/notification';
+import travelReducer from './src/redux/reducers/travel';
 import { shortBackgroundImageUrl } from './src/constants/Utils';
 
 enableScreens();
@@ -40,12 +41,13 @@ const styles = StyleSheet.create({
 const rootReducer = combineReducers({
   auth: authReducer,
   user: userReducer,
-  notifications: notificationReducer, 
+  notifications: notificationReducer,
+  travels: travelReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
-export default function App() {
+const App = () => {
   const [fontLoaded, setFontLoaded] = useState(false);
 
   if(!fontLoaded){
@@ -65,3 +67,5 @@ export default function App() {
     </Provider>
   );
 }
+
+export default App;

@@ -1,10 +1,10 @@
 import { firestoreDB } from '../../constants/Firebase';
 export const SHOW_NOTIFICATIONS = 'SHOW_NOTIFICATIONS';
 
-export const showDriverNotifications = (userId) => dispatch => {
+export const showUserNotifications = (userId) => dispatch => {
 
     const data = firestoreDB
-    .collection("OffersNotificationCenter")
+    .collection("NotificationsUsers")
     .get();
 
     const notificationsData = [];
@@ -12,7 +12,7 @@ export const showDriverNotifications = (userId) => dispatch => {
         allNotifications.forEach(notification => {
             if (
                 notification.data().userId === "0" ||
-                notification.data().userId === user.userId
+                notification.data().userId === userId
             ) {
                 notificationsData.push(notification.data());
             }
@@ -21,6 +21,6 @@ export const showDriverNotifications = (userId) => dispatch => {
     
     dispatch({
         type: SHOW_NOTIFICATIONS,
-        driverNotifications: data
+        userNotifications: data
     });
 };

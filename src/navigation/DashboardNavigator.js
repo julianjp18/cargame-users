@@ -2,7 +2,7 @@ import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { AntDesign } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 import UserDashboardScreen from '../screens/Users/UserDashboardScreen';
 import AuthScreen from '../screens/Auth/AuthScreen';
@@ -14,13 +14,19 @@ import { accentColor, primaryColor } from '../constants/Colors';
 import UserProfileScreen from '../screens/Users/UserProfileScreen';
 import UserSupportScreen from '../screens/Users/UserSupportScreen';
 import UserNotificationsScreen from '../screens/Users/UserNotificationsScreen';
-import UserTravelsScreen from '../screens/Users/UserTravelsScreen';
 import EditPhoneNumberScreen from '../screens/Users/EditProfile/EditPhoneNumberScreen';
 import StartupScreen from '../screens/StartupScreen';
+import UserServicesScreen from '../screens/Users/UserServicesScreen';
+import ServiceSelectedScreen from '../screens/Users/UserServicesScreen/ServiceSelectedScreen';
 
 const profileNavigator = createSwitchNavigator({
   Profile: UserProfileScreen,
   EditPhoneNumber: EditPhoneNumberScreen,
+});
+
+const ServicesNavigator = createSwitchNavigator({
+  Services: UserServicesScreen,
+  ServiceSelected: ServiceSelectedScreen,
 });
 
 const UserTabNavigator = createBottomTabNavigator({
@@ -28,8 +34,17 @@ const UserTabNavigator = createBottomTabNavigator({
     screen: UserDashboardScreen,
     navigationOptions: {
       tabBarLabel: 'Inicio',
-      tabBarIcon: (tabInfo) => {
-        return <MaterialIcons name="monetization-on" size={24} color={accentColor} />
+      tabBarIcon: () => {
+        return <FontAwesome name="home" size={25} color={accentColor} />
+      }
+    }
+  },
+  Services: {
+    screen: ServicesNavigator,
+    navigationOptions: {
+      tabBarLabel: 'Servicios',
+      tabBarIcon: () => {
+        return <FontAwesome name="paper-plane-o" size={25} color={accentColor} />
       }
     }
   },
@@ -37,26 +52,17 @@ const UserTabNavigator = createBottomTabNavigator({
     screen: UserNotificationsScreen,
     navigationOptions: {
       tabBarLabel: 'Notificaciones',
-      tabBarIcon: (tabInfo) => {
+      tabBarIcon: () => {
         return <AntDesign name="inbox" size={25} color={accentColor} />
       }
     }
   },
-  Travels: {
-    screen: UserTravelsScreen,
-    navigationOptions: {
-      tabBarLabel: 'Viajes',
-      tabBarIcon: (tabInfo) => {
-        return <AntDesign name="flag" size={25} color={accentColor} />
-      }
-    }
-  },
-  Services: {
+  Support: {
     screen: UserSupportScreen,
     navigationOptions: {
       headerShown: false,
-      tabBarLabel: 'Servicios',
-      tabBarIcon: (tabInfo) => {
+      tabBarLabel: 'Soporte',
+      tabBarIcon: () => {
         return <AntDesign name="customerservice" size={25} color={accentColor} />
       }
     }
@@ -66,7 +72,7 @@ const UserTabNavigator = createBottomTabNavigator({
     navigationOptions: {
       headerShown: false,
       tabBarLabel: 'Perfil',
-      tabBarIcon: (tabInfo) => {
+      tabBarIcon: () => {
         return <AntDesign name="user" size={25} color={accentColor} />
       }
     }

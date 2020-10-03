@@ -8,6 +8,7 @@ import {
   Image,
   ScrollView,
   KeyboardAvoidingView,
+  YellowBox,
 } from "react-native";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -87,6 +88,7 @@ const AuthScreen = (props) => {
   });
 
   const authHandler = async () => {
+    YellowBox.ignoreWarnings(['Setting a timer']);
     let action;
     let nextPage = "";
     let passwordError = false;
