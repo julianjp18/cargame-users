@@ -113,11 +113,12 @@ const styles = StyleSheet.create({
   },
   mainCarga: {
     marginRight: normalizeLength(2),
+    width: Platform.OS === 'ios' ? normalizeLength(480): normalizeLength(500),
     minWidth: normalizeLength(380),
     height: normalizeLength(395),
     position: 'relative',
     top: Platform.OS === 'ios' ? normalizeLength(50): normalizeLength(60),
-    left: Platform.OS === 'ios' ? normalizeLength(110): normalizeLength(80),
+    left: Platform.OS === 'ios' ? normalizeLength(70): normalizeLength(80),
   },
   linearGradientContainer: {
     paddingTop: normalizeLength(15),
