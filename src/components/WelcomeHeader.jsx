@@ -6,7 +6,7 @@ import {
   textAccentColor,
 } from "../constants/Colors";
 import { whiteSquareUrl, shortBrandAzulUrl } from "../constants/Utils";
-import { View, Image, Text, StyleSheet } from "react-native";
+import { View, Image, Text, StyleSheet, Platform } from "react-native";
 import { normalizeLength } from "../styles/layout";
 
 const WelcomeHeader = () => (
@@ -55,15 +55,16 @@ const styles = StyleSheet.create({
   },
   logo: {
     position: 'absolute',
-    left: normalizeLength(50),
-    top: normalizeLength(65),
-    width: normalizeLength(120),
+    right: Platform.OS === 'ios' ? normalizeLength(-62): normalizeLength(-68),
+    top: Platform.OS === 'ios' ? normalizeLength(58): normalizeLength(55),
+    width: normalizeLength(70),
     height: normalizeLength(120),
   },
   whiteSquare: {
     position: 'absolute',
-    top: normalizeLength(60),
-    left: normalizeLength(30),
+    top: normalizeLength(64),
+    right: normalizeLength(-85),
+    
     bottom: 0,
   }
 });

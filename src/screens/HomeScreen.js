@@ -1,6 +1,7 @@
 // HomeScreen : Pantalla principal 
 // Descripcion: Ruta inicial de cargame usuarios
 // Fecha      : Octubre 2020.
+
 import React from "react";
 import { Text, StyleSheet, View, Image, YellowBox } from "react-native";
 import { useDispatch } from "react-redux";
@@ -28,6 +29,60 @@ const onPressSignUp = (dispatch, navigation) => {
   dispatch(setIsSignUp(ISSIGNUP));
   reDirectToAuth(navigation);
 };
+
+
+// Componente Principal.
+
+const HomeScreen = (props) => {
+  YellowBox.ignoreWarnings(["Setting a timer"]);
+  const dispatch = useDispatch();
+  return (
+    <View style={styles.mainContainer}>
+      <View style={styles.logoContainer}>
+        <Image style={styles.logo} source={shortBrandAzulUrl} />
+      </View>
+      <View style={styles.infoContainer}>
+        <Text style={styles.title}>
+          Ahora puedes enviar y recibir paquetes fácilmente.
+        </Text>
+        <Text style={styles.subtitle}>
+          Ayudamos a nuestros clientes a conectar directamente con
+          transportadores.
+        </Text>
+        <View style={styles.btnsContainer}>
+          <View>
+            <Button
+              title="Registrate aquí"
+              onPress={() => onPressSignUp(dispatch, props.navigation)}
+            />
+          </View>
+          <View style={styles.btnMoreInfo}>
+            <Button
+              title="Conoce más"
+              colorOne={'white'}
+              colorTwo={'white'}
+              fontColor={primaryColor}
+            />
+          </View>
+        </View>
+        <View style={styles.buttonsContainer}>
+          <Text style={styles.buttons}>
+            {'¿Ya eres miembro? '}
+            <Text
+              style={styles.signIn}
+              onPress={() => onPressSignIn(dispatch, props.navigation)}
+            >
+              Ingresar
+            </Text>
+          </Text>
+        </View>
+      </View>
+      <Image style={styles.mainCarga} source={shortMainCargaUrl} />
+    </View>
+  );
+};
+
+// Estilo de HomeScreen
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -88,54 +143,5 @@ const styles = StyleSheet.create({
     marginLeft: normalizeLength(-50),
   }
 });
-
-const HomeScreen = (props) => {
-  YellowBox.ignoreWarnings(["Setting a timer"]);
-  const dispatch = useDispatch();
-  return (
-    <View style={styles.mainContainer}>
-      <View style={styles.logoContainer}>
-        <Image style={styles.logo} source={shortBrandAzulUrl} />
-      </View>
-      <View style={styles.infoContainer}>
-        <Text style={styles.title}>
-          Ahora puedes enviar y recibir paquetes fácilmente.
-        </Text>
-        <Text style={styles.subtitle}>
-          Ayudamos a nuestros clientes a conectar directamente con
-          transportadores.
-        </Text>
-        <View style={styles.btnsContainer}>
-          <View>
-            <Button
-              title="Registrate aquí"
-              onPress={() => onPressSignUp(dispatch, props.navigation)}
-            />
-          </View>
-          <View style={styles.btnMoreInfo}>
-            <Button
-              title="Conoce más"
-              colorOne={'white'}
-              colorTwo={'white'}
-              fontColor={primaryColor}
-            />
-          </View>
-        </View>
-        <View style={styles.buttonsContainer}>
-          <Text style={styles.buttons}>
-            {'¿Ya eres miembro? '}
-            <Text
-              style={styles.signIn}
-              onPress={() => onPressSignIn(dispatch, props.navigation)}
-            >
-              Ingresar
-            </Text>
-          </Text>
-        </View>
-      </View>
-      <Image style={styles.mainCarga} source={shortMainCargaUrl} />
-    </View>
-  );
-};
 
 export default HomeScreen;

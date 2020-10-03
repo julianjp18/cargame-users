@@ -1,3 +1,7 @@
+// UserDashboard : Menu principal del sistema. 
+// Descripcion   : Ruta inicial de cargame usuarios
+// Fecha         : Octubre 2020.
+
 import React, { useEffect } from "react";
 import { StyleSheet, View, Image, YellowBox, ScrollView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +20,8 @@ import * as userNotificationsAction from "../../redux/actions/notifications";
 import * as travelsActions from '../../redux/actions/travels';
 
 import WelcomeHeader from "../../components/WelcomeHeader";
+
+// Contenedor principal
 
 const selectedCategoryItem = (navigation, dispatch, categoryId, routeName) => {
   dispatch(setTypeService(categoryId));
@@ -90,6 +96,7 @@ const UserDashboardScreen = (props) => {
   );
 };
 
+// Estilo de UserDashBoard
 const styles = StyleSheet.create({
   servicesContainer: {
     flex: 1,
@@ -97,19 +104,19 @@ const styles = StyleSheet.create({
     minHeight: normalizeLength(300)
   },
   brandImageContainer: {
-    marginTop: normalizeLength(40),
+    marginTop: normalizeLength(20),
     alignItems: 'flex-end',
     justifyContent: 'center',
   },
   categoriesContainer: {
-    paddingTop: normalizeLength(6),
+    paddingTop: normalizeLength(4),
   },
   linearGradientContainer: {
     marginBottom: normalizeLength(2)
   },
   listContainer: {
     backgroundColor: 'transparent',
-    minHeight: normalizeLength(18)
+    minHeight: normalizeLength(16)
   },
   titleListItem: {
     paddingTop: normalizeLength(5),
