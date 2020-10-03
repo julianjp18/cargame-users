@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, View, Image } from 'react-native';
+import { Text, StyleSheet, View, Image, Platform } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { shortBrandAzulUrl, shortMainCargaUrl } from '../../constants/Utils';
 import { AntDesign } from '@expo/vector-icons';
@@ -11,7 +11,7 @@ import * as authActions from '../../redux/actions/auth';
 import { getUserInfo } from '../../utils/helpers';
 import { normalizeLength } from '../../styles/layout';
 
-const DriverSupportScreen = props => {
+const UserSupportScreen = props => {
   const dispatch = useDispatch();
 
   getUserInfo().then((data) => {
@@ -96,29 +96,28 @@ const styles = StyleSheet.create({
     minHeight: normalizeLength(200)
   },
   logoContainer: {
-    flex: 1,
+    justifyContent: 'flex-end',
     alignItems: 'flex-end',
-    minHeight: normalizeLength(150),
-    minWidth: normalizeLength(150),
-    paddingTop: normalizeLength(100)
+    padding: 0
   },
   logo: {
-    height: normalizeLength(200),
-    width: normalizeLength(150),
+    height: 180,
+    width: 180,
+    marginTop: '1%'
   },
   mainCargaContainer: {
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
-    minHeight: normalizeLength(300)
+    minHeight: normalizeLength(200)
   },
   mainCarga: {
     marginRight: normalizeLength(2),
-    minWidth: normalizeLength(400),
-    height: normalizeLength(400),
+    minWidth: normalizeLength(380),
+    height: normalizeLength(395),
     position: 'relative',
-    top: normalizeLength(50),
-    left: normalizeLength(75)
+    top: Platform.OS === 'ios' ? normalizeLength(50): normalizeLength(60),
+    left: Platform.OS === 'ios' ? normalizeLength(110): normalizeLength(80),
   },
   linearGradientContainer: {
     paddingTop: normalizeLength(15),
@@ -140,7 +139,7 @@ const styles = StyleSheet.create({
   },
   row1Col2: {
     width: '70%',
-    paddingRight: normalizeLength(10)
+    paddingRight: normalizeLength(8)
   },
   infoText: {
     paddingTop: normalizeLength(5),
@@ -163,8 +162,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: normalizeLength(5),
-    paddingBottom: normalizeLength(10)
+   
   },
 });
 
-export default DriverSupportScreen;
+export default UserSupportScreen;
