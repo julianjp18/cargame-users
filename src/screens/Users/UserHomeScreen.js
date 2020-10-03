@@ -14,13 +14,15 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import WelcomeServicio from "../../components/WelcomeServicio";
-import TextInput from "../../components/UI/Input";
-import { primaryColor, accentColor } from "../../constants/Colors";
 import { ScrollView } from "react-native-gesture-handler";
-import moment from "moment";
-import Button from "../../components/UI/Button";
 import { LinearGradient } from "expo-linear-gradient";
+import moment from "moment";
+
+import TextInput from "../../components/UI/Input";
+import Button from "../../components/UI/Button";
+import { primaryColor, accentColor } from "../../constants/Colors";
+import { getUserInfo } from "../../utils/helpers";
+
 import * as offerActions from "../../redux/actions/offers";
 
 const FORM_OFFER_INPUT_UPDATE = "FORM_INPUT_UPDATE";
@@ -65,15 +67,30 @@ const UserHomeScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const dispatch = useDispatch();
-  const userId = useSelector((state) => state.auth.userId);
   const [selectedValue, setSelectedValue] = useState("manana");
   moment.locale();
   const [date, setDate] = useState(new Date());
   const [mode] = useState("date");
   const [show, setShow] = useState(false);
-  const typeServiceId = useSelector((state) => state.auth.typeServiceSelected);
+  const { userId, typeServiceSelected} = useSelector(state => state.auth);
 
-  const onChange = (event, selectedDate) => {
+  getUserInfo().then((data) => {
+    const userInfo = JSON.parse(data);
+    if (!userInfo.token) {
+      dispatch(authActions.logout());
+      props.navigation.navigate('Index');
+    }
+  });
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert("¡Precaución, un error ha ocurrido!", error, [
+        { text: "Está bien" },
+      ]);
+    }
+  }, [error]);
+
+  const onChange = (e, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
@@ -138,16 +155,8 @@ const UserHomeScreen = (props) => {
     [dispatchFormState]
   );
 
-  useEffect(() => {
-    if (error) {
-      Alert.alert("¡Precaución, un error ha ocurrido!", error, [
-        { text: "Está bien" },
-      ]);
-    }
-  }, [error]);
-
   // definicion del formulario de ofertas.
-  return typeServiceId ? (
+  return typeServiceSelected ? (
     <View style={styles.homeContainer}>
       <ScrollView>
         <View style={styles.inputTextAreaContainer}>

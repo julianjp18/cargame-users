@@ -22,16 +22,16 @@ const StartupScreen = props => {
             }
 
             const transformedUserData = JSON.parse(userData);
-            const {token, userId, expiredDate, email } = transformedUserData;
+            const {idToken, userId, expiredDate, email } = transformedUserData;
             const expirationDate = new Date(expiredDate);
 
-            if (expirationDate <= new Date() || !token || !userId) {
-                props.navigation.navigate('Auth');
+            if (expirationDate <= new Date() || !idToken || !userId) {
+                props.navigation.navigate('Index');
                 return;
             }
 
             props.navigation.navigate('ServicesList');
-            dispatch(authActions.authenticate(userId, token, email))
+            dispatch(authActions.authenticate(userId, idToken, email))
         }
 
         tryLogin();

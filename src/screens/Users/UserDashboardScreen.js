@@ -2,16 +2,20 @@ import React, { useEffect } from "react";
 import { StyleSheet, View, Image, YellowBox, ScrollView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { ListItem, Avatar } from "react-native-elements";
-import { accentColor, primaryColor } from "../../constants/Colors";
-import { CATEGORIES_LIST } from "../../constants/Utils";
-import WelcomeHeader from "../../components/WelcomeHeader";
-import { shortBrandSoatUrl } from "./../../constants/Utils";
-import { setTypeService } from "../../redux/actions/auth";
-
-import * as userActions from "../../redux/actions/users";
-import { normalizeLength } from "../../styles/layout";
 import { LinearGradient } from "expo-linear-gradient";
 import { TouchableOpacity } from "react-native-gesture-handler";
+
+import { accentColor, primaryColor } from "../../constants/Colors";
+import { CATEGORIES_LIST } from "../../constants/Utils";
+import { shortBrandSoatUrl } from "./../../constants/Utils";
+import { setTypeService } from "../../redux/actions/auth";
+import { normalizeLength } from "../../styles/layout";
+
+import * as userActions from "../../redux/actions/users";
+import * as userNotificationsAction from "../../redux/actions/notifications";
+import * as travelsActions from '../../redux/actions/travels';
+
+import WelcomeHeader from "../../components/WelcomeHeader";
 
 const selectedCategoryItem = (navigation, dispatch, categoryId, routeName) => {
   dispatch(setTypeService(categoryId));
@@ -54,13 +58,20 @@ const categoriesList = (navigation, dispatch, category, i) => (
 );
 
 const UserDashboardScreen = (props) => {
-  YellowBox.ignoreWarnings(["Setting a timer"]);
+  YellowBox.ignoreWarnings([
+    'Setting a timer',
+    "Can't perform a React state update on an unmounted component",
+    "Cannot update during an existing state transition (such as within `render`).",
+  ]);
   const dispatch = useDispatch();
-  const userAuth = useSelector(state => state.auth);
+  const { userId } = useSelector(state => state.auth);
   
   useEffect(() =>{
-    dispatch(userActions.showUser(userAuth.userId));
-  },[userAuth]);
+    dispatch(userActions.showUser(userId));
+    dispatch(userNotificationsAction.showUserNotifications(userId));
+    dispatch(travelsActions.getTripsInProgressByUserId(userId));
+    dispatch(travelsActions.getTripsMadeByUserId(userId));
+  },[userId]);
 
   return (
     <View style={styles.servicesContainer}>

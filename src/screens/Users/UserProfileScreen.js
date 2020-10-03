@@ -5,7 +5,7 @@ import { Icon, ListItem } from 'react-native-elements';
 import { darkGrey, primaryColor } from '../../constants/Colors';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import UserHeader from '../../components/UserHeader';
-import { shortBrandOrangeGreyUrl } from '../../constants/Utils';
+import { shortBrandAzulUrl } from '../../constants/Utils';
 import ImgPicker from '../../components/UI/ImagePicker';
 import * as MediaLibrary from 'expo-media-library';
 
@@ -97,7 +97,7 @@ const UserProfileScreen = props => {
               </View>
               <View style={styles.col2}>
                 <Image
-                  source={shortBrandOrangeGreyUrl}
+                  source={shortBrandAzulUrl}
                   style={styles.mainCarga}
                 />
               </View>

@@ -6,11 +6,11 @@ export const LOGOUT = 'LOGOUT';
 export const IS_SIGNUP = 'IS_SIGNUP';
 export const CHANGE_TYPE_SERVICE_SELECTED = 'CHANGE_TYPE_SERVICE_SELECTED';
 
-export const authenticate = (localId, token, email) => {
+export const authenticate = (localId, idToken, email) => {
   return {
     type: AUTHENTICATE,
     userId: localId,
-    token,
+    idToken,
     email,
   };
 };
@@ -67,13 +67,13 @@ export const signin = (email, password) => async dispatch => {
     });
 };
 
-const saveDataToStorage = (token, userId, expirationDate, email) => {
+const saveDataToStorage = (idToken, userId, expirationDate, email) => {
   AsyncStorage.setItem(
     'userData',
     JSON.stringify({
-      token,
+      token: idToken,
       userId,
-      expirationDate: expirationDate.toISOString(),
+      expirationDate,
       email: email,
     }))
 };
