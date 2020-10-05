@@ -5,7 +5,8 @@ import {
   accentColor,
   textAccentColor,
 } from "../constants/Colors";
-import { whiteSquareUrl, shortBrandAzulUrl } from "../constants/Utils";
+import { AntDesign } from "@expo/vector-icons";
+import { shortBrandAzulUrl } from "../constants/Utils";
 import { View, Image, Text, StyleSheet, Platform } from "react-native";
 import { normalizeLength } from "../styles/layout";
 
@@ -17,9 +18,10 @@ const WelcomeDescription = () => (
     <View style={styles.row}>
       <View style={styles.col1}>
         <Text style={styles.titleHeader}>
-          {`Describe el servicio lo más detallado posible`}
+          {`Describe el servicio lo más detallado posible`} 
         </Text>
       </View>
+      
       <View style={styles.col2}>
         <Image style={styles.logo} source={shortBrandAzulUrl} />
       </View>
@@ -35,7 +37,7 @@ const styles = StyleSheet.create({
   },
   col1: {
     width:  normalizeLength(200),
-    height: normalizeLength(200)
+    height: normalizeLength(160)
   },
   titleHeader: {
     minHeight: normalizeLength(30),
@@ -48,22 +50,15 @@ const styles = StyleSheet.create({
   },
   col2: {
     minWidth:  normalizeLength(100),
-    minHeight: normalizeLength(100)
+    minHeight: normalizeLength(80)
   },
   logo: {
     position: 'absolute',
     right: Platform.OS === 'ios' ? normalizeLength(-62): normalizeLength(-68),
     top: Platform.OS === 'ios' ? normalizeLength(58): normalizeLength(55),
-    width: normalizeLength(70),
-    height: normalizeLength(120),
+    width: normalizeLength(80),
+    height: normalizeLength(100),
   },
-  whiteSquare: {
-    position: 'absolute',
-    top: normalizeLength(64),
-    right: normalizeLength(-85),
-    
-    bottom: 0,
-  }
 });
 
 export default WelcomeDescription;

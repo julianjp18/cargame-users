@@ -133,7 +133,28 @@ const MainNavigator = createSwitchNavigator({
   SendPackages: {
     screen: UserHomeScreen,
     navigationOptions: {
-      headerTitle: "Envío de documentos/carga",
+      headerTitle: "Envío de paquetes",
+      headerShown: false,
+    },
+  },
+  SendDocument: {
+    screen: UserHomeScreen,
+    navigationOptions: {
+      headerTitle: "Envío de documentos",
+      headerShown: false,
+    },
+  },
+  ServiceCrane: {
+    screen: UserHomeScreen,
+    navigationOptions: {
+      headerTitle: "Servicio de grúa",
+      headerShown: false,
+    },
+  },
+  ServiceTransport: {
+    screen: UserHomeScreen,
+    navigationOptions: {
+      headerTitle: "Servicio puerta a puerta",
       headerShown: false,
     },
   },

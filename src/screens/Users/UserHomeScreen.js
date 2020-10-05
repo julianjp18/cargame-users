@@ -6,7 +6,6 @@ import React, { useState, useEffect, useReducer, useCallback } from "react";
 import {
   StyleSheet,
   View,
-  Image,
   Text,
   Picker,
   Platform,
@@ -14,6 +13,7 @@ import {
   Alert,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { ScrollView } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
