@@ -1,23 +1,24 @@
-import React from 'react';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { AntDesign } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
+import React from "react";
+import { createAppContainer, createSwitchNavigator } from "react-navigation";
+import { createBottomTabNavigator } from "react-navigation-tabs";
+import { AntDesign } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 
-import UserDashboardScreen from '../screens/Users/UserDashboardScreen';
-import AuthScreen from '../screens/Auth/AuthScreen';
-import HomeScreen from '../screens/HomeScreen';
-import UserDestinationScreen from '../screens/Users/UserDestinationScreen';
-import UserWaitingScreen from '../screens/Users/UserWaitingScreen';
-import RegisterScreen from '../screens/Auth/RegisterScreen';
-import { accentColor, primaryColor } from '../constants/Colors';
-import UserProfileScreen from '../screens/Users/UserProfileScreen';
-import UserSupportScreen from '../screens/Users/UserSupportScreen';
-import UserNotificationsScreen from '../screens/Users/UserNotificationsScreen';
-import EditPhoneNumberScreen from '../screens/Users/EditProfile/EditPhoneNumberScreen';
-import StartupScreen from '../screens/StartupScreen';
-import UserServicesScreen from '../screens/Users/UserServicesScreen';
-import ServiceSelectedScreen from '../screens/Users/UserServicesScreen/ServiceSelectedScreen';
+import UserDashboardScreen from "../screens/Users/UserDashboardScreen";
+import AuthScreen from "../screens/Auth/AuthScreen";
+import HomeScreen from "../screens/HomeScreen";
+import UserDestinationScreen from "../screens/Users/UserDestinationScreen";
+import UserWaitingScreen from "../screens/Users/UserWaitingScreen";
+import RegisterScreen from "../screens/Auth/RegisterScreen";
+import { accentColor, primaryColor } from "../constants/Colors";
+import UserHomeScreen from "../screens/Users/UserHomeScreen";
+import UserProfileScreen from "../screens/Users/UserProfileScreen";
+import UserSupportScreen from "../screens/Users/UserSupportScreen";
+import UserNotificationsScreen from "../screens/Users/UserNotificationsScreen";
+import EditPhoneNumberScreen from "../screens/Users/EditProfile/EditPhoneNumberScreen";
+import StartupScreen from "../screens/StartupScreen";
+import UserServicesScreen from "../screens/Users/UserServicesScreen";
+import ServiceSelectedScreen from "../screens/Users/UserServicesScreen/ServiceSelectedScreen";
 
 const profileNavigator = createSwitchNavigator({
   Profile: UserProfileScreen,
@@ -29,62 +30,66 @@ const ServicesNavigator = createSwitchNavigator({
   ServiceSelected: ServiceSelectedScreen,
 });
 
-const UserTabNavigator = createBottomTabNavigator({
-  Dashboard: {
-    screen: UserDashboardScreen,
-    navigationOptions: {
-      tabBarLabel: 'Inicio',
-      tabBarIcon: () => {
-        return <FontAwesome name="home" size={25} color={accentColor} />
-      }
-    }
+const UserTabNavigator = createBottomTabNavigator(
+  {
+    Dashboard: {
+      screen: UserDashboardScreen,
+      navigationOptions: {
+        tabBarLabel: "Inicio",
+        tabBarIcon: () => {
+          return <FontAwesome name="home" size={25} color={accentColor} />;
+        },
+      },
+    },
+    Services: {
+      screen: ServicesNavigator,
+      navigationOptions: {
+        tabBarLabel: "Servicios",
+        tabBarIcon: () => {
+          return (
+            <FontAwesome name="paper-plane-o" size={25} color={accentColor} />
+          );
+        },
+      },
+    },
+    Notifications: {
+      screen: UserNotificationsScreen,
+      navigationOptions: {
+        tabBarLabel: "Notificaciones",
+        tabBarIcon: () => {
+          return <AntDesign name="inbox" size={25} color={accentColor} />;
+        },
+      },
+    },
+    Support: {
+      screen: UserSupportScreen,
+      navigationOptions: {
+        headerShown: false,
+        tabBarLabel: "Soporte",
+        tabBarIcon: () => {
+          return (
+            <AntDesign name="customerservice" size={25} color={accentColor} />
+          );
+        },
+      },
+    },
+    Profile: {
+      screen: profileNavigator,
+      navigationOptions: {
+        headerShown: false,
+        tabBarLabel: "Perfil",
+        tabBarIcon: () => {
+          return <AntDesign name="user" size={25} color={accentColor} />;
+        },
+      },
+    },
   },
-  Services: {
-    screen: ServicesNavigator,
-    navigationOptions: {
-      tabBarLabel: 'Servicios',
-      tabBarIcon: () => {
-        return <FontAwesome name="paper-plane-o" size={25} color={accentColor} />
-      }
-    }
-  },
-  Notifications: {
-    screen: UserNotificationsScreen,
-    navigationOptions: {
-      tabBarLabel: 'Notificaciones',
-      tabBarIcon: () => {
-        return <AntDesign name="inbox" size={25} color={accentColor} />
-      }
-    }
-  },
-  Support: {
-    screen: UserSupportScreen,
-    navigationOptions: {
-      headerShown: false,
-      tabBarLabel: 'Soporte',
-      tabBarIcon: () => {
-        return <AntDesign name="customerservice" size={25} color={accentColor} />
-      }
-    }
-  },
-  Profile: {
-    screen: profileNavigator,
-    navigationOptions: {
-      headerShown: false,
-      tabBarLabel: 'Perfil',
-      tabBarIcon: () => {
-        return <AntDesign name="user" size={25} color={accentColor} />
-      }
-    }
-  }
-},
   {
     tabBarOptions: {
       activeTintColor: primaryColor,
-      activeBackgroundColor: 'rgba(200,200,200,.5)'
+      activeBackgroundColor: "rgba(200,200,200,.5)",
     },
-    barStyle: {
-    }
+    barStyle: {},
   }
 );
 
@@ -92,46 +97,53 @@ const MainNavigator = createSwitchNavigator({
   Startup: {
     screen: StartupScreen,
     navigationOptions: {
-      headerTitle: 'Index',
-      headerShown: false
-    }
+      headerTitle: "Index",
+      headerShown: false,
+    },
   },
   Index: {
     screen: HomeScreen,
     navigationOptions: {
-      headerTitle: 'Index',
-      headerShown: false
-    }
+      headerTitle: "Index",
+      headerShown: false,
+    },
   },
   Auth: {
     screen: AuthScreen,
     navigationOptions: {
-      headerTitle: 'Autenticación',
-      headerShown: false
-    }
+      headerTitle: "Autenticación",
+      headerShown: false,
+    },
   },
   Member: {
     screen: RegisterScreen,
     navigationOptions: {
-      headerTitle: 'Cuentanos de ti',
-      headerShown: false
-    }
+      headerTitle: "Cuentanos de ti",
+      headerShown: false,
+    },
   },
   Dashboard: UserTabNavigator,
   DestinationList: {
     screen: UserDestinationScreen,
     navigationOptions: {
-      headerTitle: 'Destination',
-      headerShown: false
-    }
+      headerTitle: "Destination",
+      headerShown: false,
+    },
+  },
+  SendPackages: {
+    screen: UserHomeScreen,
+    navigationOptions: {
+      headerTitle: "Envío de documentos/carga",
+      headerShown: false,
+    },
   },
   WaitingList: {
     screen: UserWaitingScreen,
     navigationOptions: {
-      headerTitle: 'Esperando..',
-      headerShown: false
-    }
-  }
+      headerTitle: "Esperando..",
+      headerShown: false,
+    },
+  },
 });
 
 export default createAppContainer(MainNavigator);

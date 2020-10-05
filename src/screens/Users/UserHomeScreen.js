@@ -6,6 +6,7 @@ import React, { useState, useEffect, useReducer, useCallback } from "react";
 import {
   StyleSheet,
   View,
+  Image,
   Text,
   Picker,
   Platform,
@@ -17,6 +18,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { ScrollView } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
 import moment from "moment";
+import WelcomeDescription from '../../components/WelcomeDescription';
 
 import TextInput from "../../components/UI/Input";
 import Button from "../../components/UI/Button";
@@ -158,6 +160,7 @@ const UserHomeScreen = (props) => {
   // definicion del formulario de ofertas.
   return typeServiceSelected ? (
     <View style={styles.homeContainer}>
+      <WelcomeDescription/>
       <ScrollView>
         <View style={styles.inputTextAreaContainer}>
           <TextInput
