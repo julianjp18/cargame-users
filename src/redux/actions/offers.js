@@ -10,57 +10,56 @@ export const CHANGE_PROFILE_PICTURE = "CHANGE_PROFILE_PICTURE";
 // definicion base de datos de Ofertas.
 export const createOffer = ({
   userId,
+  description,
+  timeZone,
   collectedDate,
   contact,
-  currentAddress,
-  currentCity,
-  description,
-  destinationAddress,
-  destinationCity,
-  driverId,
-  Movil,
-  pickUpDate,
-  pickUpAddress,
-  status,
-  timeZone,
-}) => {
-  return async (dispatch) => {
+  phone,
+  currentAddress = null,
+  currentCity = null,
+  destinationAddress = null,
+  destinationCity = null,
+  driverId = null,
+  pickUpDate = null,
+  pickUpAddress = null,
+  status = null,
+}) => async (dispatch) => {
     firestoreDB.collection("OffersNotificationCenter").doc().set({
+      userId,
+      description,
+      timeZone,
       collectedDate,
       contact,
+      phone,
       currentAddress,
       currentCity,
-      description,
       destinationAddress,
       destinationCity,
       driverId,
-      Movil,
       pickUpAddress,
       pickUpDate,
       status,
-      timeZone,
-      userId,
     });
+
     dispatch({
       type: CREATE_OFFER,
       userId,
       id: userId,
+      description,
+      timeZone,
       collectedDate,
       contact,
+      phone,
       currentAddress,
       currentCity,
-      description,
       destinationAddress,
       destinationCity,
       driverId,
-      Movil,
       pickUpAddress,
       pickUpDate,
       status,
-      timeZone,
     });
   };
-};
 
 // consulta por usuario de las ofertas disponibles
 export const showOffer = (userId) => async (dispatch) => {
@@ -69,6 +68,7 @@ export const showOffer = (userId) => async (dispatch) => {
     .doc(userId)
     .get()
     .then((doc) => doc.data());
+
   dispatch({
     type: SHOW_OFFER,
     userId,
@@ -82,7 +82,7 @@ export const showOffer = (userId) => async (dispatch) => {
     destinationAddress: data.destinationAddress,
     destinationCity: data.destinationCity,
     driverId: data.driverId,
-    Movil: data.Movil,
+    phone: data.phone,
     pickUpAddress: data.pickUpAddress,
     pickUpDate: data.pickUpDate,
     status: data.status,
