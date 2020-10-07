@@ -1,3 +1,7 @@
+// StartupScreen : Pantalla principal 
+// Descripcion: Ruta inicial de cargame usuarios
+// Fecha      : Octubre 2020.
+
 import React, { useEffect } from 'react';
 import { 
     View,
@@ -10,6 +14,7 @@ import { useDispatch } from 'react-redux';
 
 import * as authActions from '../redux/actions/auth';
 
+// Componente Principal
 const StartupScreen = props => {
     const dispatch = useDispatch();
 
@@ -44,6 +49,7 @@ const StartupScreen = props => {
     );
 };
 
+// Estilo de StartupScreen
 const styles = StyleSheet.create({
     screen: {
         flex: 1,

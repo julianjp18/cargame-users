@@ -21,10 +21,10 @@ import Button from "../../components/UI/Button";
 import * as offerActions from "../../redux/actions/offers";
 
 
-const FORM_DESTINATION = "FORM_DESTINATION";
+const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
 const formReducer = (state, action) => {
-  if (action.type == FORM_DESTINATION) {
+  if (action.type == FORM_INPUT_UPDATE) {
     const updatedValues = {
       ...state.inputValues,
       [action.input]: action.value,
@@ -144,10 +144,9 @@ const UserDestinationScreen = (props) => {
                 <TextInput
                   id="destinationAddress"
                   label="Dirección de destino (*)"
-                  keyboardType="numeric"
+                  keyboardType="default"
+                  minLength={5}
                   required
-                  minLength={10}
-                  maxLength={10}
                   autoCapitalize="none"
                   errorText="¡Precaución! Por favor ingresa una dirección válida."
                   onInputChange={inputChangeHandler}

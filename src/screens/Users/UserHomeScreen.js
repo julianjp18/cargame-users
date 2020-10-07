@@ -13,10 +13,12 @@ import {
   Alert,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { ScrollView } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
 import moment from "moment";
+import WelcomeDescription from '../../components/WelcomeDescription';
 
 import TextInput from "../../components/UI/Input";
 import Button from "../../components/UI/Button";
@@ -25,10 +27,10 @@ import { getUserInfo } from "../../utils/helpers";
 
 import * as offerActions from "../../redux/actions/offers";
 
-const FORM_OFFER_INPUT_UPDATE = "FORM_INPUT_UPDATE";
+const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
 const formReducer = (state, action) => {
-  if (action.type == FORM_OFFER_INPUT_UPDATE) {
+  if (action.type == FORM_INPUT_UPDATE) {
     const updatedValues = {
       ...state.inputValues,
       [action.input]: action.value,
@@ -124,10 +126,10 @@ const UserHomeScreen = (props) => {
     const action = offerActions.createOffer({
       userId,
       description: formState.inputValues.description,
-      timezone: formState.inputValues.timezone,
+      timeZone: formState.inputValues.timezone ? formState.inputValues.timezone : 'manana',
       collectedDate: formState.inputValues.collectedDate,
       contact: formState.inputValues.contact,
-      movil: formState.inputValues.movil,
+      phone: formState.inputValues.movil,
     });
 
     setError(null);
@@ -158,6 +160,7 @@ const UserHomeScreen = (props) => {
   // definicion del formulario de ofertas.
   return typeServiceSelected ? (
     <View style={styles.homeContainer}>
+      <WelcomeDescription/>
       <ScrollView>
         <View style={styles.inputTextAreaContainer}>
           <TextInput
@@ -166,7 +169,6 @@ const UserHomeScreen = (props) => {
             keyboardType="default"
             maxLength={2000}
             placeholder="Aquí debes escribir que vas a enviar incluyendo tamaños y medidas. Ej: 1 cama doble, 1 nevera grande, 2 cajas medianas de 30 x 40cm.."
-            onInputChange={inputChangeHandler}
             isTextArea
           />
         </View>

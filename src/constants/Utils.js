@@ -20,27 +20,27 @@ export const secondaryFont = 'Quicksand';
 
 export const CATEGORIES_LIST = [
     {
-      id: 'paquete',
+      id: 'package',
       name: 'Envíar una carga o paquete',
       avatar_url: truckSquareUrl,
-      routeName: 'HomeDriver', 
+      routeName: 'SendPackages', 
     },
     {
-      id: 'documento',
+      id: 'document',
       name: 'Envíar un documento',
       avatar_url: carSquareUrl,
-      routeName: 'HomeDriver',
+      routeName: 'SendDocument',
     },
     {
-        id: 'grua',
+        id: 'crane',
         name: 'Solicita un servicio de grúa',
         avatar_url: motocycleSquareUrl,
-        routeName: 'HomeDriver',
+        routeName: 'ServiceCrane',
     },
     {
-        id: 'puerta',
+        id: 'door',
         name: 'Solicitar transporte puerta a puerta',
         avatar_url: craneSquareUrl,
-        routeName: 'HomeDriver',
+        routeName: 'ServiceTransport',
     },
 ];

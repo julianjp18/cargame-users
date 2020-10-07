@@ -55,7 +55,7 @@ const UserSupportScreen = props => {
               />
             </View>
             <View style={styles.row1Col2}>
-              <Text style={styles.infoText}>¡Aquí tendrás solución a tus dudas!</Text>
+              <Text style={styles.infoText}>¡ Aquí tendrás solución a tus dudas!</Text>
             </View>
           </View>
           <View style={styles.extraInfo}>
