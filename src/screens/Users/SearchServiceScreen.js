@@ -23,7 +23,7 @@ import * as offerActions from "../../redux/actions/offers";
 
 
 
-const UserWaitingScreen = (props) => {
+const SearchServiceScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [setError] = useState();
   const dispatch = useDispatch();
@@ -136,4 +136,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserWaitingScreen;
+export default SearchServiceScreen;
