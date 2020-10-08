@@ -17,7 +17,7 @@ import {
   shortBrandAzulUrl,
   shortHeader,
   shortCarga,
-} from "./../../constants/Utils";
+} from "../../constants/Utils";
 import Button from "../../components/UI/Button";
 import * as offerActions from "../../redux/actions/offers";
 
