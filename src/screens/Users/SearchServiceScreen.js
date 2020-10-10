@@ -1,139 +1,104 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
-  Text,
   ActivityIndicator,
   Image,
-  ImageBackground,
+  Text,
 } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
 import {
+  accentColor,
   primaryColor,
-  textAccentColor,
 } from "../../constants/Colors";
 import {
-  shortBackgroundBluImageUrl,
-  shortBrandAzulUrl,
-  shortHeader,
   shortCarga,
+  whiteLogo,
 } from "../../constants/Utils";
 import Button from "../../components/UI/Button";
-import * as offerActions from "../../redux/actions/offers";
-
-
+import { LinearGradient } from "expo-linear-gradient";
+import { normalizeLength } from "../../styles/layout";
 
 const SearchServiceScreen = (props) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [setError] = useState();
-  const dispatch = useDispatch();
-  const userId = useSelector((state) => state.auth.userId);
-
-  const [] = useState();
-  const typeServiceId = useSelector((state) => state.auth.typeServiceSelected);
+  const [isLoading, setIsLoading] = useState(true);
 
   const waitingHandler = async () => {
-    const action = offerActions.createOffer({
-      userId,
-    });
-  
-    // setError(null);
-     setIsLoading(true);
-  
-    try {
-      dispatch(action);
-      props.navigation.navigate("Notifications");
-    } catch (err) {
-      setError(err.message);
-      setIsLoading(false);
-    }
+    props.navigation.navigate("Notifications");
   };
-  return typeServiceId ? (
-    <View style={styles.supportContainer}>
-      <ImageBackground source={shortBackgroundBluImageUrl} style={styles.image}>
-        <Image style={styles.logo} source={shortBrandAzulUrl} />
-        <Image style={styles.extraInfo} source={shortHeader} />
-        <View style={styles.userBoton}>
-          {isLoading ? (
-            <ActivityIndicator size="large" color={primaryColor} />
-          ) : (
-            <Button title="Ir a mis notificaciones" onPress={waitingHandler} />
-          )}
-        </View>
 
-        <View style={styles.userInfoContainer}>
-          <Image style={styles.brandImageContainer} source={shortCarga} />
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  }, []);
+
+  return (
+    <LinearGradient
+      start={{ x: -1, y: 0 }}
+      end={{ x: 1, y: 0 }}
+      colors={[
+        props.colorOne ? props.colorOne : primaryColor,
+        props.colorTwo ? props.colorTwo : accentColor
+      ]}
+      style={styles.mainContainer}
+    >
+      {isLoading ? (
+        <ActivityIndicator size="large" color={primaryColor} />
+      ) : (
+        <View style={styles.supportContainer}>
+          <View style={styles.logoContainer}>
+            <Image style={styles.logo} source={whiteLogo} />
+          </View>
+          <View style={styles.infoTextContainer}>
+            <Text style={styles.infoText}>
+              ¡Te enviaremos una notificación cuando este lista tu oferta!
+            </Text>
+          </View>
+          <View style={styles.userButtonContainer}>
+            <Button title="Ir a mis notificaciones" fontColor="white" onPress={waitingHandler} />
+          </View>
+          <View style={styles.mainCargaContainer}>
+            <Image style={styles.mainCarga} source={shortCarga} />
+          </View>
         </View>
-      </ImageBackground>
-    </View>
-  ) : (
-    <View>
-      <Text>Error</Text>
-    </View>
+      )}
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
-  supportContainer: {
-    backgroundColor: "transparent",
-    height: "100%",
-  },
-  image: {
+  mainContainer: {
     flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center",
+    minHeight: normalizeLength(400),
+    minWidth: normalizeLength(300),
   },
-  brandImageContainer: {
-    marginTop: "5%",
-    marginLeft: "-18%",
-    justifyContent: "center",
-  },
-  categoriesContainer: {
-    marginTop: "10%",
-    backgroundColor: "rgba(255,255,255,0.0)",
-    height: "40%",
-  },
-  logoContainer: {
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
-    padding: 0,
+  supportContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   logo: {
-    height: 250,
-    width: 250,
-    marginTop: "40%",
-    paddingHorizontal: "35%",
-    marginLeft: "16%",
+    height: normalizeLength(250),
+    width: normalizeLength(250),
+    marginTop: normalizeLength(100),
   },
-
+  infoTextContainer: {
+    marginHorizontal: normalizeLength(30),
+    marginTop: normalizeLength(20)
+  },
   infoText: {
-    paddingTop: "5%",
-    color: textAccentColor,
-    fontFamily: "Ruda",
-    fontSize: 20,
-    lineHeight: 30,
+    color: '#FFF',
+    fontFamily: 'Quicksand',
+    fontSize: normalizeLength(25),
+    fontWeight: '700',
+    lineHeight: 31,
+    textAlign: 'center',
   },
-  extraInfo: {
-    paddingHorizontal: "5%",
-    paddingTop: "1%",
-    marginLeft: "12%",
+  userButtonContainer: {
+    marginTop: normalizeLength(20),
   },
-  extraInfoText: {
-    color: textAccentColor,
-    fontFamily: "Quicksand",
-    fontSize: 18,
-    lineHeight: 19,
-  },
-  row2: {
-    justifyContent: "center",
-    alignItems: "center",
-    paddingTop: "5%",
-  },
-  userBoton: {
-    paddingVertical: "4%",
-    paddingHorizontal: "15%",
-    marginTop: "-6%",
-  },
+  mainCargaContainer: {
+    marginTop: normalizeLength(20)
+  }
 });
 
 export default SearchServiceScreen;

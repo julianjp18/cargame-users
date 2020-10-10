@@ -21,7 +21,7 @@ const Button = props => {
                     textAlign: "center",
                     padding: 10,
                     borderWidth: props.fontColor ? 2 : 1,
-                    borderColor: props.fontColor ? primaryColor : 'transparent',
+                    borderColor: props.fontColor ? props.fontColor : 'transparent',
                     borderRadius: 25,
                     color: props.fontColor ? props.fontColor : textAccentColor,
                     fontFamily: 'Quicksand',

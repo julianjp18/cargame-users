@@ -69,13 +69,16 @@ const UserHomeScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const dispatch = useDispatch();
-  const [selectedValue, setSelectedValue] = useState("manana");
+  const [timezone, setTimezone] = useState("manana");
   moment.locale();
   const [date, setDate] = useState(new Date());
   const [mode] = useState("date");
   const [show, setShow] = useState(false);
-  const { userId, typeServiceSelected} = useSelector(state => state.auth);
-
+  const { userId, typeServiceSelected } = useSelector(state => state.auth);
+  const [description, setDescription] = useState('');
+  const [contact, setContact] = useState('');
+  const [phone, setPhone] = useState('');
+ 
   getUserInfo().then((data) => {
     const userInfo = JSON.parse(data);
     if (!userInfo.token) {
@@ -98,75 +101,54 @@ const UserHomeScreen = (props) => {
     setDate(currentDate);
   };
 
-  const showDatePickerModal = () => {
+  const showDatePickerModal = (value) => {
+    console.log(value);
     setShow(!show);
   };
 
-  // carga los datos iniciales del formulario
-  const [formState, dispatchFormState] = useReducer(formReducer, {
-    inputValues: {
-      description: "",
-      timezone: "",
-      collectedDate: "",
-      contact: "",
-      movil: "",
-    },
-    inputValidation: {
-      description: false,
-      timezone: false,
-      collectedDate: false,
-      contact: false,
-      movil: false,
-    },
-    formIsValid: false,
-  });
 
   // mapea los campos del formulario de oferta
   const homedestinationHandler = async () => {
-    const action = offerActions.createOffer({
-      userId,
-      description: formState.inputValues.description,
-      timeZone: formState.inputValues.timezone ? formState.inputValues.timezone : 'manana',
-      collectedDate: formState.inputValues.collectedDate,
-      contact: formState.inputValues.contact,
-      phone: formState.inputValues.movil,
-    });
-
-    setError(null);
-    setIsLoading(true);
-
-    try {
-      dispatch(action);
-      props.navigation.navigate("DestinationList");
-    } catch (err) {
-      setError(err.message);
-      setIsLoading(false);
+    if (description && date && contact && phone) {
+      const action = offerActions.createOffer({
+        userId,
+        description: description,
+        timeZone: timezone ? timezone : 'manana',
+        collectedDate: date,
+        contact: contact,
+        phone: phone,
+      });
+  
+      setError(null);
+      setIsLoading(true);
+  
+      try {
+        dispatch(action);
+        props.navigation.navigate("DestinationList");
+      } catch (err) {
+        setError(err.message);
+        setIsLoading(false);
+      }
+    } else {
+      Alert.alert("¡Por favor completa todos los campos!", [
+        { text: "Está bien" },
+      ]);
     }
   };
 
-  // Modificacion de cualquier campo
-  const inputChangeHandler = useCallback(
-    (inputIdentifier, inputValue, inputValidity) => {
-      dispatchFormState({
-        type: FORM_INPUT_UPDATE,
-        value: inputValue,
-        isValid: inputValidity,
-        input: inputIdentifier,
-      });
-    },
-    [dispatchFormState]
-  );
 
   // definicion del formulario de ofertas.
   return typeServiceSelected ? (
     <View style={styles.homeContainer}>
-      <WelcomeDescription/>
+      <WelcomeDescription />
       <ScrollView>
         <View style={styles.inputTextAreaContainer}>
           <TextInput
             id="description"
             label="Descripción (*)"
             keyboardType="default"
+            value={description}
+            onChange={(value) => setDescription(value.nativeEvent.text)}
             maxLength={2000}
             placeholder="Aquí debes escribir que vas a enviar incluyendo tamaños y medidas. Ej: 1 cama doble, 1 nevera grande, 2 cajas medianas de 30 x 40cm.."
             isTextArea
@@ -177,11 +159,9 @@ const UserHomeScreen = (props) => {
           <Text style={styles.label}>Franja horaria</Text>
           <Picker
             id="timezone"
-            selectedValue={selectedValue}
+            selectedValue={timezone}
             style={styles.TravelContent}
-            onValueChange={(itemValue) =>
-              setSelectedValue(itemValue)
-            }
+            onValueChange={(itemValue) => setTimezone(itemValue)}
           >
             <Picker.Item label="Mañana" value="manana" />
             <Picker.Item label="Tarde" value="tarde" />
@@ -215,11 +195,12 @@ const UserHomeScreen = (props) => {
               required
               autoCapitalize="words"
               errorText="¡Precaución! Por favor ingresa tu nombre y apellido correctamente."
-              onInputChange={inputChangeHandler}
-              initialValue=""
+              onChange={(value) => setContact(value.nativeEvent.text)}
+              onInputChange={() => {}}
+              value={contact}
             />
             <TextInput
-              id="movil"
+              id="phone"
               label="Celular (*)"
               keyboardType="numeric"
               required
@@ -227,8 +208,9 @@ const UserHomeScreen = (props) => {
               maxLength={10}
               autoCapitalize="none"
               errorText="¡Precaución! Por favor ingresa un número de celular correcto."
-              onInputChange={inputChangeHandler}
-              initialValue=""
+              onChange={(value) => setPhone(value.nativeEvent.text)}
+              onInputChange={() => {}}
+              value={phone}
             />
           </View>
           <View style={styles.userBoton}>

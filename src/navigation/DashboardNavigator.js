@@ -8,7 +8,7 @@ import UserDashboardScreen from "../screens/Users/UserDashboardScreen";
 import AuthScreen from "../screens/Auth/AuthScreen";
 import HomeScreen from "../screens/HomeScreen";
 import UserDestinationScreen from "../screens/Users/UserDestinationScreen";
-import UserWaitingScreen from "../screens/Users/UserWaitingScreen";
+import SearchServiceScreen from "../screens/Users/SearchServiceScreen";
 import RegisterScreen from "../screens/Auth/RegisterScreen";
 import { accentColor, primaryColor } from "../constants/Colors";
 import UserHomeScreen from "../screens/Users/UserHomeScreen";
@@ -18,6 +18,7 @@ import UserNotificationsScreen from "../screens/Users/UserNotificationsScreen";
 import EditPhoneNumberScreen from "../screens/Users/EditProfile/EditPhoneNumberScreen";
 import StartupScreen from "../screens/StartupScreen";
 import UserServicesScreen from "../screens/Users/UserServicesScreen";
+import GoogleMapScreen from '../screens/GoogleMapScreen';
 import ServiceSelectedScreen from "../screens/Users/UserServicesScreen/ServiceSelectedScreen";
 
 const profileNavigator = createSwitchNavigator({
@@ -123,6 +124,13 @@ const MainNavigator = createSwitchNavigator({
     },
   },
   Dashboard: UserTabNavigator,
+  Map: {
+    screen: GoogleMapScreen,
+    navigationOptions: {
+      headerTitle: '',
+      headerShown: true
+    }
+  },
   DestinationList: {
     screen: UserDestinationScreen,
     navigationOptions: {
@@ -158,8 +166,8 @@ const MainNavigator = createSwitchNavigator({
       headerShown: false,
     },
   },
-  WaitingList: {
-    screen: UserWaitingScreen,
+  SearchService: {
+    screen: SearchServiceScreen,
     navigationOptions: {
       headerTitle: "Esperando..",
       headerShown: false,
