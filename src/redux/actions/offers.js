@@ -6,6 +6,7 @@ import { firestoreDB } from "../../constants/Firebase";
 export const CREATE_OFFER = "CREATE_OFFER";
 export const SHOW_OFFER = "SHOW_OFFER";
 export const CHANGE_PROFILE_PICTURE = "CHANGE_PROFILE_PICTURE";
+export const ADD_DESTINATION_OFFER = "ADD_DESTINATION_OFFER";
 
 // definicion base de datos de Ofertas.
 export const createOffer = ({
@@ -24,27 +25,29 @@ export const createOffer = ({
   pickUpAddress = null,
   status = null,
 }) => async (dispatch) => {
-    firestoreDB.collection("OffersNotificationCenter").doc().set({
-      userId,
-      description,
-      timeZone,
-      collectedDate,
-      contact,
-      phone,
-      currentAddress,
-      currentCity,
-      destinationAddress,
-      destinationCity,
-      driverId,
-      pickUpAddress,
-      pickUpDate,
-      status,
-    });
+  const uid = [];
+  await firestoreDB.collection("OffersNotificationCenter").add({
+    userId,
+    description,
+    timeZone,
+    collectedDate,
+    contact,
+    phone,
+    currentAddress,
+    currentCity,
+    destinationAddress,
+    destinationCity,
+    driverId,
+    pickUpAddress,
+    pickUpDate,
+    status,
+  }).then((ref) => uid.push(ref.id));
 
+  if(uid[0]) {
     dispatch({
       type: CREATE_OFFER,
       userId,
-      id: userId,
+      id: uid[0],
       description,
       timeZone,
       collectedDate,
@@ -59,8 +62,25 @@ export const createOffer = ({
       pickUpDate,
       status,
     });
-  };
+  }
+};
 
+export const addDestinationToOffer = ({
+  id,
+  currentAddress,
+  destinationAddress,
+}) => async (dispatch) => {
+  await firestoreDB.collection("OffersNotificationCenter").doc(id).update({
+    currentAddress,
+    destinationAddress,
+  });
+
+  dispatch({
+    type: ADD_DESTINATION_OFFER,
+    currentAddress,
+    destinationAddress,
+  });
+};
 // consulta por usuario de las ofertas disponibles
 export const showOffer = (userId) => async (dispatch) => {
   const data = await firestoreDB

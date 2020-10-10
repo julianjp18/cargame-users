@@ -1,8 +1,8 @@
-// Fecha  : Ultima revision Agosto 19 - 2020
-// Autor  : Flavio Cortes
-// Detalle: definicion Hook para la persistencia de la tabla oferta.
-
-import { CREATE_OFFER, SHOW_OFFER } from "../actions/offers";
+import {
+  CREATE_OFFER,
+  SHOW_OFFER,
+  ADD_DESTINATION_OFFER,
+} from "../actions/offers";
 const initialState = null;
 
 export default (state = initialState, action) => {
@@ -19,11 +19,16 @@ export default (state = initialState, action) => {
         destinationAddress: action.destinationAddress,
         destinationCity: action.destinationCity,
         driverId: action.driverId,
-        movil: action.movil,
+        phine: action.phone,
         pickUpDate: action.pickUpDate,
         pickUpAddress: action.pickUpAddress,
         status: action.status,
         timeZone: action.timeZone,
+      };
+    case ADD_DESTINATION_OFFER:
+      return {
+        currentAddress: action.currentAddress,
+        destinationAddress: action.destinationAddress,
       };
     default:
       return state;

@@ -12,7 +12,9 @@ import DashboardNavigator from './src/navigation/DashboardNavigator';
 import authReducer from './src/redux/reducers/auth';
 import userReducer from './src/redux/reducers/user';
 import notificationReducer from './src/redux/reducers/notification';
+import placeReducer from './src/redux/reducers/place';
 import travelReducer from './src/redux/reducers/travel';
+import offerReducer from './src/redux/reducers/offer';
 import { shortBackgroundImageUrl } from './src/constants/Utils';
 
 enableScreens();
@@ -43,6 +45,8 @@ const rootReducer = combineReducers({
   user: userReducer,
   notifications: notificationReducer,
   travels: travelReducer,
+  offer: offerReducer,
+  places: placeReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));

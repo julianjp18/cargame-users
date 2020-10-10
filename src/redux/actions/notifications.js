@@ -1,5 +1,7 @@
 import { firestoreDB } from '../../constants/Firebase';
+import moment from "moment";
 export const SHOW_NOTIFICATIONS = 'SHOW_NOTIFICATIONS';
+export const SAVE_DESTINATION_NOTIFICATION = 'SAVE_DESTINATION_NOTIFICATION';
 
 export const showUserNotifications = (userId) => dispatch => {
 
@@ -23,4 +25,16 @@ export const showUserNotifications = (userId) => dispatch => {
         type: SHOW_NOTIFICATIONS,
         userNotifications: data
     });
+};
+
+export const saveNotificationDestinationOffer = async ({ offerId, userId }) => {
+  await firestoreDB
+  .collection("NotificationsUsers")
+  .set({
+    date: moment().format('MMMM Do YYYY, h:mm:ss a'),
+    message: 'Has solicitado un nuevo servicio',
+    typeMessage: 'Information',
+    userId,
+    offerId,
+  });
 };
