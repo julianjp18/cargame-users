@@ -87,10 +87,7 @@ export const showOffer = (userId) => async (dispatch) => {
     .collection("OffersNotificationCenter")
     .doc(userId)
     .get()
-    .then((doc) => {
-      console.log(doc);
-      return doc.data();
-    });
+    .then((doc) => doc.data());
 
   dispatch({
     type: SHOW_OFFER,

@@ -101,11 +101,7 @@ const UserHomeScreen = (props) => {
     setDate(currentDate);
   };
 
-  const showDatePickerModal = (value) => {
-    console.log(value);
-    setShow(!show);
-  };
-
+  const showDatePickerModal = (value) => setShow(!show);
 
   // mapea los campos del formulario de oferta
   const homedestinationHandler = async () => {
