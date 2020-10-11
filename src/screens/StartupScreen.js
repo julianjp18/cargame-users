@@ -27,7 +27,7 @@ const StartupScreen = props => {
             }
 
             const transformedUserData = JSON.parse(userData);
-            const {idToken, userId, expiredDate, email } = transformedUserData;
+            const { idToken, userId, expiredDate, email } = transformedUserData;
             const expirationDate = new Date(expiredDate);
 
             if (expirationDate <= new Date() || !idToken || !userId) {

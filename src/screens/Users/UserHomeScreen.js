@@ -26,6 +26,7 @@ import { primaryColor, accentColor } from "../../constants/Colors";
 import { getUserInfo } from "../../utils/helpers";
 
 import * as offerActions from "../../redux/actions/offers";
+import * as authActions from '../../redux/actions/auth';
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -81,7 +82,7 @@ const UserHomeScreen = (props) => {
  
   getUserInfo().then((data) => {
     const userInfo = JSON.parse(data);
-    if (!userInfo.token) {
+    if (!userInfo.idToken) {
       dispatch(authActions.logout());
       props.navigation.navigate('Index');
     }
