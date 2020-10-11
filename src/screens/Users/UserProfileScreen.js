@@ -50,7 +50,7 @@ const UserProfileScreen = props => {
 
   getUserInfo().then((data) => {
     const userInfo = JSON.parse(data);
-    if (!userInfo.token) {
+    if (!userInfo.idToken) {
       dispatch(authActions.logout());
       props.navigation.navigate('Index');
     }

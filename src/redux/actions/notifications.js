@@ -30,7 +30,7 @@ export const showUserNotifications = (userId) => dispatch => {
 export const saveNotificationDestinationOffer = async ({ offerId, userId }) => {
   await firestoreDB
   .collection("NotificationsUsers")
-  .set({
+  .add({
     date: moment().format('MMMM Do YYYY, h:mm:ss a'),
     message: 'Has solicitado un nuevo servicio',
     typeMessage: 'Information',
