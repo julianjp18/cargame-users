@@ -19,27 +19,7 @@ const StartupScreen = props => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const tryLogin = async () => {
-            const userData = await AsyncStorage.getItem('userData');
-            if (!userData) {
-                props.navigation.navigate('Index');
-                return;
-            }
-
-            const transformedUserData = JSON.parse(userData);
-            const { idToken, userId, expiredDate, email } = transformedUserData;
-            const expirationDate = new Date(expiredDate);
-
-            if (expirationDate <= new Date() || !idToken || !userId) {
-                props.navigation.navigate('Index');
-                return;
-            }
-
-            props.navigation.navigate('ServicesList');
-            dispatch(authActions.authenticate(userId, idToken, email))
-        }
-
-        tryLogin();
+        props.navigation.navigate('Index');
     }, [dispatch]);
 
     return (

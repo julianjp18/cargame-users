@@ -40,8 +40,8 @@ const UserDestinationScreen = (props) => {
     } else {
       const saveDestinationAction = offerActions.addDestinationToOffer({
         id: offer.id,
-        currentAddress: places.currentOriginAddress,
-        destinationAddress: places.currentDestinyAddress,
+        currentCity: places.currentOriginAddress,
+        destinationCity: places.currentDestinyAddress,
       });
 
       const updateUserNotifications =

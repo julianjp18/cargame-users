@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { ListItem, Icon } from "react-native-elements";
@@ -6,6 +6,7 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { textSecondaryColor, darkGrey, primaryColor, } from "../../constants/Colors";
 
 import * as authActions from '../../redux/actions/auth';
+import * as userNotificationsActions from "../../redux/actions/notifications";
 import { getUserInfo } from '../utils/helpers';
 import UserHeader from "../../components/UserHeader";
 
@@ -13,7 +14,12 @@ const UserNotificationsScreen = (props) => {
   const dispatch = useDispatch();
   
   const user = useSelector(state => state.user);
-  const notifications = useSelector(state => state.notifications.userNotifications);
+  const [notifications, setNotifications] = useState(useSelector(state => state.notifications.userNotifications));
+
+  useEffect(() => {
+    dispatch(userNotificationsActions.showUserNotifications(user.userId));
+    setNotifications(useSelector(state => state.notifications.userNotifications));
+  }, []);
 
   getUserInfo().then((data) => {
     const userInfo = JSON.parse(data);

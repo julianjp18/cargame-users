@@ -14,6 +14,7 @@ export const createOffer = ({
   description,
   timeZone,
   collectedDate,
+  pickUpDate,
   contact,
   phone,
   currentAddress = null,
@@ -21,9 +22,10 @@ export const createOffer = ({
   destinationAddress = null,
   destinationCity = null,
   driverId = null,
-  pickUpDate = null,
   pickUpAddress = null,
-  status = null,
+  status = 'ACTIVE',
+  offerValue = '',
+  dateOffered = '',
 }) => async (dispatch) => {
   const uid = [];
   await firestoreDB.collection("OffersNotificationCenter").add({
@@ -31,6 +33,7 @@ export const createOffer = ({
     description,
     timeZone,
     collectedDate,
+    dateOffered,
     contact,
     phone,
     currentAddress,
@@ -41,6 +44,7 @@ export const createOffer = ({
     pickUpAddress,
     pickUpDate,
     status,
+    offerValue,
   }).then((ref) => uid.push(ref.id));
 
   if(uid[0]) {
@@ -67,18 +71,18 @@ export const createOffer = ({
 
 export const addDestinationToOffer = ({
   id,
-  currentAddress,
-  destinationAddress,
+  currentCity,
+  destinationCity,
 }) => async (dispatch) => {
   await firestoreDB.collection("OffersNotificationCenter").doc(id).update({
-    currentAddress,
-    destinationAddress,
+    currentCity,
+    destinationCity,
   });
 
   dispatch({
     type: ADD_DESTINATION_OFFER,
-    currentAddress,
-    destinationAddress,
+    currentCity,
+    destinationCity,
   });
 };
 // consulta por usuario de las ofertas disponibles
