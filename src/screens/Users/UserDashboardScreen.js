@@ -16,7 +16,7 @@ import { setTypeService } from "../../redux/actions/auth";
 import { normalizeLength } from "../../styles/layout";
 
 import * as userActions from "../../redux/actions/users";
-import * as userNotificationsAction from "../../redux/actions/notifications";
+import * as userNotificationsActions from "../../redux/actions/notifications";
 import * as travelsActions from '../../redux/actions/travels';
 
 import WelcomeHeader from "../../components/WelcomeHeader";
@@ -74,7 +74,7 @@ const UserDashboardScreen = (props) => {
   
   useEffect(() =>{
     dispatch(userActions.showUser(userId));
-    dispatch(userNotificationsAction.showUserNotifications(userId));
+    dispatch(userNotificationsActions.showUserNotifications(userId));
     dispatch(travelsActions.getTripsInProgressByUserId(userId));
     dispatch(travelsActions.getTripsMadeByUserId(userId));
   },[userId]);

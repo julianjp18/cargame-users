@@ -67,6 +67,7 @@ const linearGradientTitle = (title) => (
 );
 
 const UserHomeScreen = (props) => {
+  moment.locale();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const dispatch = useDispatch();
@@ -110,8 +111,9 @@ const UserHomeScreen = (props) => {
       const action = offerActions.createOffer({
         userId,
         description: description,
-        timeZone: timezone ? timezone : 'manana',
+        timeZone: timezone ? timezone : 'morning',
         collectedDate: date,
+        pickUpDate: moment(date).format("DD/MM/YYYY"),
         contact: contact,
         phone: phone,
       });
@@ -160,8 +162,9 @@ const UserHomeScreen = (props) => {
             style={styles.TravelContent}
             onValueChange={(itemValue) => setTimezone(itemValue)}
           >
-            <Picker.Item label="Mañana" value="manana" />
-            <Picker.Item label="Tarde" value="tarde" />
+            <Picker.Item label="Mañana" value="morning" />
+            <Picker.Item label="Tarde" value="evening" />
+            <Picker.Item label="Noche" value="night" />
           </Picker>
 
           {linearGradientTitle("Fecha de recogida")}
