@@ -7,6 +7,7 @@ export const CREATE_OFFER = "CREATE_OFFER";
 export const SHOW_OFFER = "SHOW_OFFER";
 export const CHANGE_PROFILE_PICTURE = "CHANGE_PROFILE_PICTURE";
 export const ADD_DESTINATION_OFFER = "ADD_DESTINATION_OFFER";
+export const OFFER_SELECTED = "OFFER_SELECTED";
 
 // definicion base de datos de Ofertas.
 export const createOffer = ({
@@ -97,7 +98,6 @@ export const showOffer = (userId) => async (dispatch) => {
     type: SHOW_OFFER,
     userId,
     id: data.userId,
-    pickupDate: data.pickupDate,
     collectionDate: data.collectionDate,
     contact: data.contact,
     currentAddress: data.currentCity,
@@ -112,4 +112,34 @@ export const showOffer = (userId) => async (dispatch) => {
     status: data.status,
     timeZone: data.timeZone,
   });
+};
+
+export const saveOfferSelected = (offerId) => async dispatch => {
+  const data = firestoreDB
+    .collection("OffersNotificationCenter")
+    .doc(offerId)
+    .get();
+    
+  const {
+    currentCity,
+    destinationCity,
+    timeZone,
+    pickUpDate,
+    offerValue,
+  } = await data.then((doc) => doc.data());
+
+  if (currentCity && destinationCity) {
+    dispatch({
+      type: OFFER_SELECTED,
+      offerSelected: {
+        currentCity,
+        destinationCity,
+        timeZone,
+        pickUpDate,
+        offerValue,
+        offerId
+      },
+    });
+  }
+  
 };

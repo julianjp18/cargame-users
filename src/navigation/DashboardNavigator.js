@@ -20,6 +20,7 @@ import StartupScreen from "../screens/StartupScreen";
 import UserServicesScreen from "../screens/Users/UserServicesScreen";
 import GoogleMapScreen from '../screens/GoogleMapScreen';
 import ServiceSelectedScreen from "../screens/Users/UserServicesScreen/ServiceSelectedScreen";
+import ShowOfferScreen from "../screens/Users/UserNotificationsScreen/ShowOfferScreen";
 
 const profileNavigator = createSwitchNavigator({
   Profile: UserProfileScreen,
@@ -29,6 +30,11 @@ const profileNavigator = createSwitchNavigator({
 const ServicesNavigator = createSwitchNavigator({
   Services: UserServicesScreen,
   ServiceSelected: ServiceSelectedScreen,
+});
+
+const NotificationsNavigator = createSwitchNavigator({
+  Notifications: UserNotificationsScreen,
+  ShowOffer: ShowOfferScreen
 });
 
 const UserTabNavigator = createBottomTabNavigator(
@@ -54,7 +60,7 @@ const UserTabNavigator = createBottomTabNavigator(
       },
     },
     Notifications: {
-      screen: UserNotificationsScreen,
+      screen: NotificationsNavigator,
       navigationOptions: {
         tabBarLabel: "Notificaciones",
         tabBarIcon: () => {

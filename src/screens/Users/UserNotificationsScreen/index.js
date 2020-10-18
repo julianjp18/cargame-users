@@ -3,23 +3,22 @@ import { StyleSheet, View } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { ListItem, Icon } from "react-native-elements";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import { textSecondaryColor, darkGrey, primaryColor, } from "../../constants/Colors";
+import { textSecondaryColor, darkGrey, primaryColor, } from "../../../constants/Colors";
 
-import * as authActions from '../../redux/actions/auth';
-import * as userNotificationsActions from "../../redux/actions/notifications";
-import { getUserInfo } from '../utils/helpers';
-import UserHeader from "../../components/UserHeader";
+import * as authActions from '../../../redux/actions/auth';
+import * as userNotificationsActions from "../../../redux/actions/notifications";
+import * as offersActions from '../../../redux/actions/offers';
+import { getUserInfo } from '../../utils/helpers';
+import UserHeader from "../../../components/UserHeader";
 
 const UserNotificationsScreen = (props) => {
   const dispatch = useDispatch();
-  
   const user = useSelector(state => state.user);
   const [notifications, setNotifications] = useState(useSelector(state => state.notifications.userNotifications));
 
   useEffect(() => {
     dispatch(userNotificationsActions.showUserNotifications(user.userId));
-    setNotifications(useSelector(state => state.notifications.userNotifications));
-  }, []);
+  }, [user]);
 
   getUserInfo().then((data) => {
     const userInfo = JSON.parse(data);
@@ -29,6 +28,16 @@ const UserNotificationsScreen = (props) => {
     }
   });
   
+  const showOfferScreen = (notification) => {
+    if (!notification.offerId) return true;
+    try {
+      dispatch(offersActions.saveOfferSelected(notification.offerId));
+      props.navigation.navigate('ShowOffer');
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   return (
     <View style={styles.servicesContainer}>
       <UserHeader
@@ -40,7 +49,7 @@ const UserNotificationsScreen = (props) => {
         <ScrollView>
           <View style={styles.infoContainer}>
             {notifications.length > 0 && notifications.map((notification) => (
-              <ListItem key={notification.message} containerStyle={styles.listContainer} bottomDivider>
+              <ListItem onPress={() => showOfferScreen(notification)} key={notification.message} containerStyle={styles.listContainer} bottomDivider>
                 <Icon
                   name='bell'
                   type='font-awesome'
@@ -49,6 +58,13 @@ const UserNotificationsScreen = (props) => {
                 <ListItem.Content>
                   <ListItem.Title style={styles.titleListItem}>{notification.message}</ListItem.Title>
                 </ListItem.Content>
+                {notification.status && (
+                  <Icon
+                    name='angle-right'
+                    type='font-awesome'
+                    color={primaryColor}
+                  />
+                )}
               </ListItem>
             ))}
             <TouchableOpacity>

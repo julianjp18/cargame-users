@@ -44,3 +44,18 @@ export const CATEGORIES_LIST = [
         routeName: 'ServiceTransport',
     },
 ];
+
+export const collectionTimeSlot = [
+  {
+      label: 'morning',
+      value: 'Mañana (7:00am - 12:00pm)'
+  },
+  {
+      label: 'evening',
+      value: 'Tarde (12:01pm - 6:59pm)'
+  },
+  {
+      label: 'night',
+      value: 'Noche (7:00pm - 10:00pm)'
+  }
+];
