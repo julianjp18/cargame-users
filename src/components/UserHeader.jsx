@@ -21,9 +21,11 @@ const UserHeader = props => (
         </View>
       )}
       <View style={props.leftIcon ? styles.col2 : styles.col12}>
-        <Text style={props.leftIcon ? styles.titleHeader : styles.longTitleHeader}>
-          {props.title}
-        </Text>
+        {props.title && (
+          <Text style={props.leftIcon ? styles.titleHeader : styles.longTitleHeader}>
+            {props.title}
+          </Text>
+        )}
         {props.subtitle && (
           <Text style={styles.subtitleHeader}>
             {props.subtitle}
