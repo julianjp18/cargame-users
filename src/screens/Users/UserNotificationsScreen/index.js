@@ -32,7 +32,9 @@ const UserNotificationsScreen = (props) => {
     if (!notification.offerId) return true;
     try {
       dispatch(offersActions.saveOfferSelected(notification.offerId));
-      props.navigation.navigate('ShowOffer');
+      setTimeout(() => {
+        props.navigation.navigate('ShowOffer');
+      }, 2000);
     } catch (err) {
       console.log(err.message);
     }
