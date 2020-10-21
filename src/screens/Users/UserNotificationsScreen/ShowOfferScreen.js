@@ -1,5 +1,5 @@
 import React, { useState, useReducer, useCallback } from "react";
-import Env from 'react-native-config';
+import Env from '../../../../env';
 import { StyleSheet, Text, View, Alert } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import moment from 'moment';
@@ -25,17 +25,92 @@ const getPreferenceId = async (payer, ...items) => {
     `https://api.mercadopago.com/checkout/preferences?access_token=${Env.MP_ACCESS_TOKEN}`,
     {
       method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${Env.MP_ACCESS_TOKEN}`
+      },
       body: JSON.stringify({
-        items,
-        payer: {
+        "collector_id": 202809963,
+        "operation_type": "regular_payment",
+        "items": [items],
+        "payer": {
           email: payer,
+          name: 'test',
+          surname: 'last name',
+          phone: {
+            number: '3202345684'
+          },
+          "date_created": "",
+          "phone": {
+              "area_code": "",
+              "number": ""
+          },
+          "identification": {
+              "type": "",
+              "number": ""
+          },
+          "address": {
+              "street_name": "",
+              "street_number": null,
+              "zip_code": ""
+          }
         },
+        "back_urls": {
+            "success": "",
+            "pending": "",
+            "failure": ""
+        },
+        "auto_return": "",
+        "payment_methods": {
+            "excluded_payment_methods": [
+                {
+                    "id": ""
+                }
+            ],
+            "excluded_payment_types": [
+                {
+                    "id": ""
+                }
+            ],
+            default_payment_method_id: 'credit_card',
+            installments: 1,
+            default_installments: 1,
+        },
+        "client_id": "6295877106812064",
+        "marketplace": "MP-MKT-6295877106812064",
+        "marketplace_fee": 0,
+        "shipments": {
+            "receiver_address": {
+                "zip_code": "",
+                "street_number": null,
+                "street_name": "",
+                "floor": "",
+                "apartment": ""
+            }
+        },
+        "notification_url": null,
+        "statement_descriptor": "MERCADOPAGO",
+        "external_reference": "",
+        "additional_info": "",
+        "expires": false,
+        "expiration_date_from": null,
+        "expiration_date_to": null,
+        "date_created": "2018-02-02T15:22:23.535-04:00",
+        "id": "202809963-920c288b-4ebb-40be-966f-700250fa5370",
+        "init_point": "https://www.mercadopago.com/mla/checkout/start?pref_id=202809963-920c288b-4ebb-40be-966f-700250fa5370",
+        "sandbox_init_point": "https://sandbox.mercadopago.com/mla/checkout/pay?pref_id=202809963-920c288b-4ebb-40be-966f-700250fa5370"
       }),
     }
-  );
-  const preference = await response.json();
+  ).then((response) => console.log(response))
+  .catch((error) => {
+    console.error(error);
+  });;
 
-  return preference.id;
+  if (response) {
+    const preference = await response.json();
+    return preference.id;
+  }
 };
 
 const getcollectionTimeSlot = (collectionTimeSlotItem) =>
@@ -45,24 +120,24 @@ const getcollectionTimeSlot = (collectionTimeSlotItem) =>
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
 const formReducer = (state, action) => {
-  if(action.type == FORM_INPUT_UPDATE) {
-      const updatedValues = {
-          ...state.inputValues,
-          [action.input]: action.value
-      };
-      const updatedValidities = {
-          ...state.inputValidities,
-          [action.input]: action.isValid
-      }
-      let updatedFormIsValid = true;
-      for (const key in updatedValidities) {
-          updatedFormIsValid = updatedFormIsValid && updatedValidities[key];
-      }
-      return {
-          formIsValid: updatedFormIsValid,
-          inputValidities: updatedValidities,
-          inputValues: updatedValues
-      }
+  if (action.type == FORM_INPUT_UPDATE) {
+    const updatedValues = {
+      ...state.inputValues,
+      [action.input]: action.value
+    };
+    const updatedValidities = {
+      ...state.inputValidities,
+      [action.input]: action.isValid
+    }
+    let updatedFormIsValid = true;
+    for (const key in updatedValidities) {
+      updatedFormIsValid = updatedFormIsValid && updatedValidities[key];
+    }
+    return {
+      formIsValid: updatedFormIsValid,
+      inputValidities: updatedValidities,
+      inputValues: updatedValues
+    }
   }
   return state;
 };
@@ -84,13 +159,16 @@ const ShowOfferScreen = (props) => {
         currency_id: 'COP',
         unit_price: offer.offerValue,
       });
-
-      const payment = await MercadoPagoCheckout.createPayment({
-        publicKey: Env.MP_PUBLIC_KEY,
-        preferenceId,
-      });
-
-      setPaymentResult(payment);
+      console.log('yes');
+      if (preferenceId) {
+        console.log('yes2');
+        const payment = await MercadoPagoCheckout.createPayment({
+          publicKey: Env.MP_PUBLIC_KEY,
+          preferenceId,
+        });
+        
+        if (payment) setPaymentResult(payment);
+      }
     } catch (err) {
       Alert.alert('Something went wrong', err.message);
     }
@@ -105,12 +183,12 @@ const ShowOfferScreen = (props) => {
   });
 
   const inputChangeHandler = useCallback(
-    (inputIdentifier, inputValue, inputValidity ) => {
+    (inputIdentifier, inputValue, inputValidity) => {
       dispatchFormState({
         type: FORM_INPUT_UPDATE,
         value: inputValue,
         isValid: inputValidity,
-        input: inputIdentifier 
+        input: inputIdentifier
       });
     },
     [dispatchFormState]
@@ -136,108 +214,108 @@ const ShowOfferScreen = (props) => {
         reDirect="Notifications"
       />
       {user && (
-          <View style={styles.mainContainer}>
-            <ScrollView>
-              <View style={styles.serviceTitleContainer}>
-                  <View style={styles.row}>
-                    <View style={styles.col1ServiceTitle}>
-                      <Text style={styles.serviceTitle}>Tu servicio:</Text>
-                    </View>
-                    <View style={styles.col2ServiceTitle}>
-                      <Text style={styles.servicePrice}>{0}</Text>
-                    </View>
-                  </View>
+        <View style={styles.mainContainer}>
+          <ScrollView>
+            <View style={styles.serviceTitleContainer}>
+              <View style={styles.row}>
+                <View style={styles.col1ServiceTitle}>
+                  <Text style={styles.serviceTitle}>Tu servicio:</Text>
+                </View>
+                <View style={styles.col2ServiceTitle}>
+                  <Text style={styles.servicePrice}>{0}</Text>
+                </View>
               </View>
-              <View style={styles.showInfoContainer}>
-                <View style={styles.showInfoContent}>
-                  <Text style={styles.title}>Ciudad de recogida:</Text>
-                  <Text style={styles.subtitle}>{offer.currentCity}</Text>
+            </View>
+            <View style={styles.showInfoContainer}>
+              <View style={styles.showInfoContent}>
+                <Text style={styles.title}>Ciudad de recogida:</Text>
+                <Text style={styles.subtitle}>{offer.currentCity}</Text>
+              </View>
+              <View style={styles.showInfoContent}>
+                <Text style={styles.title}>Ciudad de destino:</Text>
+                <Text style={styles.subtitle}>{offer.destinationCity}</Text>
+              </View>
+              <View style={styles.showInfoContent}>
+                <Text style={styles.title}>Fecha de recogida:</Text>
+                <Text style={styles.subtitle}>{moment(offer.pickUpDate, 'DD/MM/YYYY').format("ll")}</Text>
+              </View>
+              <View style={styles.showInfoContent}>
+                <Text style={styles.title}>Franja horaria de recogida:</Text>
+                <Text style={styles.subtitle}>
+                  {getcollectionTimeSlot(offer.timeZone)}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.valueDeclaredContainer}>
+              <View style={styles.valueDeclaredInputContent}>
+                <TextInput
+                  id="valueDeclared"
+                  label="Valor declarado (*)"
+                  keyboardType="numeric"
+                  required
+                  min={0}
+                  max={1000000}
+                  minLength={1}
+                  maxLength={10}
+                  autoCapitalize="none"
+                  errorText="¡UPS! Por favor ingresa un valor mayor a 0 y menor que 1.000.000"
+                  onInputChange={inputChangeHandler}
+                  initialValue=""
+                  leftIcon={
+                    <FontAwesome name="dollar" size={20} color={primaryColor} />
+                  }
+                />
+              </View>
+              <Text style={styles.valueDeclaredText}>Tu envío se encuentra respaldado por un costo del 10% del valor declarado.</Text>
+            </View>
+            <View style={styles.discountCodeContainer}>
+
+            </View>
+            <View style={styles.subtotalsContainer}>
+              <View style={styles.rowSubtotals}>
+                <View style={styles.col1Subtotals}>
+                  <Text style={styles.subtotalsText}>Subtotal: </Text>
                 </View>
-                <View style={styles.showInfoContent}>
-                  <Text style={styles.title}>Ciudad de destino:</Text>
-                  <Text style={styles.subtitle}>{offer.destinationCity}</Text>
-                </View>
-                <View style={styles.showInfoContent}>
-                  <Text style={styles.title}>Fecha de recogida:</Text>
-                  <Text style={styles.subtitle}>{moment(offer.pickUpDate, 'DD/MM/YYYY').format("ll")}</Text>
-                </View>
-                <View style={styles.showInfoContent}>
-                  <Text style={styles.title}>Franja horaria de recogida:</Text>
-                  <Text style={styles.subtitle}>
-                    {getcollectionTimeSlot(offer.timeZone)}
+                <View style={styles.col2Subtotals}>
+                  <Text style={styles.subtotalsNumber}>
+                    {currencyFormat(offer.offerValue ? offer.offerValue : 0, 0)}
                   </Text>
                 </View>
-              </View> 
-              <View style={styles.valueDeclaredContainer}>
-                <View style={styles.valueDeclaredInputContent}>
-                  <TextInput
-                    id="valueDeclared"
-                    label="Valor declarado (*)"
-                    keyboardType="numeric"
-                    required
-                    min={0}
-                    max={1000000}
-                    minLength={1}
-                    maxLength={10}
-                    autoCapitalize="none"
-                    errorText="¡UPS! Por favor ingresa un valor mayor a 0 y menor que 1.000.000"
-                    onInputChange={inputChangeHandler}
-                    initialValue=""
-                    leftIcon={
-                      <FontAwesome name="dollar" size={20} color={primaryColor} />
-                    }
-                  />
+              </View>
+              <View style={styles.row}>
+                <View style={styles.col1Subtotals}>
+                  <Text style={styles.subtotalsText}>% Valor declarado: </Text>
                 </View>
-                <Text style={styles.valueDeclaredText}>Tu envío se encuentra respaldado por un costo del 10% del valor declarado.</Text>
-              </View>
-              <View style={styles.discountCodeContainer}>
-
-              </View>
-              <View style={styles.subtotalsContainer}>
-                  <View style={styles.rowSubtotals}>
-                    <View style={styles.col1Subtotals}>
-                      <Text style={styles.subtotalsText}>Subtotal: </Text>
-                    </View>
-                    <View style={styles.col2Subtotals}>
-                      <Text style={styles.subtotalsNumber}>
-                        {currencyFormat(offer.offerValue ? offer.offerValue : 0, 0)}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={styles.row}>
-                    <View style={styles.col1Subtotals}>
-                      <Text style={styles.subtotalsText}>% Valor declarado: </Text>
-                    </View>
-                    <View style={styles.col2Subtotals}>
-                      <Text style={styles.subtotalsNumber}>
-                        {currencyFormat((10 * formState.inputValues.valueDeclared) / 100, 0)}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={styles.row}>
-                    <View style={styles.col1Subtotals}>
-                      <Text style={styles.subtotalsText}>Código promo: </Text>
-                    </View>
-                    <View style={styles.col2Subtotals}>
-                      <Text style={styles.subtotalsNumber}>{0}</Text>
-                    </View>
-                  </View>
-              </View>
-              <View style={styles.totalContainer}>
-                <View style={styles.row}>
-                  <View style={styles.col1}>
-                    <Text style={styles.totalTitle}>VALOR A PAGAR:</Text>
-                  </View>
-                  <View style={styles.col2}>
-                    <Text style={styles.totalPrice}>
-                      {offer.offerValue ? offer.offerValue : 0}
-                    </Text>
-                  </View>
+                <View style={styles.col2Subtotals}>
+                  <Text style={styles.subtotalsNumber}>
+                    {currencyFormat((10 * formState.inputValues.valueDeclared) / 100, 0)}
+                  </Text>
                 </View>
               </View>
-              {paymentResult ? (
-                <Text style={styles.text}>Resultado de pago: {JSON.stringify(paymentResult)}</Text>
-              ) : (
+              <View style={styles.row}>
+                <View style={styles.col1Subtotals}>
+                  <Text style={styles.subtotalsText}>Código promo: </Text>
+                </View>
+                <View style={styles.col2Subtotals}>
+                  <Text style={styles.subtotalsNumber}>{0}</Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.totalContainer}>
+              <View style={styles.row}>
+                <View style={styles.col1}>
+                  <Text style={styles.totalTitle}>VALOR A PAGAR:</Text>
+                </View>
+                <View style={styles.col2}>
+                  <Text style={styles.totalPrice}>
+                    {offer.offerValue ? offer.offerValue : 0}
+                  </Text>
+                </View>
+              </View>
+            </View>
+            {paymentResult ? (
+              <Text style={styles.text}>Resultado de pago: {JSON.stringify(paymentResult)}</Text>
+            ) : (
                 <View style={styles.buttonsContainer}>
                   <View style={styles.row}>
                     <View style={styles.col1}>
@@ -258,8 +336,8 @@ const ShowOfferScreen = (props) => {
                   </View>
                 </View>
               )}
-            </ScrollView>
-          </View>
+          </ScrollView>
+        </View>
       )}
     </View>
   );
@@ -287,7 +365,7 @@ const styles = StyleSheet.create({
 
   },
   col2ServiceTitle: {
-    
+
   },
   serviceTitle: {
     color: primaryColor,
