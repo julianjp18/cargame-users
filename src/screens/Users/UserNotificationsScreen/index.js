@@ -51,7 +51,12 @@ const UserNotificationsScreen = (props) => {
         <ScrollView>
           <View style={styles.infoContainer}>
             {notifications.length > 0 && notifications.map((notification) => (
-              <ListItem onPress={() => showOfferScreen(notification)} key={notification.message} containerStyle={styles.listContainer} bottomDivider>
+              <ListItem
+                onPress={() => showOfferScreen(notification)}
+                key={`${notification.userId}-${notification.offerId}-${notification.date}`}
+                containerStyle={styles.listContainer}
+                bottomDivider
+              >
                 <Icon
                   name='bell'
                   type='font-awesome'

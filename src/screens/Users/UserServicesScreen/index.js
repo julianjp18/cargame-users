@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { ListItem } from 'react-native-elements';
+import { Icon, ListItem } from 'react-native-elements';
 import { textSecondaryColor, darkGrey, primaryColor } from '../../../constants/Colors';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
@@ -23,7 +23,7 @@ const UserServicesScreen = props => {
 
   getUserInfo().then((data) => {
     const userInfo = JSON.parse(data);
-    if (!userInfo.token) {
+    if (!userInfo.idToken) {
       dispatch(authActions.logout());
       props.navigation.navigate('Index');
     }
@@ -78,7 +78,7 @@ const UserServicesScreen = props => {
           <ScrollView>
             <View style={styles.infoContainer}>
               {tripsInProgress.length > 0 ? tripsInProgress.map((tripInProgress) => (
-                <TouchableOpacity key={`${tripInProgress.offerValue}-${tripInProgress.pickupDate}`}>
+                <TouchableOpacity key={`${tripInProgress.offerValue}-${tripInProgress.pickUpDate}`}>
                   <ListItem
                     onPress={() => viewTravel(tripInProgress)}
                     containerStyle={styles.listContainer}
@@ -91,14 +91,8 @@ const UserServicesScreen = props => {
                     />
                     <ListItem.Content>
                       <ListItem.Title style={styles.titleListItem}>
-                        <View>
-                          <Text>
-                            Destino: {tripInProgress.destinationCity}
-                          </Text>
-                          <Text>
-                            Fecha de recogida: {tripInProgress.pickupDate}
-                          </Text>
-                        </View>
+                        <Text style={styles.titleListText}>Destino: {tripInProgress.destinationCity}</Text>
+                        <Text style={styles.titleListText}>{"\n"}Fecha de recogida: {tripInProgress.pickUpDate}</Text>
                       </ListItem.Title>
                     </ListItem.Content>
                     <ListItem.Chevron />
@@ -107,9 +101,7 @@ const UserServicesScreen = props => {
               )) : (
                 <View style={styles.notFoundContainer}>
                   <AntDesign name="flag" size={100} color={primaryColor} />
-                  <Text style={styles.notFoundText}>
-                    No has realizado Servicios por el momento
-                  </Text>
+                  <Text style={styles.notFoundText}>No has realizado Servicios por el momento</Text>
                 </View>
               )}
             </View>
@@ -165,16 +157,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     height: '100%'
   },
-  nameListContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: normalizeLength(15)
-  },
-  nameListText: {
-    color: darkGrey,
-    fontFamily: 'Quicksand',
-    fontSize: normalizeLength(20),
-    fontWeight: '700'
+  titleListText: {
+    fontSize: normalizeLength(12)
   },
   title: {
     paddingTop: normalizeLength(6),

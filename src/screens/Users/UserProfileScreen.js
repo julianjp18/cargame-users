@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, StyleSheet, View, Image } from 'react-native';
+import { Text, StyleSheet, View, Image, ActivityIndicator } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Icon, ListItem } from 'react-native-elements';
 import { darkGrey, primaryColor } from '../../constants/Colors';
@@ -172,7 +172,14 @@ const UserProfileScreen = props => {
             />
           </View>
         </ScrollView>
-      ) : (<LogOutListItem dispatch={dispatch} navigation={props.navigation} />)}
+      ) : (
+          <View>
+            <View style={styles.activityIndicator}>
+              <ActivityIndicator size="large" />
+            </View>
+            <LogOutListItem dispatch={dispatch} navigation={props.navigation} />
+          </View>
+        )}
 
     </View>
   );
@@ -230,6 +237,9 @@ const styles = StyleSheet.create({
   listContainer: {
     backgroundColor: 'transparent',
     paddingBottom: normalizeLength(6)
+  },
+  activityIndicator: {
+    marginHorizontal: normalizeLength(20)
   }
 });
 

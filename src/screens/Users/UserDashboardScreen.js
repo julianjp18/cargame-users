@@ -14,6 +14,7 @@ import { CATEGORIES_LIST } from "../../constants/Utils";
 import { shortBrandSoatUrl } from "./../../constants/Utils";
 import { setTypeService } from "../../redux/actions/auth";
 import { normalizeLength } from "../../styles/layout";
+import { getUserInfo } from '../../utils/helpers';
 
 import * as userActions from "../../redux/actions/users";
 import * as userNotificationsActions from "../../redux/actions/notifications";
@@ -78,6 +79,14 @@ const UserDashboardScreen = (props) => {
     dispatch(travelsActions.getTripsInProgressByUserId(userId));
     dispatch(travelsActions.getTripsMadeByUserId(userId));
   },[userId]);
+
+  getUserInfo().then((data) => {
+    const userInfo = JSON.parse(data);
+    if (!userInfo.idToken) {
+      dispatch(authActions.logout());
+      props.navigation.navigate('Index');
+    }
+  });
 
   return (
     <View style={styles.servicesContainer}>
