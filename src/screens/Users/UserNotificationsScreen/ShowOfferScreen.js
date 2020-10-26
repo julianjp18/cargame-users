@@ -17,102 +17,6 @@ import { collectionTimeSlot } from "../../../constants/Utils";
 import { FontAwesome } from '@expo/vector-icons';
 import { ScrollView } from "react-native-gesture-handler";
 
-import MercadoPagoCheckout from '@blackbox-vision/react-native-mercadopago-px';
-
-// You should create the preference server-side, not client-side
-const getPreferenceId = async (payer, ...items) => {
-  const response = await fetch(
-    `https://api.mercadopago.com/checkout/preferences?access_token=${Env.MP_ACCESS_TOKEN}`,
-    {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${Env.MP_ACCESS_TOKEN}`
-      },
-      body: JSON.stringify({
-        "collector_id": 202809963,
-        "operation_type": "regular_payment",
-        "items": [items],
-        "payer": {
-          email: payer,
-          name: 'test',
-          surname: 'last name',
-          phone: {
-            number: '3202345684'
-          },
-          "date_created": "",
-          "phone": {
-              "area_code": "",
-              "number": ""
-          },
-          "identification": {
-              "type": "",
-              "number": ""
-          },
-          "address": {
-              "street_name": "",
-              "street_number": null,
-              "zip_code": ""
-          }
-        },
-        "back_urls": {
-            "success": "",
-            "pending": "",
-            "failure": ""
-        },
-        "auto_return": "",
-        "payment_methods": {
-            "excluded_payment_methods": [
-                {
-                    "id": ""
-                }
-            ],
-            "excluded_payment_types": [
-                {
-                    "id": ""
-                }
-            ],
-            default_payment_method_id: 'credit_card',
-            installments: 1,
-            default_installments: 1,
-        },
-        "client_id": "6295877106812064",
-        "marketplace": "MP-MKT-6295877106812064",
-        "marketplace_fee": 0,
-        "shipments": {
-            "receiver_address": {
-                "zip_code": "",
-                "street_number": null,
-                "street_name": "",
-                "floor": "",
-                "apartment": ""
-            }
-        },
-        "notification_url": null,
-        "statement_descriptor": "MERCADOPAGO",
-        "external_reference": "",
-        "additional_info": "",
-        "expires": false,
-        "expiration_date_from": null,
-        "expiration_date_to": null,
-        "date_created": "2018-02-02T15:22:23.535-04:00",
-        "id": "202809963-920c288b-4ebb-40be-966f-700250fa5370",
-        "init_point": "https://www.mercadopago.com/mla/checkout/start?pref_id=202809963-920c288b-4ebb-40be-966f-700250fa5370",
-        "sandbox_init_point": "https://sandbox.mercadopago.com/mla/checkout/pay?pref_id=202809963-920c288b-4ebb-40be-966f-700250fa5370"
-      }),
-    }
-  ).then((response) => console.log(response))
-  .catch((error) => {
-    console.error(error);
-  });;
-
-  if (response) {
-    const preference = await response.json();
-    return preference.id;
-  }
-};
-
 const getcollectionTimeSlot = (collectionTimeSlotItem) =>
   collectionTimeSlot.map((collectionTime) =>
     collectionTime.label === collectionTimeSlotItem ? collectionTime.value : '');
@@ -144,34 +48,13 @@ const formReducer = (state, action) => {
 
 const ShowOfferScreen = (props) => {
   const dispatch = useDispatch();
-  console.log(useSelector((state) => state));
-  const user = useSelector(state => state.auth);
-  const [notifications, setNotifications] = useState(useSelector(state => state.notifications.userNotifications));
-  const offer = useSelector((state) => state.offer.offerSelected);
-  const [paymentResult, setPaymentResult] = useState(null);
+  const state = useSelector((state) => state);
+  const user = state.auth;
+  const [notifications, setNotifications] = useState(state.notifications.userNotifications);
+  const offer = state.offer.offerSelected;
 
-  const startCheckout = async () => {
-    try {
-      const preferenceId = await getPreferenceId(user.email, {
-        title: 'Payment for service',
-        description: `currentCity: ${offer.currentCity}, destinationCity: ${offer.destinationCity}, offerId: ${offer.offerId}, date: ${offer.pickUpDate}`,
-        quantity: 1,
-        currency_id: 'COP',
-        unit_price: offer.offerValue,
-      });
-      console.log('yes');
-      if (preferenceId) {
-        console.log('yes2');
-        const payment = await MercadoPagoCheckout.createPayment({
-          publicKey: Env.MP_PUBLIC_KEY,
-          preferenceId,
-        });
-        
-        if (payment) setPaymentResult(payment);
-      }
-    } catch (err) {
-      Alert.alert('Something went wrong', err.message);
-    }
+  const startCheckout = () => {
+    props.navigation.navigate('StartCheckout');
   };
 
   getUserInfo().then((data) => {
@@ -266,7 +149,6 @@ const ShowOfferScreen = (props) => {
                   }
                 />
               </View>
-              <Text style={styles.valueDeclaredText}>Tu envío se encuentra respaldado por un costo del 10% del valor declarado.</Text>
             </View>
             <View style={styles.discountCodeContainer}>
 
@@ -313,29 +195,25 @@ const ShowOfferScreen = (props) => {
                 </View>
               </View>
             </View>
-            {paymentResult ? (
-              <Text style={styles.text}>Resultado de pago: {JSON.stringify(paymentResult)}</Text>
-            ) : (
-                <View style={styles.buttonsContainer}>
-                  <View style={styles.row}>
-                    <View style={styles.col1}>
-                      <Button
-                        title='Declinar'
-                        colorOne={'white'}
-                        colorTwo={'white'}
-                        fontColor={primaryColor}
-                        onPress={() => declineOffer()}
-                      />
-                    </View>
-                    <View style={styles.col2}>
-                      <Button
-                        title='Hacer el pago'
-                        onPress={startCheckout}
-                      />
-                    </View>
-                  </View>
+            <View style={styles.buttonsContainer}>
+              <View style={styles.row}>
+                <View style={styles.col1}>
+                  <Button
+                    title='Declinar'
+                    colorOne={'white'}
+                    colorTwo={'white'}
+                    fontColor={primaryColor}
+                    onPress={() => declineOffer()}
+                  />
                 </View>
-              )}
+                <View style={styles.col2}>
+                  <Button
+                    title='Hacer el pago'
+                    onPress={startCheckout}
+                  />
+                </View>
+              </View>
+            </View>
           </ScrollView>
         </View>
       )}

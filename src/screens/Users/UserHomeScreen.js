@@ -7,10 +7,10 @@ import {
   StyleSheet,
   View,
   Text,
-  Picker,
   Platform,
   ActivityIndicator,
   Alert,
+  Picker,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 

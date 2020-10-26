@@ -21,6 +21,7 @@ import UserServicesScreen from "../screens/Users/UserServicesScreen";
 import GoogleMapScreen from '../screens/GoogleMapScreen';
 import ServiceSelectedScreen from "../screens/Users/UserServicesScreen/ServiceSelectedScreen";
 import ShowOfferScreen from "../screens/Users/UserNotificationsScreen/ShowOfferScreen";
+import StartCheckoutScreen from "../screens/Users/UserNotificationsScreen/StartCheckoutScreen";
 
 const profileNavigator = createSwitchNavigator({
   Profile: UserProfileScreen,
@@ -34,7 +35,8 @@ const ServicesNavigator = createSwitchNavigator({
 
 const NotificationsNavigator = createSwitchNavigator({
   Notifications: UserNotificationsScreen,
-  ShowOffer: ShowOfferScreen
+  ShowOffer: ShowOfferScreen,
+  StartCheckout: StartCheckoutScreen,
 });
 
 const UserTabNavigator = createBottomTabNavigator(
