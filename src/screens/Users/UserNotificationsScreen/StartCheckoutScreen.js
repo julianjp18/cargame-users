@@ -1,7 +1,6 @@
 import React, { useState, useReducer, useCallback } from "react";
 import { Alert, StyleSheet, Text, View, Picker, ActivityIndicator } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import moment from 'moment';
 import { getUserInfo } from '../../utils/helpers';
 import { currencyFormat } from '../../../utils/helpers';
 import * as authActions from '../../../redux/actions/auth';
@@ -125,6 +124,7 @@ const StartCheckoutScreen = (props) => {
     formIsValid: false
   });
 
+  /*
   const realizePayment = async () => {
     //https://www.mercadopago.com.ar/developers/es/reference/payments/_payments/post/
     //https://api.mercadopago.com/v1/payments
@@ -211,6 +211,8 @@ const StartCheckoutScreen = (props) => {
       Alert.alert('¡UPS! Ha ocurrido un error.', err.message);
     }
   };
+*/
+  const changeToPaymentScreen = () => props.navitgation.navigate('PaymentScreen');
 
   return (
     <View style={styles.servicesContainer}>
@@ -375,13 +377,13 @@ const StartCheckoutScreen = (props) => {
                     colorOne={'white'}
                     colorTwo={'white'}
                     fontColor={primaryColor}
-                    onPress={() => declineOffer()}
+                    onPress={declineOffer}
                   />
                 </View>
                 <View style={styles.col2}>
                   <Button
                     title='Hacer el pago'
-                    onPress={realizePayment}
+                    onPress={changeToPaymentScreen}
                   />
                 </View>
               </View>

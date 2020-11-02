@@ -54,7 +54,7 @@ const ShowOfferScreen = (props) => {
   const offer = state.offer.offerSelected;
 
   const startCheckout = () => {
-    props.navigation.navigate('StartCheckout');
+    props.navigation.navigate('PaymentScreen');
   };
 
   getUserInfo().then((data) => {
@@ -94,6 +94,7 @@ const ShowOfferScreen = (props) => {
         subtitle="el mejor servicio para ti!"
         leftIcon="paper-plane-o"
         isButtonBack
+        navigation={props.navigation}
         reDirect="Notifications"
       />
       {user && (
