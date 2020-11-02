@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: EACCES: permission denied, unlink '/Users/flaviocortez/Documents/GitHub/cargame_users/node_modules/.bin/babylon'
+  Error: EACCES: permission denied, unlink '/Users/flaviocortez/Documents/GitHub/cargame_users/node_modules/.bin/atob'
 
 npm manifest: 
   {
