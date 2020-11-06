@@ -18,12 +18,21 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   titleContent: {
-    fontSize: normalizeLength(15),
+    fontSize: normalizeLength(20),
     textAlign: 'center',
     fontWeight: 'bold',
-    marginTop: normalizeLength(10)
-  }
+    marginTop: normalizeLength(15),
+    marginBottom: normalizeLength(20)
+  },
 });
+
+const changeWebViewStyle = `(function() {
+  document.body.style.textAlign = 'center';
+  document.body.style.display = 'auto';
+  document.getElementsByClassName('text')[0].style.marginTop = '200px';
+  document.getElementsByClassName('text')[0].style.fontSize = '30';
+  document.getElementsByClassName('mercadopago-button')[0].style.fontSize = '30';
+})();`;
 
 const PaymentScreen = (props) => {
   const [mpData, setMpData] = useState('');
@@ -83,12 +92,13 @@ const PaymentScreen = (props) => {
             originWhitelist={['*']}
             source={{
               html: `
-                <p>Tu pago es seguro con mercadopago</p>
+                <p class="text">Presiona el siguiente botón para comenzar</p>
                 <script
                   src="https://www.mercadopago.com.co/integrations/v1/web-payment-checkout.js"
                   data-preference-id='${mpData.preferenceId}'>
                 </script>
               ` }}
+              injectedJavaScript={changeWebViewStyle}
           />
         ) : (
             <ActivityIndicator

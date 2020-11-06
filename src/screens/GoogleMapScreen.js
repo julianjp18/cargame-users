@@ -73,8 +73,8 @@ const GoogleMapScreen = props => {
     {
       latitude,
       longitude,
-      address: '',
-      status: 'WAITING',
+      address: 'Bogotá, Colombia',
+      status: 'OK',
     }
   );
   const [region, setRegion] =
@@ -108,7 +108,8 @@ const GoogleMapScreen = props => {
     const savedLocation = await dispatch(
       placesActions.getPosition(location));
     
-    
+    console.log(savedLocation);
+
     setSelectedLocation({
       latitude: location.lat,
       longitude: location.lng,
@@ -150,6 +151,7 @@ const GoogleMapScreen = props => {
               <ActivityIndicator size="large" color={primaryColor} />
             ) : (
               <Text>
+                {console.log(selectedLocation.status)}
                 {selectedLocation.status ? selectedLocation.address : 'No localización por el momento'}
               </Text>
             )}

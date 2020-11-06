@@ -72,22 +72,23 @@ const TextInput = props => {
           {...props}
           style={styles.textAreaInput}
           multiline
+          numberOfLines={8}
           editable
-          maxLength={80}
+          maxLength={600}
         />
       ) : (
-        <Input
-          {...props}
-          labelStyle={styles.disabledLabel}
-          containerStyle={styles.mainContainer}
-          inputContainerStyle={styles.inputContainer}
-          inputStyle={styles.input}
-          value={inputState.value}
-          onChangeText={textChangeHandler}
-          onBlur={lostFocusHandler}
-          errorMessage={!inputState.isValid && inputState.touched ? props.errorText : ''}
-        />
-      )}
+          <Input
+            {...props}
+            labelStyle={styles.disabledLabel}
+            containerStyle={styles.mainContainer}
+            inputContainerStyle={styles.inputContainer}
+            inputStyle={styles.input}
+            value={inputState.value}
+            onChangeText={textChangeHandler}
+            onBlur={lostFocusHandler}
+            errorMessage={!inputState.isValid && inputState.touched ? props.errorText : ''}
+          />
+        )}
     </View>
   );
 };
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     fontFamily: 'Quicksand',
     fontSize: 10,
-    borderColor: '#1D59A2',
+    borderColor: primaryColor,
     borderEndWidth: 1,
     borderWidth: 1,
     borderRadius: 15,
