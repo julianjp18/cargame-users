@@ -37,12 +37,20 @@ export const getPosition = (location) => async dispatch => {
       address: 'Por favor selecciona un punto dentro de una ciudad'
     };
   } else {
-    getPositionPicked = {
-      lat: location.lat,
-      lng: location.lng,
-      address: responseData.results[0].formatted_address,
-      status: responseData.status,
-    };
+
+    if (responseData.results[0]) {
+      getPositionPicked = {
+        lat: location.lat,
+        lng: location.lng,
+        address: responseData.results[0].formatted_address,
+        status: responseData.status,
+      };
+    } else {
+      getPositionPicked = {
+        status: responseData.status,
+        address: 'Por favor selecciona un punto dentro de una ciudad'
+      };
+    }
   }
 
   dispatch({
