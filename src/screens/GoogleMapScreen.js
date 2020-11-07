@@ -151,7 +151,6 @@ const GoogleMapScreen = props => {
               <ActivityIndicator size="large" color={primaryColor} />
             ) : (
               <Text>
-                {console.log(selectedLocation.status)}
                 {selectedLocation.status ? selectedLocation.address : 'No localización por el momento'}
               </Text>
             )}

@@ -33,9 +33,9 @@ const UserServicesScreen = props => {
     setTypeTravelService(changeType);
   };
 
-  const viewTravel = (trip) => {
+  const viewService = (trip) => {
     dispatch(travelActions.saveTripSelected(trip));
-    props.navigation.navigate('TravelSelected');
+    props.navigation.navigate('ServiceSelected');
   };
 
   return (
@@ -80,7 +80,7 @@ const UserServicesScreen = props => {
               {tripsInProgress.length > 0 ? tripsInProgress.map((tripInProgress) => (
                 <TouchableOpacity key={`${tripInProgress.offerValue}-${tripInProgress.pickUpDate}`}>
                   <ListItem
-                    onPress={() => viewTravel(tripInProgress)}
+                    onPress={() => viewService(tripInProgress)}
                     containerStyle={styles.listContainer}
                     bottomDivider
                   >
@@ -112,7 +112,7 @@ const UserServicesScreen = props => {
                 {tripsMade.length > 0 ? tripsMade.map((tripMade) => (
                   <TouchableOpacity key={`${tripMade.offerValue}-${tripMade.pickupDate}`}>
                     <ListItem
-                      onPress={() => viewTravel(tripMade)}
+                      onPress={() => viewService(tripMade)}
                       containerStyle={styles.listContainer}
                       bottomDivider
                     >
