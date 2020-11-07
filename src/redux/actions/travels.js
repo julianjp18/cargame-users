@@ -68,3 +68,13 @@ export const getDriverById = async (driverId) => {
 
   return { name, phone };
 };
+
+export const getUserById = async (userId) => {
+  const data = firestoreDB
+    .collection('Users')
+    .doc(userId)
+    .get();
+  const { name, phone } = await data.then(doc => doc.data());
+
+  return { name, phone };
+};

@@ -31,7 +31,7 @@ const profileNavigator = createSwitchNavigator({
 
 const ServicesNavigator = createSwitchNavigator({
   Services: UserServicesScreen,
-  ServiceSelected: ServiceSelectedScreen,
+  ServiceSelected: ServiceSelectedScreen
 });
 
 const NotificationsNavigator = createSwitchNavigator({
