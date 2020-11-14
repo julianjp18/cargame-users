@@ -107,6 +107,7 @@ export const showOffer = (userId) => async (dispatch) => {
     destinationCity: data.destinationCity,
     driverId: data.driverId,
     phone: data.phone,
+    offerValue: data.offerValue,
     pickUpAddress: data.pickUpAddress,
     pickUpDate: data.pickUpDate,
     status: data.status,

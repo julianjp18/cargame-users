@@ -78,7 +78,7 @@ const UserServicesScreen = props => {
           <ScrollView>
             <View style={styles.infoContainer}>
               {tripsInProgress.length > 0 ? tripsInProgress.map((tripInProgress) => (
-                <TouchableOpacity key={`${tripInProgress.offerValue}-${tripInProgress.pickUpDate}`}>
+                <TouchableOpacity key={`${tripInProgress.offerValue}-${tripInProgress.pickUpDate}-${tripInProgress.destinationCity}`}>
                   <ListItem
                     onPress={() => viewService(tripInProgress)}
                     containerStyle={styles.listContainer}
@@ -110,7 +110,7 @@ const UserServicesScreen = props => {
             <ScrollView>
               <View style={styles.infoContainer}>
                 {tripsMade.length > 0 ? tripsMade.map((tripMade) => (
-                  <TouchableOpacity key={`${tripMade.offerValue}-${tripMade.pickupDate}`}>
+                  <TouchableOpacity key={`${tripMade.offerValue}-${tripMade.pickupDate}.${tripMade.destinationCity}`}>
                     <ListItem
                       onPress={() => viewService(tripMade)}
                       containerStyle={styles.listContainer}
