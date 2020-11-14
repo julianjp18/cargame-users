@@ -106,7 +106,7 @@ const ShowOfferScreen = (props) => {
                   <Text style={styles.serviceTitle}>Tu servicio:</Text>
                 </View>
                 <View style={styles.col2ServiceTitle}>
-                  <Text style={styles.servicePrice}>{0}</Text>
+                  <Text style={styles.servicePrice}>{currencyFormat(offer.offerValue ? offer.offerValue : 0, 0)}</Text>
                 </View>
               </View>
             </View>
@@ -191,7 +191,7 @@ const ShowOfferScreen = (props) => {
                 </View>
                 <View style={styles.col2}>
                   <Text style={styles.totalPrice}>
-                    {offer.offerValue ? offer.offerValue : 0}
+                    {currencyFormat(offer.offerValue ? offer.offerValue : 0, 0)}
                   </Text>
                 </View>
               </View>
