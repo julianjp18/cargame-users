@@ -100,7 +100,7 @@ const StartCheckoutScreen = (props) => {
     [dispatchFormState]
   );
 
-  const [formState, dispatchFormState] = useReducer(formReducer, {
+  const [, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       identificationType: 'CC',
       identification: 0,
