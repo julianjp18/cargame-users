@@ -14,7 +14,7 @@ import UserHeader from "../../../components/UserHeader";
 const UserNotificationsScreen = (props) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
-  const [notifications, setNotifications] = useState(useSelector(state => state.notifications.userNotifications));
+  const [notifications] = useState(useSelector(state => state.notifications.userNotifications));
 
   useEffect(() => {
     dispatch(userNotificationsActions.showUserNotifications(user.userId));
