@@ -52,8 +52,8 @@ const styles = StyleSheet.create({
   }
 });
 
-const LATITUDE_DELTA = 0.2;
-const LONGITUDE_DELTA = 0.5;
+const LATITUDE_DELTA = 0.01;
+const LONGITUDE_DELTA = 0.01;
 
 const GoogleMapScreen = props => {
   const userAuth = useSelector(state => state.auth);
@@ -62,11 +62,13 @@ const GoogleMapScreen = props => {
   }
   const typeFieldSelected = useSelector(state => state.places.typeFieldSelected);
   const currentPosition = useSelector(state => state.places.currentPosition);
+
   let latitude = 4.60971;
   let longitude = -74.08175;
+
   if (currentPosition) {
-    latitude = currentPosition.lat;
-    longitude = currentPosition.lng;
+    latitude = currentPosition.latitude;
+    longitude = currentPosition.longitude;
   }
   
   const [selectedLocation, setSelectedLocation] = useState(

@@ -87,6 +87,11 @@ const ShowOfferScreen = (props) => {
     formIsValid: false
   });
 
+  const totalPrice = () => {
+    const price = currencyFormat((offer.offerValue ? offer.offerValue : 0) + formState.inputValues.valueDeclared, 0);
+    return (13 * price) / 100;
+  };
+
   return (
     <View style={styles.servicesContainer}>
       <UserHeader
@@ -171,7 +176,7 @@ const ShowOfferScreen = (props) => {
                 </View>
                 <View style={styles.col2Subtotals}>
                   <Text style={styles.subtotalsNumber}>
-                    {currencyFormat((10 * formState.inputValues.valueDeclared) / 100, 0)}
+                    {currencyFormat(formState.inputValues.valueDeclared, 0)}
                   </Text>
                 </View>
               </View>
@@ -191,7 +196,7 @@ const ShowOfferScreen = (props) => {
                 </View>
                 <View style={styles.col2}>
                   <Text style={styles.totalPrice}>
-                    {currencyFormat(offer.offerValue ? offer.offerValue : 0, 0)}
+                    {totalPrice}
                   </Text>
                 </View>
               </View>
