@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   Alert,
   ImageBackground,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import * as Location from 'expo-location';
@@ -14,14 +15,19 @@ import { shortMapaUrl } from "./../../constants/Utils";
 import { ScrollView } from "react-native-gesture-handler";
 import Button from "../../components/UI/Button";
 import LocationPicker from '../../components/UI/LocationPicker';
-import * as offerActions from "../../redux/actions/offers";
-import * as notificationsActions from '../../redux/actions/notifications';
 import UserHeader from "../../components/UserHeader";
 import { normalizeLength } from "../../styles/layout";
+import TextInput from "../../components/UI/Input";
+
+import * as offerActions from "../../redux/actions/offers";
+import * as notificationsActions from '../../redux/actions/notifications';
+import * as placesActions from '../../redux/actions/places';
 
 const UserDestinationScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+  const [originAddress, setOriginAddress] = useState();
+  const [destinyAddress, setDestinyAddress] = useState();
   const dispatch = useDispatch();
   const places = useSelector(state => state.places);
   const offer = useSelector((state) => state.offer);
@@ -31,25 +37,27 @@ const UserDestinationScreen = (props) => {
   // mapea los campos del formulario de oferta
   const destinationHandler = async () => {
 
-    if (!places.currentOriginAddress || !places.currentDestinyAddress) {
+    if (!places.currentOriginAddress || !places.currentDestinyAddress || !originAddress || !destinyAddress) {
       Alert.alert(
         'Campos incompletos',
         'Por favor completa los dos campos para poder continuar',
         [{ text: 'Está bien' }]
-    );
+      );
     } else {
       const saveDestinationAction = offerActions.addDestinationToOffer({
         id: offer.id,
         currentCity: places.currentOriginAddress,
         destinationCity: places.currentDestinyAddress,
+        originAddress,
+        destinyAddress,
       });
 
       const updateUserNotifications =
         notificationsActions.showUserNotifications(offer.userId);
-  
+
       setError(null);
       setIsLoading(true);
-  
+
       try {
         dispatch(saveDestinationAction);
         notificationsActions.saveNotificationDestinationOffer({
@@ -68,12 +76,12 @@ const UserDestinationScreen = (props) => {
   const verifyPermissions = async () => {
     const result = await Permissions.askAsync(Permissions.LOCATION);
     if (result.status !== 'granted') {
-        Alert.alert(
-            'Permisos insuficientes',
-            'Necesita los permisos de geolocalización para poder obtener localización en tiempo real.',
-            [{ text: 'Está bien' }]
-        );
-        return verifyPermissions();
+      Alert.alert(
+        'Permisos insuficientes',
+        'Necesita los permisos de geolocalización para poder obtener localización en tiempo real.',
+        [{ text: 'Está bien' }]
+      );
+      return verifyPermissions();
     }
     return true;
   };
@@ -88,14 +96,18 @@ const UserDestinationScreen = (props) => {
 
   const getCurrentLocation = async () => {
     const hasPermissions = await verifyPermissions();
-    if (!hasPermissions) return;
+    if (!hasPermissions) return hasPermissions;
 
     try {
-        const location = await Location.getLastKnownPositionAsync();
+      const location = await Location.getLastKnownPositionAsync();
+      console.log(location);
+      if (location) {
+        console.log(location, location.coords.latitude, location.coords.longitude);
         dispatch(placesActions.currentPosition({
-          lat: location.coords.latitude,
-          lng: location.coords.longitude,
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
         }));
+      }
     } catch (err) {
       validLocationTurnOn();
     }
@@ -123,47 +135,77 @@ const UserDestinationScreen = (props) => {
       />
       <ImageBackground source={shortMapaUrl} style={styles.image}>
         <View style={styles.categoriesContainer}>
-          <ScrollView>
-            <View style={styles.userInfoContainer}>
-              <View style={styles.userInfoContent}>
-                <View>
-                  <LocationPicker
-                    navigation={props.navigation}
-                    id="origin"
-                    label="Ciudad de Origen (*)"
-                    errorText="¡UPS! Por favor ingresa una dirección válida."
-                    initialValue={
-                      places.currentOriginAddress
-                        ? places.currentOriginAddress
-                        : ''
-                    }
-                    isOriginCityService
-                  />
+          <KeyboardAvoidingView behavior="padding">
+            <ScrollView>
+              <View style={styles.userInfoContainer}>
+                <View style={styles.userInfoContent}>
+                  <View>
+                    <LocationPicker
+                      navigation={props.navigation}
+                      id="origin"
+                      label="Ciudad de recogida (*)"
+                      errorText="¡UPS! Por favor ingresa una dirección válida."
+                      initialValue={
+                        places.currentOriginAddress
+                          ? places.currentOriginAddress
+                          : ''
+                      }
+                      isOriginCityService
+                    />
+                  </View>
+                  <View>
+                    <TextInput
+                      id="originAddress"
+                      label="Dirección de recogida (*)"
+                      keyboardType="default"
+                      minLength={10}
+                      required
+                      autoCapitalize="words"
+                      errorText="¡Precaución! Por favor ingresa una dirección válida"
+                      onChange={(value) => setOriginAddress(value.nativeEvent.text)}
+                      onInputChange={() => { }}
+                      value={originAddress}
+                    />
+                  </View>
+                  <View>
+                    <LocationPicker
+                      navigation={props.navigation}
+                      id="destination"
+                      label="Ciudad de entrega (*)"
+                      errorText="¡UPS! Por favor ingresa una dirección válida."
+                      initialValue={
+                        places.currentDestinyAddress
+                          ? places.currentDestinyAddress
+                          : ''
+                      }
+                      isDestinyCityService
+                    />
+                  </View>
+                  <View>
+                    <TextInput
+                      id="destinyAddress"
+                      label="Dirección de entrega (*)"
+                      keyboardType="default"
+                      minLength={10}
+                      required
+                      autoCapitalize="words"
+                      errorText="¡Precaución! Por favor ingresa una dirección válida"
+                      onChange={(value) => setDestinyAddress(value.nativeEvent.text)}
+                      onInputChange={() => { }}
+                      value={destinyAddress}
+                    />
+                  </View>
                 </View>
-                <View>
-                  <LocationPicker
-                    navigation={props.navigation}
-                    id="destination"
-                    label="Dirección de destino (*)"
-                    errorText="¡UPS! Por favor ingresa una dirección válida."
-                    initialValue={
-                      places.currentDestinyAddress
-                        ? places.currentDestinyAddress
-                        : ''
-                    }
-                    isDestinyCityService
-                  />
+                <View style={styles.userButton}>
+                  {isLoading ? (
+                    <ActivityIndicator size="large" color={primaryColor} />
+                  ) : (
+                      <Button title="Solicitar oferta" onPress={destinationHandler} />
+                    )}
                 </View>
               </View>
-              <View style={styles.userButton}>
-                {isLoading ? (
-                  <ActivityIndicator size="large" color={primaryColor} />
-                ) : (
-                  <Button title="Solicitar oferta" onPress={destinationHandler} />
-                )}
-              </View>
-            </View>
-          </ScrollView>
+            </ScrollView>
+          </KeyboardAvoidingView>
         </View>
       </ImageBackground>
     </View>
@@ -191,7 +233,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     minWidth: normalizeLength(370),
     backgroundColor: "rgba(255,255,255,0.7)",
-    height: normalizeLength(300),
+    minHeight: normalizeLength(470),
   },
   userInfoContent: {
     marginTop: normalizeLength(20)

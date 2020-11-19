@@ -74,10 +74,14 @@ export const addDestinationToOffer = ({
   id,
   currentCity,
   destinationCity,
+  originAddres,
+  destinyAddress,
 }) => async (dispatch) => {
   await firestoreDB.collection("OffersNotificationCenter").doc(id).update({
     currentCity,
     destinationCity,
+    currentAddress: originAddres,
+    destinationAddress: destinyAddress
   });
 
   dispatch({

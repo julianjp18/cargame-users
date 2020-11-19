@@ -49,8 +49,8 @@ export default (state = initialState, action) => {
         return {
           ...state,
           currentPosition: {
-            lat: action.latitude,
-            lng: action.longitude,
+            latitude: action.latitude,
+            longitude: action.longitude,
           },
         };
       default:

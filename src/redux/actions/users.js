@@ -20,9 +20,8 @@ export const createUser = ({ userId, name, numberId, phone, referidNumber = '' }
     dispatch({
       type: CREATE_USER,
       userId,
-      id: name,
-      name,
-      numberId,
+      name: name ? name: '',
+      numberId: numberId ? numberId : '',
       phone,
       referidNumber: referidNumber ? referidNumber : '',
       profilePicture: null,
@@ -39,7 +38,7 @@ export const showUser = (userId) => async dispatch => {
     dispatch({
       type: SHOW_USER,
       userId,
-      id: data.numberId,
+      id: userId,
       name: data.name,
       numberId: data.numberId,
       phone: data.phone,
