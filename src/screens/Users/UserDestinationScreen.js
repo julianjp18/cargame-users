@@ -17,7 +17,6 @@ import Button from "../../components/UI/Button";
 import LocationPicker from '../../components/UI/LocationPicker';
 import UserHeader from "../../components/UserHeader";
 import { normalizeLength } from "../../styles/layout";
-import TextInput from "../../components/UI/Input";
 
 import * as offerActions from "../../redux/actions/offers";
 import * as notificationsActions from '../../redux/actions/notifications';
@@ -26,18 +25,23 @@ import * as placesActions from '../../redux/actions/places';
 const UserDestinationScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-  const [originAddress, setOriginAddress] = useState();
-  const [destinyAddress, setDestinyAddress] = useState();
   const dispatch = useDispatch();
   const places = useSelector(state => state.places);
   const offer = useSelector((state) => state.offer);
 
   const typeServiceId = useSelector((state) => state.auth.typeServiceSelected);
 
+  const getCountry = (address) => {
+    const splitAddress = address.split(',');
+    if (splitAddress.length === 3)
+      return splitAddress[2];
+    return splitAddress[1];
+  };
+
   // mapea los campos del formulario de oferta
   const destinationHandler = async () => {
 
-    if (!places.currentOriginAddress || !places.currentDestinyAddress || !originAddress || !destinyAddress) {
+    if (!places.currentOriginAddress || !places.currentDestinyAddress) {
       Alert.alert(
         'Campos incompletos',
         'Por favor completa los dos campos para poder continuar',
@@ -46,10 +50,10 @@ const UserDestinationScreen = (props) => {
     } else {
       const saveDestinationAction = offerActions.addDestinationToOffer({
         id: offer.id,
-        currentCity: places.currentOriginAddress,
-        destinationCity: places.currentDestinyAddress,
-        originAddress,
-        destinyAddress,
+        currentCity: getCountry(places.currentOriginAddress),
+        destinationCity: getCountry(places.currentDestinyAddress),
+        originAddress: places.currentOriginAddress.split(',')[0],
+        destinyAddress: places.currentDestinyAddress.split(',')[0],
       });
 
       const updateUserNotifications =
@@ -100,7 +104,6 @@ const UserDestinationScreen = (props) => {
 
     try {
       const location = await Location.getLastKnownPositionAsync();
-      console.log(location);
       if (location) {
         console.log(location, location.coords.latitude, location.coords.longitude);
         dispatch(placesActions.currentPosition({
@@ -143,7 +146,7 @@ const UserDestinationScreen = (props) => {
                     <LocationPicker
                       navigation={props.navigation}
                       id="origin"
-                      label="Ciudad de recogida (*)"
+                      label="Dirección de recogida (*)"
                       errorText="¡UPS! Por favor ingresa una dirección válida."
                       initialValue={
                         places.currentOriginAddress
@@ -154,24 +157,10 @@ const UserDestinationScreen = (props) => {
                     />
                   </View>
                   <View>
-                    <TextInput
-                      id="originAddress"
-                      label="Dirección de recogida (*)"
-                      keyboardType="default"
-                      minLength={10}
-                      required
-                      autoCapitalize="words"
-                      errorText="¡Precaución! Por favor ingresa una dirección válida"
-                      onChange={(value) => setOriginAddress(value.nativeEvent.text)}
-                      onInputChange={() => { }}
-                      value={originAddress}
-                    />
-                  </View>
-                  <View>
                     <LocationPicker
                       navigation={props.navigation}
                       id="destination"
-                      label="Ciudad de entrega (*)"
+                      label="Dirección de entrega (*)"
                       errorText="¡UPS! Por favor ingresa una dirección válida."
                       initialValue={
                         places.currentDestinyAddress
@@ -179,20 +168,6 @@ const UserDestinationScreen = (props) => {
                           : ''
                       }
                       isDestinyCityService
-                    />
-                  </View>
-                  <View>
-                    <TextInput
-                      id="destinyAddress"
-                      label="Dirección de entrega (*)"
-                      keyboardType="default"
-                      minLength={10}
-                      required
-                      autoCapitalize="words"
-                      errorText="¡Precaución! Por favor ingresa una dirección válida"
-                      onChange={(value) => setDestinyAddress(value.nativeEvent.text)}
-                      onInputChange={() => { }}
-                      value={destinyAddress}
                     />
                   </View>
                 </View>
@@ -233,7 +208,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     minWidth: normalizeLength(370),
     backgroundColor: "rgba(255,255,255,0.7)",
-    minHeight: normalizeLength(470),
+    minHeight: normalizeLength(370),
   },
   userInfoContent: {
     marginTop: normalizeLength(20)

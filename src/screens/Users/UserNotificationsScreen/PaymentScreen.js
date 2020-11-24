@@ -42,8 +42,9 @@ const PaymentScreen = (props) => {
 
   const getPreferenceData = async (email = user.email) => {
     try {
+
       const response = await fetch(
-        `http://192.168.0.8:3001/get-preference-id`, {
+        `http://192.168.0.10:3001/get-preference-id`, {
         email,
         items: [
           {
