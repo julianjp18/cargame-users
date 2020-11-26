@@ -33,7 +33,7 @@ const UserDestinationScreen = (props) => {
 
   const getCountry = (address) => {
     const splitAddress = address.split(',');
-    if (splitAddress.length === 3)
+    if (splitAddress.length === 4)
       return splitAddress[2];
     return splitAddress[1];
   };

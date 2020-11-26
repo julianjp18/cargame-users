@@ -50,8 +50,8 @@ const ShowOfferScreen = (props) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const user = state.auth;
-  const [notifications, setNotifications] = useState(state.notifications.userNotifications);
   const offer = state.offer.offerSelected;
+  const [totalPriceValue, settotalPriceValue] = useState(currencyFormat(offer.offerValue ? offer.offerValue : 0, 0))
 
   const startCheckout = () => {
     props.navigation.navigate('PaymentScreen');
@@ -67,6 +67,7 @@ const ShowOfferScreen = (props) => {
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
+      totalPrice();
       dispatchFormState({
         type: FORM_INPUT_UPDATE,
         value: inputValue,
@@ -88,8 +89,9 @@ const ShowOfferScreen = (props) => {
   });
 
   const totalPrice = () => {
-    const price = currencyFormat((offer.offerValue ? offer.offerValue : 0) + formState.inputValues.valueDeclared, 0);
-    return (13 * price) / 100;
+    const price = Number.parseInt(offer.offerValue ? offer.offerValue : 0) + Number.parseInt(((10 * formState.inputValues.valueDeclared) / 100));
+    const priceWithTax = ((13 * price) / 100) + price;
+    settotalPriceValue(currencyFormat(priceWithTax, 0));
   };
 
   return (
@@ -176,7 +178,7 @@ const ShowOfferScreen = (props) => {
                 </View>
                 <View style={styles.col2Subtotals}>
                   <Text style={styles.subtotalsNumber}>
-                    {currencyFormat(formState.inputValues.valueDeclared, 0)}
+                    {currencyFormat((10 * formState.inputValues.valueDeclared) / 100, 0)}
                   </Text>
                 </View>
               </View>
@@ -196,7 +198,7 @@ const ShowOfferScreen = (props) => {
                 </View>
                 <View style={styles.col2}>
                   <Text style={styles.totalPrice}>
-                    {totalPrice}
+                    {totalPriceValue}
                   </Text>
                 </View>
               </View>

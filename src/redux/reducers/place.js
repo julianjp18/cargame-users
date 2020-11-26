@@ -22,38 +22,38 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
-    switch (action.type) {
-      case GET_POSITION:
-        return {
-          ...state,
-          getPositionPicked: action.getPositionPicked,
-        };
-      case GET_CURRENT_ORIGIN_SERVICE:
-        return {
-          ...state,
-          currentOriginAddress: action.address,
-          currentOriginCoords: action.coords,
-        };
-      case GET_CURRENT_DESTINY_SERVICE:
-        return {
-          ...state,
-          currentDestinyAddress: action.address,
-          currentDestinyCoords: action.coords,
-        };
-      case CHANGE_FIELD_SELECTED:
-        return {
-          ...state,
-          typeFieldSelected: action.typeFieldSelected,  
-        };
-      case GET_CURRENT_POSITION:
-        return {
-          ...state,
-          currentPosition: {
-            latitude: action.latitude,
-            longitude: action.longitude,
-          },
-        };
-      default:
-        return state;
-    }
+  switch (action.type) {
+    case GET_POSITION:
+      return {
+        ...state,
+        getPositionPicked: action.getPositionPicked,
+      };
+    case GET_CURRENT_ORIGIN_SERVICE:
+      return {
+        ...state,
+        currentOriginAddress: action.address,
+        currentOriginCoords: action.coords,
+      };
+    case GET_CURRENT_DESTINY_SERVICE:
+      return {
+        ...state,
+        currentDestinyAddress: action.address,
+        currentDestinyCoords: action.coords,
+      };
+    case CHANGE_FIELD_SELECTED:
+      return {
+        ...state,
+        typeFieldSelected: action.typeFieldSelected,
+      };
+    case GET_CURRENT_POSITION:
+      return {
+        ...state,
+        currentPosition: {
+          latitude: action.latitude,
+          longitude: action.longitude,
+        },
+      };
+    default:
+      return state;
+  }
 };
