@@ -42,18 +42,29 @@ const PaymentScreen = (props) => {
 
   const getPreferenceData = async (email = user.email) => {
     try {
+
       const response = await fetch(
-        `http://192.168.0.8:3001/get-preference-id`, {
-        email,
-        items: [
-          {
-            title: 'Payment for service',
-            description: `currentCity: ${offer.currentCity}, destinationCity: ${offer.destinationCity}, offerId: ${offer.offerId}, date: ${offer.pickUpDate}`,
-            quantity: 1,
-            currency_id: 'COP',
-            unit_price: offer.offerValue,
-          }
-        ],
+        `http://192.168.0.10:3001/get-preference-id`, {
+          method: 'POST', // *GET, POST, PUT, DELETE, etc.
+          mode: 'cors', // no-cors, *cors, same-origin
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, *same-origin, omit
+          headers: {
+            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: 'follow', // manual, *follow, error
+          referrerPolicy: 'no-referrer',
+          body : JSON.stringify({
+            email,
+            item: {
+                title: 'Payment for service',
+                description: `currentCity: ${offer.currentCity}, destinationCity: ${offer.destinationCity}, offerId: ${offer.offerId}, date: ${offer.pickUpDate}`,
+                quantity: 1,
+                currency_id: 'COP',
+                unit_price: offer.offerValue,
+              },
+          }),
       });
 
       const {

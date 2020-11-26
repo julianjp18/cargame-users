@@ -19,7 +19,7 @@ export const getPosition = (location) => async dispatch => {
   const response = await fetch(
     `https://maps.googleapis.com/maps/api/geocode/json?latlng=${
     location.lat
-    },${location.lng}&result_type=locality&key=${ENV.googleApiKey}`)
+    },${location.lng}&result_type=street_address&key=${ENV.googleApiKey}`)
   
   if (!response.ok) {
     throw new Error('¡UPS! Error al conseguir la dirección');

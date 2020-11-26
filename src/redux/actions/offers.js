@@ -1,7 +1,3 @@
-// Fecha  : Ultima revision Agosto 19 - 2020
-// Autor  : Flavio Cortes
-// Detalle: Definicion de la collecion de Ofertas - OffersNotificationCenter
-
 import { firestoreDB } from "../../constants/Firebase";
 export const CREATE_OFFER = "CREATE_OFFER";
 export const SHOW_OFFER = "SHOW_OFFER";
@@ -48,7 +44,7 @@ export const createOffer = ({
     offerValue,
   }).then((ref) => uid.push(ref.id));
 
-  if(uid[0]) {
+  if (uid[0]) {
     dispatch({
       type: CREATE_OFFER,
       userId,
@@ -74,22 +70,25 @@ export const addDestinationToOffer = ({
   id,
   currentCity,
   destinationCity,
-  originAddres,
+  originAddress,
   destinyAddress,
 }) => async (dispatch) => {
-  await firestoreDB.collection("OffersNotificationCenter").doc(id).update({
-    currentCity,
-    destinationCity,
-    currentAddress: originAddres,
-    destinationAddress: destinyAddress
-  });
-
   dispatch({
     type: ADD_DESTINATION_OFFER,
     currentCity,
     destinationCity,
+    currentAddress: originAddress,
+    destinationAddress: destinyAddress
+  });
+
+  await firestoreDB.collection("OffersNotificationCenter").doc(id).update({
+    currentCity,
+    destinationCity,
+    currentAddress: originAddress,
+    destinationAddress: destinyAddress
   });
 };
+
 // consulta por usuario de las ofertas disponibles
 export const showOffer = (userId) => async (dispatch) => {
   const data = await firestoreDB
@@ -124,7 +123,7 @@ export const saveOfferSelected = (offerId) => async dispatch => {
     .collection("OffersNotificationCenter")
     .doc(offerId)
     .get();
-    
+
   const {
     currentCity,
     destinationCity,
@@ -146,5 +145,4 @@ export const saveOfferSelected = (offerId) => async dispatch => {
       },
     });
   }
-  
 };

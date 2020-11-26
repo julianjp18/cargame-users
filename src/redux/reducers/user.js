@@ -31,6 +31,6 @@ export default (state = initialState, action) => {
         profilePicture: action.profilePicture,
       };
     default:
-        return state;
+      return state;
   }
 };
