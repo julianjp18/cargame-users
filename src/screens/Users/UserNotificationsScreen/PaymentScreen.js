@@ -44,7 +44,7 @@ const PaymentScreen = (props) => {
     try {
 
       const response = await fetch(
-        `http://192.168.0.10:3001/get-preference-id`, {
+        `https://cargame-server.herokuapp.com/get-preference-id`, {
           method: 'POST', // *GET, POST, PUT, DELETE, etc.
           mode: 'cors', // no-cors, *cors, same-origin
           cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
