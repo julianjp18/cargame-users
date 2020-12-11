@@ -44,27 +44,27 @@ const PaymentScreen = (props) => {
     try {
 
       const response = await fetch(
-        `https://cargame-server.herokuapp.com/get-preference-id`, {
-          method: 'POST', // *GET, POST, PUT, DELETE, etc.
-          mode: 'cors', // no-cors, *cors, same-origin
-          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-          credentials: 'same-origin', // include, *same-origin, omit
-          headers: {
-            'Content-Type': 'application/json'
-            // 'Content-Type': 'application/x-www-form-urlencoded',
+        `https://cargame-mp-server.herokuapp.com/get-preference-id`, {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json'
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrerPolicy: 'no-referrer',
+        body: JSON.stringify({
+          email,
+          item: {
+            title: 'Payment for service',
+            description: `currentCity: ${offer.currentCity}, destinationCity: ${offer.destinationCity}, offerId: ${offer.offerId}, date: ${offer.pickUpDate}`,
+            quantity: 1,
+            currency_id: 'COP',
+            unit_price: offer.offerValue,
           },
-          redirect: 'follow', // manual, *follow, error
-          referrerPolicy: 'no-referrer',
-          body : JSON.stringify({
-            email,
-            item: {
-                title: 'Payment for service',
-                description: `currentCity: ${offer.currentCity}, destinationCity: ${offer.destinationCity}, offerId: ${offer.offerId}, date: ${offer.pickUpDate}`,
-                quantity: 1,
-                currency_id: 'COP',
-                unit_price: offer.offerValue,
-              },
-          }),
+        }),
       });
 
       const {
@@ -109,7 +109,7 @@ const PaymentScreen = (props) => {
                   data-preference-id='${mpData.preferenceId}'>
                 </script>
               ` }}
-              injectedJavaScript={changeWebViewStyle}
+            injectedJavaScript={changeWebViewStyle}
           />
         ) : (
             <ActivityIndicator
