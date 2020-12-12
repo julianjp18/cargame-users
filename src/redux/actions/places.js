@@ -27,6 +27,8 @@ export const getPosition = (location) => async dispatch => {
 
   const responseData = await response.json();
 
+  console.log(responseData);
+
   if (!responseData.results) {
     return;
   }
