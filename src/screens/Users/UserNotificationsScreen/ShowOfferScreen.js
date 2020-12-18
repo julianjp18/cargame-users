@@ -1,12 +1,10 @@
 import React, { useState, useReducer, useCallback } from "react";
-import Env from '../../../../env';
-import { StyleSheet, Text, View, Alert } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import moment from 'moment';
 import { getUserInfo } from '../../utils/helpers';
 import { currencyFormat } from '../../../utils/helpers';
 import * as authActions from '../../../redux/actions/auth';
-import * as userNotificationsActions from "../../../redux/actions/notifications";
 
 import Button from "../../../components/UI/Button";
 import TextInput from '../../../components/UI/Input';
@@ -51,7 +49,7 @@ const ShowOfferScreen = (props) => {
   const state = useSelector((state) => state);
   const user = state.auth;
   const offer = state.offer.offerSelected;
-  const [totalPriceValue, settotalPriceValue] = useState(currencyFormat(offer.offerValue ? offer.offerValue : 0, 0))
+  const [totalPriceValue, settotalPriceValue] = useState(currencyFormat(offer.offerValue ? offer.offerValue : 0, 0));
 
   const startCheckout = () => {
     props.navigation.navigate('PaymentScreen');
@@ -372,4 +370,5 @@ const styles = StyleSheet.create({
     marginBottom: normalizeLength(10),
   },
 });
+
 export default ShowOfferScreen;

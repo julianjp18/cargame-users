@@ -40,6 +40,18 @@ const UserNotificationsScreen = (props) => {
     }
   };
 
+  const showResumeOfferScreen = (notification) => {
+    if (!notification.offerId) return true;
+    try {
+      dispatch(offersActions.saveResumeOfferSelected(notification.offerId));
+      setTimeout(() => {
+        props.navigation.navigate('ShowResumeOffer');
+      }, 2000);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   return (
     <View style={styles.servicesContainer}>
       <UserHeader
@@ -52,7 +64,7 @@ const UserNotificationsScreen = (props) => {
           <View style={styles.infoContainer}>
             {notifications.length > 0 && notifications.map((notification) => (
               <ListItem
-                onPress={() => showOfferScreen(notification)}
+                onPress={() => notification.status === 'RESUME' ? showResumeOfferScreen(notification) : showOfferScreen(notification)}
                 key={`${notification.userId}-${notification.offerId}-${notification.date}`}
                 containerStyle={styles.listContainer}
                 bottomDivider

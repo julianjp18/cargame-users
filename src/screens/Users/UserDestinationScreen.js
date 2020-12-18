@@ -105,7 +105,6 @@ const UserDestinationScreen = (props) => {
     try {
       const location = await Location.getLastKnownPositionAsync();
       if (location) {
-        console.log(location, location.coords.latitude, location.coords.longitude);
         dispatch(placesActions.currentPosition({
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,

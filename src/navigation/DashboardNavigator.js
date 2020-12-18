@@ -18,6 +18,7 @@ import UserNotificationsScreen from "../screens/Users/UserNotificationsScreen";
 import EditPhoneNumberScreen from "../screens/Users/EditProfile/EditPhoneNumberScreen";
 import StartupScreen from "../screens/StartupScreen";
 import UserServicesScreen from "../screens/Users/UserServicesScreen";
+import UserCompleteDescriptionScreen from '../screens/Users/UserNotificationsScreen/UserCompleteDescriptionScreen';
 import GoogleMapScreen from '../screens/GoogleMapScreen';
 import ServiceSelectedScreen from "../screens/Users/UserServicesScreen/ServiceSelectedScreen";
 import ShowOfferScreen from "../screens/Users/UserNotificationsScreen/ShowOfferScreen";
@@ -37,6 +38,7 @@ const ServicesNavigator = createSwitchNavigator({
 const NotificationsNavigator = createSwitchNavigator({
   Notifications: UserNotificationsScreen,
   ShowOffer: ShowOfferScreen,
+  ShoWResumeOffer: UserCompleteDescriptionScreen,
   StartCheckout: StartCheckoutScreen,
   PaymentScreen: PaymentScreen,
 });
