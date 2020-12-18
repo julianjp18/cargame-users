@@ -21,6 +21,18 @@ export const showUserNotifications = (userId) => async dispatch => {
     });
   }
 
+  const dataConfirmationPayments = await firestoreDB
+  .collection('ConfirmationPayments')
+  .where("userId", "==", userId)
+  .get().then((allNotifications) => allNotifications);
+
+  if (dataConfirmationPayments.length > 0) {
+    dataConfirmationPayments.forEach(notification => {
+      notificationsData.push({...notification.data(), message: 'Tu pago se encuentra confirmado, mira el resumen de tu servicio', userId });
+    });
+  }
+
+
   dispatch({
     type: SHOW_NOTIFICATIONS,
     userNotifications: notificationsData

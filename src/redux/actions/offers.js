@@ -130,7 +130,19 @@ export const saveOfferSelected = (offerId) => async dispatch => {
     timeZone,
     pickUpDate,
     offerValue,
+    driverId,
   } = await data.then((doc) => doc.data());
+
+  const driverData = firestoreDB
+  .collection("Drivers")
+  .doc(driverId)
+  .get();
+
+  const {
+    name,
+    phone
+  } = await driverData.then((doc) => doc.data());
+
 
   if (currentCity && destinationCity) {
     dispatch({
@@ -141,7 +153,57 @@ export const saveOfferSelected = (offerId) => async dispatch => {
         timeZone,
         pickUpDate,
         offerValue,
-        offerId
+        offerId,
+        driver: {
+          name,
+          phone,
+        },
+      },
+    });
+  }
+};
+
+export const saveResumeOfferSelected = (offerId) => async dispatch => {
+  const data = firestoreDB
+    .collection("OffersNotificationCenter")
+    .doc(offerId)
+    .get();
+
+  const {
+    currentCity,
+    destinationCity,
+    timeZone,
+    pickUpDate,
+    offerValue,
+    description,
+    driverId,
+  } = await data.then((doc) => doc.data());
+
+  const driverData = firestoreDB
+  .collection("Drivers")
+  .doc(driverId)
+  .get();
+
+  const {
+    name,
+    phone
+  } = await driverData.then((doc) => doc.data());
+
+  if (currentCity && destinationCity) {
+    dispatch({
+      type: OFFER_SELECTED,
+      offerSelected: {
+        currentCity,
+        destinationCity,
+        timeZone,
+        pickUpDate,
+        offerValue,
+        offerId,
+        description,
+        driver: {
+          name,
+          phone,
+        },
       },
     });
   }
