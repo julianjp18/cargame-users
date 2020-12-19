@@ -67,12 +67,11 @@ const linearGradientTitle = (title) => (
 );
 
 const UserHomeScreen = (props) => {
-  moment.locale();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const dispatch = useDispatch();
   const [timezone, setTimezone] = useState("manana");
-  moment.locale();
+  moment.locale('es');
   const [date, setDate] = useState(new Date());
   const [mode] = useState("date");
   const [show, setShow] = useState(false);
@@ -83,7 +82,7 @@ const UserHomeScreen = (props) => {
  
   getUserInfo().then((data) => {
     const userInfo = JSON.parse(data);
-    if (!userInfo.idToken) {
+    if (!userInfo.idToken || !userId) {
       dispatch(authActions.logout());
       props.navigation.navigate('Index');
     }
@@ -103,7 +102,7 @@ const UserHomeScreen = (props) => {
     setDate(currentDate);
   };
 
-  const showDatePickerModal = (value) => setShow(!show);
+  const showDatePickerModal = () => setShow(!show);
 
   // mapea los campos del formulario de oferta
   const homedestinationHandler = async () => {
@@ -116,6 +115,7 @@ const UserHomeScreen = (props) => {
         pickUpDate: moment(date).format("DD/MM/YYYY"),
         contact: contact,
         phone: phone,
+        typeServiceSelected,
       });
   
       setError(null);
@@ -225,7 +225,7 @@ const UserHomeScreen = (props) => {
     </View>
   ) : (
     <View>
-      <Text>Error</Text>
+      <Text>Cargando...</Text>
     </View>
   );
 };

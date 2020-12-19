@@ -327,4 +327,5 @@ const styles = StyleSheet.create({
     marginBottom: normalizeLength(10),
   },
 });
+
 export default UserCompleteDescriptionScreen;
