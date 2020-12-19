@@ -1,10 +1,10 @@
 export const shortBackgroundImageUrl = require('../../assets/background.png');
 export const shortBackgroundBluImageUrl = require('../../assets/extras/backazul.png');
 export const shortBrandAzulUrl = require('../../assets/logos/logo-cargame-azul.png');
+export const whiteLogo = require('../../assets/logos/white_logo.png')
 export const shortBrandPuntosUrl = require('../../assets/extras/fondopuntos.png');
 export const shortBrandSoatUrl = require('../../assets/extras/soat.png');
 export const shortCarga = require('../../assets/extras/carga.png');
-export const shortHeader = require('../../assets/extras/Header.png');
 export const shortMapaUrl = require('../../assets/extras/mapa.png');
 export const shortBrandFondoAzulUrl = require('../../assets/extras/moto.png');
 export const shortMainCargaUrl = require('../../assets/extras/main-carga.png');
@@ -20,27 +20,42 @@ export const secondaryFont = 'Quicksand';
 
 export const CATEGORIES_LIST = [
     {
-      id: 'paquete',
+      id: 'package',
       name: 'Envíar una carga o paquete',
       avatar_url: truckSquareUrl,
-      routeName: 'HomeDriver', 
+      routeName: 'SendPackages', 
     },
     {
-      id: 'documento',
+      id: 'document',
       name: 'Envíar un documento',
       avatar_url: carSquareUrl,
-      routeName: 'HomeDriver',
+      routeName: 'SendDocument',
     },
     {
-        id: 'grua',
+        id: 'crane',
         name: 'Solicita un servicio de grúa',
         avatar_url: motocycleSquareUrl,
-        routeName: 'HomeDriver',
+        routeName: 'ServiceCrane',
     },
     {
-        id: 'puerta',
+        id: 'door',
         name: 'Solicitar transporte puerta a puerta',
         avatar_url: craneSquareUrl,
-        routeName: 'HomeDriver',
+        routeName: 'ServiceTransport',
     },
+];
+
+export const collectionTimeSlot = [
+  {
+      label: 'morning',
+      value: 'Mañana (7:00am - 12:00pm)'
+  },
+  {
+      label: 'evening',
+      value: 'Tarde (12:01pm - 6:59pm)'
+  },
+  {
+      label: 'night',
+      value: 'Noche (7:00pm - 10:00pm)'
+  }
 ];

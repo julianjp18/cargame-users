@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, View, Image } from 'react-native';
+import { Text, StyleSheet, View, Image, Platform } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { shortBrandAzulUrl, shortMainCargaUrl } from '../../constants/Utils';
 import { AntDesign } from '@expo/vector-icons';
@@ -11,12 +11,12 @@ import * as authActions from '../../redux/actions/auth';
 import { getUserInfo } from '../../utils/helpers';
 import { normalizeLength } from '../../styles/layout';
 
-const DriverSupportScreen = props => {
+const UserSupportScreen = props => {
   const dispatch = useDispatch();
 
   getUserInfo().then((data) => {
     const userInfo = JSON.parse(data);
-    if (!userInfo.token) {
+    if (!userInfo.idToken) {
       dispatch(authActions.logout());
       props.navigation.navigate('Index');
     }
@@ -55,7 +55,7 @@ const DriverSupportScreen = props => {
               />
             </View>
             <View style={styles.row1Col2}>
-              <Text style={styles.infoText}>¡Aquí tendrás solución a tus dudas!</Text>
+              <Text style={styles.infoText}>¡ Aquí tendrás solución a tus dudas!</Text>
             </View>
           </View>
           <View style={styles.extraInfo}>
@@ -96,29 +96,29 @@ const styles = StyleSheet.create({
     minHeight: normalizeLength(200)
   },
   logoContainer: {
-    flex: 1,
+    justifyContent: 'flex-end',
     alignItems: 'flex-end',
-    minHeight: normalizeLength(150),
-    minWidth: normalizeLength(150),
-    paddingTop: normalizeLength(100)
+    padding: 0
   },
   logo: {
-    height: normalizeLength(200),
+    height: normalizeLength(150),
     width: normalizeLength(150),
+    marginTop: normalizeLength(13)
   },
   mainCargaContainer: {
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
-    minHeight: normalizeLength(300)
+    minHeight: normalizeLength(200)
   },
   mainCarga: {
     marginRight: normalizeLength(2),
-    minWidth: normalizeLength(400),
-    height: normalizeLength(400),
+    width: Platform.OS === 'ios' ? normalizeLength(480): normalizeLength(500),
+    minWidth: normalizeLength(380),
+    height: normalizeLength(395),
     position: 'relative',
     top: normalizeLength(50),
-    left: normalizeLength(75)
+    left: normalizeLength(70),
   },
   linearGradientContainer: {
     paddingTop: normalizeLength(15),
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     top: 0,
   },
   row1Col1: {
-    width: '30%',
+    width: normalizeLength(100),
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -139,8 +139,8 @@ const styles = StyleSheet.create({
     opacity: 0.32
   },
   row1Col2: {
-    width: '70%',
-    paddingRight: normalizeLength(10)
+    width: normalizeLength(250),
+    paddingRight: normalizeLength(8)
   },
   infoText: {
     paddingTop: normalizeLength(5),
@@ -162,9 +162,8 @@ const styles = StyleSheet.create({
   row2: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: normalizeLength(5),
-    paddingBottom: normalizeLength(10)
+    paddingVertical: normalizeLength(10),
   },
 });
 
-export default DriverSupportScreen;
+export default UserSupportScreen;

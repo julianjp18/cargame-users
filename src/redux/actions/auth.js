@@ -6,11 +6,22 @@ export const LOGOUT = 'LOGOUT';
 export const IS_SIGNUP = 'IS_SIGNUP';
 export const CHANGE_TYPE_SERVICE_SELECTED = 'CHANGE_TYPE_SERVICE_SELECTED';
 
-export const authenticate = (localId, token, email) => {
+const saveDataToStorage = (idToken, userId, expirationDate, email) => {
+  AsyncStorage.setItem(
+    'userData',
+    JSON.stringify({
+      idToken,
+      userId,
+      expirationDate,
+      email,
+    }))
+};
+
+export const authenticate = (localId, idToken, email) => {
   return {
     type: AUTHENTICATE,
     userId: localId,
-    token,
+    idToken,
     email,
   };
 };
@@ -65,17 +76,6 @@ export const signin = (email, password) => async dispatch => {
 
       throw new Error(errorMessage);
     });
-};
-
-const saveDataToStorage = (token, userId, expirationDate, email) => {
-  AsyncStorage.setItem(
-    'userData',
-    JSON.stringify({
-      token,
-      userId,
-      expirationDate: expirationDate.toISOString(),
-      email: email,
-    }))
 };
 
 export const setIsSignUp = (isSignUp) => {

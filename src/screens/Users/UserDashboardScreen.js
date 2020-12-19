@@ -1,17 +1,28 @@
+// UserDashboard : Menu principal del sistema. 
+// Descripcion   : Ruta inicial de cargame usuarios
+// Fecha         : Octubre 2020.
+
 import React, { useEffect } from "react";
 import { StyleSheet, View, Image, YellowBox, ScrollView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { ListItem, Avatar } from "react-native-elements";
-import { accentColor, primaryColor } from "../../constants/Colors";
-import { CATEGORIES_LIST } from "../../constants/Utils";
-import WelcomeHeader from "../../components/WelcomeHeader";
-import { shortBrandSoatUrl } from "./../../constants/Utils";
-import { setTypeService } from "../../redux/actions/auth";
-
-import * as userActions from "../../redux/actions/users";
-import { normalizeLength } from "../../styles/layout";
 import { LinearGradient } from "expo-linear-gradient";
 import { TouchableOpacity } from "react-native-gesture-handler";
+
+import { accentColor, primaryColor } from "../../constants/Colors";
+import { CATEGORIES_LIST } from "../../constants/Utils";
+import { shortBrandSoatUrl } from "./../../constants/Utils";
+import { setTypeService } from "../../redux/actions/auth";
+import { normalizeLength } from "../../styles/layout";
+import { getUserInfo } from '../../utils/helpers';
+
+import * as userActions from "../../redux/actions/users";
+import * as userNotificationsActions from "../../redux/actions/notifications";
+import * as travelsActions from '../../redux/actions/travels';
+
+import WelcomeHeader from "../../components/WelcomeHeader";
+
+// Contenedor principal
 
 const selectedCategoryItem = (navigation, dispatch, categoryId, routeName) => {
   dispatch(setTypeService(categoryId));
@@ -54,13 +65,28 @@ const categoriesList = (navigation, dispatch, category, i) => (
 );
 
 const UserDashboardScreen = (props) => {
-  YellowBox.ignoreWarnings(["Setting a timer"]);
+  YellowBox.ignoreWarnings([
+    'Setting a timer',
+    "Can't perform a React state update on an unmounted component",
+    "Cannot update during an existing state transition (such as within `render`).",
+  ]);
   const dispatch = useDispatch();
-  const userAuth = useSelector(state => state.auth);
+  const { userId } = useSelector(state => state.auth);
   
   useEffect(() =>{
-    dispatch(userActions.showUser(userAuth.userId));
-  },[userAuth]);
+    dispatch(userActions.showUser(userId));
+    dispatch(userNotificationsActions.showUserNotifications(userId));
+    dispatch(travelsActions.getTripsInProgressByUserId(userId));
+    dispatch(travelsActions.getTripsMadeByUserId(userId));
+  },[userId]);
+
+  getUserInfo().then((data) => {
+    const userInfo = JSON.parse(data);
+    if (!userInfo.idToken) {
+      dispatch(authActions.logout());
+      props.navigation.navigate('Index');
+    }
+  });
 
   return (
     <View style={styles.servicesContainer}>
@@ -79,6 +105,7 @@ const UserDashboardScreen = (props) => {
   );
 };
 
+// Estilo de UserDashBoard
 const styles = StyleSheet.create({
   servicesContainer: {
     flex: 1,
@@ -86,19 +113,19 @@ const styles = StyleSheet.create({
     minHeight: normalizeLength(300)
   },
   brandImageContainer: {
-    marginTop: normalizeLength(40),
+    marginTop: normalizeLength(20),
     alignItems: 'flex-end',
     justifyContent: 'center',
   },
   categoriesContainer: {
-    paddingTop: normalizeLength(6),
+    paddingTop: normalizeLength(4),
   },
   linearGradientContainer: {
     marginBottom: normalizeLength(2)
   },
   listContainer: {
     backgroundColor: 'transparent',
-    minHeight: normalizeLength(18)
+    minHeight: normalizeLength(16)
   },
   titleListItem: {
     paddingTop: normalizeLength(5),

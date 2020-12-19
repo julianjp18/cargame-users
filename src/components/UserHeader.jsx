@@ -15,16 +15,22 @@ const UserHeader = props => (
     ]}
   >
     <View style={styles.row}>
-      <View style={styles.col1}>
-        <FontAwesome style={styles.col1Icon} name={props.leftIcon} size={60} color='#fff' />
-      </View>
-      <View style={styles.col2}>
-        <Text style={styles.titleHeader}>
-          {props.title}
-        </Text>
-        <Text style={styles.subtitleHeader}>
-          {props.subtitle}
-        </Text>
+      {props.leftIcon && (
+        <View style={styles.col1}>
+          <FontAwesome style={styles.col1Icon} name={props.leftIcon} size={60} color='#fff' />
+        </View>
+      )}
+      <View style={props.leftIcon ? styles.col2 : styles.col12}>
+        {props.title !== '' && (
+          <Text style={props.leftIcon ? styles.titleHeader : styles.longTitleHeader}>
+            {props.title}
+          </Text>
+        )}
+        {props.subtitle !== '' && (
+          <Text style={styles.subtitleHeader}>
+            {props.subtitle}
+          </Text>
+        )}
       </View>
       {props.isButtonBack && (
         <View style={styles.col3}>
@@ -70,6 +76,18 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: textAccentColor
   },
+  col12: {
+    minWidth: normalizeLength(290),
+    minHeight: normalizeLength(400),
+  },
+  longTitleHeader: {
+    marginTop: normalizeLength(40),
+    marginLeft: normalizeLength(50),
+    fontFamily: 'Quicksand',
+    fontSize: normalizeLength(20),
+    fontWeight: '700',
+    color: textAccentColor
+  },
   col2: {
     minWidth: normalizeLength(200),
     minHeight: normalizeLength(400),
@@ -78,10 +96,10 @@ const styles = StyleSheet.create({
     minWidth: normalizeLength(20),
     minHeight: normalizeLength(400),
     alignItems: 'flex-end',
-    paddingTop: normalizeLength(15),
+    paddingTop: normalizeLength(40),
   },
   col3Icon: {
-    marginRight: normalizeLength(20)
+    paddingLeft: normalizeLength(20)
   }
 });
 

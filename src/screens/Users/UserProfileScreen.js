@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Text, StyleSheet, View, Image } from 'react-native';
+import { Text, StyleSheet, View, Image, ActivityIndicator } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Icon, ListItem } from 'react-native-elements';
 import { darkGrey, primaryColor } from '../../constants/Colors';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import UserHeader from '../../components/UserHeader';
-import { shortBrandOrangeGreyUrl } from '../../constants/Utils';
+import { shortBrandAzulUrl } from '../../constants/Utils';
 import ImgPicker from '../../components/UI/ImagePicker';
 import * as MediaLibrary from 'expo-media-library';
 
@@ -50,7 +50,7 @@ const UserProfileScreen = props => {
 
   getUserInfo().then((data) => {
     const userInfo = JSON.parse(data);
-    if (!userInfo.token) {
+    if (!userInfo.idToken) {
       dispatch(authActions.logout());
       props.navigation.navigate('Index');
     }
@@ -97,7 +97,7 @@ const UserProfileScreen = props => {
               </View>
               <View style={styles.col2}>
                 <Image
-                  source={shortBrandOrangeGreyUrl}
+                  source={shortBrandAzulUrl}
                   style={styles.mainCarga}
                 />
               </View>
@@ -172,7 +172,14 @@ const UserProfileScreen = props => {
             />
           </View>
         </ScrollView>
-      ) : (<LogOutListItem dispatch={dispatch} navigation={props.navigation} />)}
+      ) : (
+          <View>
+            <View style={styles.activityIndicator}>
+              <ActivityIndicator size="large" />
+            </View>
+            <LogOutListItem dispatch={dispatch} navigation={props.navigation} />
+          </View>
+        )}
 
     </View>
   );
@@ -230,6 +237,9 @@ const styles = StyleSheet.create({
   listContainer: {
     backgroundColor: 'transparent',
     paddingBottom: normalizeLength(6)
+  },
+  activityIndicator: {
+    marginHorizontal: normalizeLength(20)
   }
 });
 

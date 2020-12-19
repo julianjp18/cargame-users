@@ -6,6 +6,7 @@ import { AntDesign } from "@expo/vector-icons";
 import * as userActions from "../../../redux/actions/users";
 import TextInput from "../../../components/UI/Input";
 import Button from "../../../components/UI/Button";
+import UserHeader from "../../../components/UserHeader";
 
 const FORM_NUMBER_PHONE_UPDATE = "FORM_NUMBER_PHONE_UPDATE";
 
@@ -36,8 +37,7 @@ const EditPhoneNumberScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const dispatch = useDispatch();
-  const username = useSelector((state) => state.auth.name);
-  const userId = useSelector((state) => state.auth.userId);
+  const { name, phone, userId } = useSelector(state => state.user);
 
   useEffect(() => {
     if (error) {
@@ -49,7 +49,7 @@ const EditPhoneNumberScreen = (props) => {
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
-      phoneNumber: "",
+      phoneNumber: phone,
     },
     inputValidities: {
       phoneNumber: false,
@@ -73,7 +73,11 @@ const EditPhoneNumberScreen = (props) => {
     let action;
     let passwordError = false;
     const phoneNumber = formState.inputValues.phoneNumber;
-    action = userActions.changePhoneNumber(phoneNumber, userId);
+    if (!phoneNumber) phoneNumber = phone;
+    action = userActions.changePhoneNumber(
+      phoneNumber,
+      userId
+    );
     if (!passwordError) {
       const controller = new AbortController();
       setError(null);
@@ -81,19 +85,27 @@ const EditPhoneNumberScreen = (props) => {
       try {
         await dispatch(action);
         controller.abort();
-        props.navigation.navigate("Profile");
+        props.navigation.navigate('Profile');
       } catch (err) {
         setError(err.message);
       }
       setIsLoading(false);
       controller.abort();
     } else {
-      setError("¡Error! Las contraseñas no coinciden. Intentalo nuevamente.");
+      setError('¡UPS! Las contraseñas no coinciden. Intentalo nuevamente.');
     }
+
   };
+
+  const goToProfile = () => props.navigation.navigate('Profile');
 
   return (
     <View style={styles.servicesContainer}>
+      <UserHeader
+        title={name}
+        subtitle="Edita tu número de teléfono"
+        leftIcon="user-o"
+      />
       <View style={styles.inputContainer}>
         <View style={styles.inputContent}>
           <TextInput
@@ -109,14 +121,30 @@ const EditPhoneNumberScreen = (props) => {
             autoCapitalize="none"
             errorText="¡Error! Por favor ingresa un número de celular correcto."
             onInputChange={inputChangeHandler}
-            initialValue=""
+            initialValue={phone}
           />
         </View>
         {isLoading ? (
-          <ActivityIndicator size="large" color={primaryColor} />
+          <ActivityIndicator size='large' color={primaryColor} />
         ) : (
-          <Button title={"Actualizar"} onPress={changeHandler} />
-        )}
+            <View>
+              <Button
+                style={styles.updatedBtn}
+                title={'Actualizar'}
+                onPress={changeHandler}
+              />
+              <View style={styles.goBackContainer}>
+                <Button
+                  style={styles.goBackBtn}
+                  title={'Volver'}
+                  colorOne={'white'}
+                  colorTwo={'white'}
+                  fontColor={primaryColor}
+                  onPress={goToProfile}
+                />
+              </View>
+            </View>
+          )}
       </View>
     </View>
   );
@@ -137,8 +165,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: "3%",
   },
   inputContent: {
-    marginBottom: "5%",
+    marginBottom: '5%'
   },
+  goBackContainer: {
+      marginTop: '5%',
+  }
 });
 
 export default EditPhoneNumberScreen;
