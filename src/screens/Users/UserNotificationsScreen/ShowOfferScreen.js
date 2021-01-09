@@ -5,6 +5,7 @@ import moment from 'moment';
 import { getUserInfo } from '../../utils/helpers';
 import { currencyFormat } from '../../../utils/helpers';
 import * as authActions from '../../../redux/actions/auth';
+import * as offersActions from '../../../redux/actions/offers';
 
 import Button from "../../../components/UI/Button";
 import TextInput from '../../../components/UI/Input';
@@ -49,9 +50,12 @@ const ShowOfferScreen = (props) => {
   const state = useSelector((state) => state);
   const user = state.auth;
   const offer = state.offer.offerSelected;
-  const [totalPriceValue, settotalPriceValue] = useState(currencyFormat(offer.offerValue ? offer.offerValue : 0, 0));
+  const price = Number.parseInt(((13 * offer.offerValue) / 100)) + Number.parseInt(offer.offerValue);
+  const [priceForMP, setpriceForMP] = useState(price); 
+  const [totalPriceValue, settotalPriceValue] = useState(currencyFormat(price, 0));
 
   const startCheckout = () => {
+    dispatch(offersActions.saveTotalPrice(priceForMP));
     props.navigation.navigate('PaymentScreen');
   };
 
@@ -65,7 +69,8 @@ const ShowOfferScreen = (props) => {
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
-      totalPrice();
+
+      totalPrice(inputValue);
       dispatchFormState({
         type: FORM_INPUT_UPDATE,
         value: inputValue,
@@ -86,9 +91,10 @@ const ShowOfferScreen = (props) => {
     formIsValid: false
   });
 
-  const totalPrice = () => {
-    const price = Number.parseInt(offer.offerValue ? offer.offerValue : 0) + Number.parseInt(((10 * formState.inputValues.valueDeclared) / 100));
-    const priceWithTax = ((13 * price) / 100) + price;
+  const totalPrice = (value) => {
+    const price = (Number.parseInt(13 * Number.parseInt(offer.offerValue)) / 100) + Number.parseInt((10 * value) / 100);
+    const priceWithTax = (Number.parseInt(offer.offerValue) + price);
+    setpriceForMP(priceWithTax);
     settotalPriceValue(currencyFormat(priceWithTax, 0));
   };
 
@@ -111,7 +117,7 @@ const ShowOfferScreen = (props) => {
                   <Text style={styles.serviceTitle}>Tu servicio:</Text>
                 </View>
                 <View style={styles.col2ServiceTitle}>
-                  <Text style={styles.servicePrice}>{currencyFormat(offer.offerValue ? offer.offerValue : 0, 0)}</Text>
+                  <Text style={styles.servicePrice}>{totalPriceValue}</Text>
                 </View>
               </View>
             </View>
@@ -166,7 +172,7 @@ const ShowOfferScreen = (props) => {
                 </View>
                 <View style={styles.col2Subtotals}>
                   <Text style={styles.subtotalsNumber}>
-                    {currencyFormat(offer.offerValue ? offer.offerValue : 0, 0)}
+                    {currencyFormat(price, 0)}
                   </Text>
                 </View>
               </View>

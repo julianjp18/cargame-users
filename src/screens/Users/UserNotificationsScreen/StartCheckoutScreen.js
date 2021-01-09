@@ -52,7 +52,7 @@ const StartCheckoutScreen = (props) => {
   const getPreferenceData = async (email, offer) => {
     try {
       const response = await fetch(
-        `https://cargame-server.herokuapp.com/get-preference-id`, {
+        `http://192.168.1.44:3001/get-preference-id`, {
         email,
         items: [
           {

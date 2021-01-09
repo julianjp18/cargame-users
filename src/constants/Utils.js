@@ -47,15 +47,15 @@ export const CATEGORIES_LIST = [
 
 export const collectionTimeSlot = [
   {
-      label: 'morning',
+      label: 'manana',
       value: 'Mañana (7:00am - 12:00pm)'
   },
   {
-      label: 'evening',
+      label: 'tarde',
       value: 'Tarde (12:01pm - 6:59pm)'
   },
   {
-      label: 'night',
+      label: 'noche',
       value: 'Noche (7:00pm - 10:00pm)'
   }
 ];

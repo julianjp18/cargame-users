@@ -39,12 +39,12 @@ const PaymentScreen = (props) => {
   const state = useSelector((state) => state);
   const user = state.auth;
   const offer = state.offer.offerSelected;
+  const finalTotalPriceOffer = state.offer.finalTotalPriceOffer;
 
   const getPreferenceData = async (email = user.email) => {
     try {
-
       const response = await fetch(
-        `https://cargame-mp-server.herokuapp.com/get-preference-id`, {
+        `http://192.168.1.44:3001/get-preference-id`, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         mode: 'cors', // no-cors, *cors, same-origin
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -62,7 +62,7 @@ const PaymentScreen = (props) => {
             description: `currentCity: ${offer.currentCity}, destinationCity: ${offer.destinationCity}, offerId: ${offer.offerId}, date: ${offer.pickUpDate}`,
             quantity: 1,
             currency_id: 'COP',
-            unit_price: offer.offerValue,
+            unit_price: Number.parseInt(finalTotalPriceOffer),
           },
         }),
       });

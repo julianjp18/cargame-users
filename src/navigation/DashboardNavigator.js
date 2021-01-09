@@ -37,8 +37,8 @@ const ServicesNavigator = createSwitchNavigator({
 
 const NotificationsNavigator = createSwitchNavigator({
   Notifications: UserNotificationsScreen,
+  ShowResumeOffer: UserCompleteDescriptionScreen,
   ShowOffer: ShowOfferScreen,
-  ShoWResumeOffer: UserCompleteDescriptionScreen,
   StartCheckout: StartCheckoutScreen,
   PaymentScreen: PaymentScreen,
 });
