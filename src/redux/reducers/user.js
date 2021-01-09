@@ -12,6 +12,7 @@ export default (state = initialState, action) => {
     case SHOW_USER:
     case CREATE_USER:
       return {
+        ...state,
         id: action.id,
         name: action.name,
         numberId: action.numberId,

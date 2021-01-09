@@ -52,7 +52,7 @@ const UserNotificationsScreen = (props) => {
     }
   };
 
-  return (
+  return user.userId && (
     <View style={styles.servicesContainer}>
       <UserHeader
         title="Notificaciones"

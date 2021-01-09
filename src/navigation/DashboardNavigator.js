@@ -41,6 +41,8 @@ const NotificationsNavigator = createSwitchNavigator({
   ShoWResumeOffer: UserCompleteDescriptionScreen,
   StartCheckout: StartCheckoutScreen,
   PaymentScreen: PaymentScreen,
+  Services: UserServicesScreen,
+  ServiceSelected: ServiceSelectedScreen
 });
 
 const UserTabNavigator = createBottomTabNavigator(

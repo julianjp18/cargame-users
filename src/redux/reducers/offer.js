@@ -3,6 +3,7 @@ import {
   SHOW_OFFER,
   ADD_DESTINATION_OFFER,
   OFFER_SELECTED,
+  FINAL_TOTAL_PRICE_OFFER,
 } from "../actions/offers";
 const initialState = null;
 
@@ -11,6 +12,7 @@ export default (state = initialState, action) => {
     case SHOW_OFFER:
     case CREATE_OFFER:
       return {
+        ...state,
         id: action.id,
         description: action.description,
         contact: action.contact,
@@ -35,7 +37,13 @@ export default (state = initialState, action) => {
       };
     case OFFER_SELECTED:
       return {
+        ...state,
         offerSelected: action.offerSelected,
+      };
+    case FINAL_TOTAL_PRICE_OFFER:
+      return {
+        ...state,
+        finalTotalPriceOffer: action.finalTotalPriceOffer,
       };
     default:
       return state;

@@ -4,6 +4,7 @@ export const SHOW_OFFER = "SHOW_OFFER";
 export const CHANGE_PROFILE_PICTURE = "CHANGE_PROFILE_PICTURE";
 export const ADD_DESTINATION_OFFER = "ADD_DESTINATION_OFFER";
 export const OFFER_SELECTED = "OFFER_SELECTED";
+export const FINAL_TOTAL_PRICE_OFFER = "FINAL_TOTAL_PRICE_OFFER";
 
 // definicion base de datos de Ofertas.
 export const createOffer = ({
@@ -210,4 +211,11 @@ export const saveResumeOfferSelected = (offerId) => async dispatch => {
       },
     });
   }
+};
+
+export const saveTotalPrice = (price) => async dispatch => {
+  dispatch({
+    type: FINAL_TOTAL_PRICE_OFFER,
+    finalTotalPriceOffer: price,
+  });
 };
