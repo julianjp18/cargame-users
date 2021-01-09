@@ -31,9 +31,9 @@ const styles = StyleSheet.create({
     paddingTop: '2%',
   },
   col: {
-      width: '33%',
-      alignItems: 'center',
-      justifyContent: 'center',
+    width: '33%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   hideCol: {
     width: '0%',
@@ -70,7 +70,7 @@ const GoogleMapScreen = props => {
     latitude = currentPosition.latitude;
     longitude = currentPosition.longitude;
   }
-  
+
   const [selectedLocation, setSelectedLocation] = useState(
     {
       latitude,
@@ -109,8 +109,6 @@ const GoogleMapScreen = props => {
     };
     const savedLocation = await dispatch(
       placesActions.getPosition(location));
-    
-    console.log(savedLocation);
 
     setSelectedLocation({
       latitude: location.lat,
@@ -146,16 +144,16 @@ const GoogleMapScreen = props => {
               size={24}
               color={primaryColor}
               onPress={() => props.navigation.navigate('Dashboard')}
-              />
+            />
           </View>
           <View style={selectedLocation.status === 'OK' ? styles.col : styles.oneCol}>
             {!selectedLocation ? (
               <ActivityIndicator size="large" color={primaryColor} />
             ) : (
-              <Text>
-                {selectedLocation.status ? selectedLocation.address : 'No localización por el momento'}
-              </Text>
-            )}
+                <Text>
+                  {selectedLocation.status ? selectedLocation.address : 'No localización por el momento'}
+                </Text>
+              )}
           </View>
           <View style={selectedLocation.status === 'OK' ? styles.col : styles.hideCol}>
             {selectedLocation.status === 'OK' &&

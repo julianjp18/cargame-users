@@ -1,12 +1,14 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Alert } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { currencyFormat, getUserInfo } from '../../../utils/helpers';
 import * as authActions from '../../../redux/actions/auth';
+import * as offersActions from '../../../redux/actions/offers';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import UserHeader from "../../../components/UserHeader";
+import Button from '../../../components/UI/Button';
 import { normalizeLength } from "../../../styles/layout"
 import { primaryColor, accentColor, textAccentColor } from "../../../constants/Colors";
 import { ScrollView } from "react-native-gesture-handler";
@@ -24,6 +26,26 @@ const UserCompleteDescriptionScreen = (props) => {
       props.navigation.navigate('Index');
     }
   });
+
+  const cancelOfferState = () => {
+    dispatch(offersActions.cancelOffer(offer.offerId, offer.notificationId));
+    props.navigation.navigate('Notifications');
+  };
+
+  const cancelOffer = () => {
+    Alert.alert(
+      'Cancelar viaje',
+      '¿Seguro que deseas cancelar el viaje?',
+      [
+        {
+          text: 'No',
+          style: 'cancel',
+        },
+        { text: 'Si, cancelar', onPress: cancelOfferState },
+      ],
+      { cancelable: false }
+    )
+  };
 
   return (
     <View style={styles.servicesContainer}>
@@ -133,6 +155,15 @@ const UserCompleteDescriptionScreen = (props) => {
                 </View>
               </View>
             </LinearGradient>
+            <View style={styles.buttonContainer}>
+              <Button
+                title={'Cancelar viaje'}
+                onPress={cancelOffer}
+                colorOne={'white'}
+                colorTwo={'white'}
+                fontColor={primaryColor}
+              />
+            </View>
           </ScrollView>
         </View>
       )}
@@ -326,6 +357,10 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     marginBottom: normalizeLength(10),
   },
+  buttonContainer: {
+    marginVertical: normalizeLength(10),
+    marginHorizontal: normalizeLength(30)
+  }
 });
 
 export default UserCompleteDescriptionScreen;

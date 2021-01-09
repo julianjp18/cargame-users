@@ -27,7 +27,7 @@ const UserNotificationsScreen = (props) => {
       props.navigation.navigate('Index');
     }
   });
-  
+
   const showOfferScreen = (notification) => {
     if (!notification.offerId) return true;
     try {
@@ -43,7 +43,7 @@ const UserNotificationsScreen = (props) => {
   const showResumeOfferScreen = (notification) => {
     if (!notification.offerId) return true;
     try {
-      dispatch(offersActions.saveResumeOfferSelected(notification.offerId));
+      dispatch(offersActions.saveResumeOfferSelected((notification.offerId).split('_')[0]));
       setTimeout(() => {
         props.navigation.navigate('ShowResumeOffer');
       }, 2000);
@@ -62,6 +62,7 @@ const UserNotificationsScreen = (props) => {
       {user && (
         <ScrollView>
           <View style={styles.infoContainer}>
+            {console.log(notifications)}
             {notifications.length > 0 && notifications.map((notification) => (
               <ListItem
                 onPress={() => notification.status === 'RESUME' ? showResumeOfferScreen(notification) : showOfferScreen(notification)}

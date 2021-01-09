@@ -52,7 +52,7 @@ const StartCheckoutScreen = (props) => {
   const getPreferenceData = async (email, offer) => {
     try {
       const response = await fetch(
-        `http://192.168.1.39:3001/get-preference-id`, {
+        `http://192.168.1.44:3001/get-preference-id`, {
         email,
         items: [
           {

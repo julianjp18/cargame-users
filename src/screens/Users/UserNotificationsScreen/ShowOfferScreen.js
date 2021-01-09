@@ -69,7 +69,7 @@ const ShowOfferScreen = (props) => {
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
-      console.log(inputValue);
+
       totalPrice(inputValue);
       dispatchFormState({
         type: FORM_INPUT_UPDATE,

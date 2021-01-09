@@ -6,8 +6,8 @@ export const SAVE_DESTINATION_NOTIFICATION = 'SAVE_DESTINATION_NOTIFICATION';
 export const showUserNotifications = (userId) => async dispatch => {
 
   const data = await firestoreDB
-      .collection('NotificationsUsers')
-      .get().then((allNotifications) => allNotifications);
+    .collection('NotificationsUsers')
+    .get().then((allNotifications) => allNotifications);
 
   const notificationsData = [];
   if (data) {
@@ -16,19 +16,19 @@ export const showUserNotifications = (userId) => async dispatch => {
         notification.data().userId === "0" ||
         notification.data().userId === userId
       ) {
-        notificationsData.push({...notification.data()});
+        notificationsData.push({ ...notification.data(), id: notification.id });
       }
     });
   }
 
   const dataConfirmationPayments = await firestoreDB
-  .collection('ConfirmationPayments')
-  .where("userId", "==", userId)
-  .get().then((allNotifications) => allNotifications);
+    .collection('ConfirmationPayments')
+    .where("userId", "==", userId)
+    .get().then((allNotifications) => allNotifications);
 
-  if (dataConfirmationPayments.length > 0) {
+  if (dataConfirmationPayments) {
     dataConfirmationPayments.forEach(notification => {
-      notificationsData.push({...notification.data(), message: 'Tu pago se encuentra confirmado, mira el resumen de tu servicio', userId });
+      notificationsData.push({ ...notification.data(), id: notification.id, message: 'Tu pago se encuentra confirmado, mira el resumen de tu servicio', userId });
     });
   }
 

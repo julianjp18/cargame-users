@@ -17,23 +17,21 @@ export const currentPosition = ({ latitude, longitude }) => dispatch => {
 
 export const getPosition = (location) => async dispatch => {
   const response = await fetch(
-    `https://maps.googleapis.com/maps/api/geocode/json?latlng=${
-    location.lat
+    `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.lat
     },${location.lng}&result_type=street_address&key=${ENV.googleApiKey}`)
-  
+
   if (!response.ok) {
     throw new Error('¡UPS! Error al conseguir la dirección');
   }
 
   const responseData = await response.json();
 
-  console.log(responseData);
 
   if (!responseData.results) {
     return;
   }
   let getPositionPicked;
-  if(responseData.status === 'ZERO_RESULTS') {
+  if (responseData.status === 'ZERO_RESULTS') {
     getPositionPicked = {
       status: responseData.status,
       address: 'Por favor selecciona un punto dentro de una ciudad'

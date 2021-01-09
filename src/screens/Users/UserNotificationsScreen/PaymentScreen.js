@@ -43,9 +43,8 @@ const PaymentScreen = (props) => {
 
   const getPreferenceData = async (email = user.email) => {
     try {
-      console.log(finalTotalPriceOffer);
       const response = await fetch(
-        `http://192.168.1.39:3001/get-preference-id`, {
+        `http://192.168.1.44:3001/get-preference-id`, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         mode: 'cors', // no-cors, *cors, same-origin
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
