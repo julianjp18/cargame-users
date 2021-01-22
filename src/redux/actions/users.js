@@ -1,10 +1,19 @@
 import { firestoreDB } from '../../constants/Firebase';
+import moment from 'moment';
+
 export const CREATE_USER = 'CREATE_USER';
 export const SHOW_USER = 'SHOW_USER';
 export const CHANGE_PHONE_NUMBER = 'CHANGE_PHONE_NUMBER';
 export const CHANGE_PROFILE_PICTURE = 'CHANGE_PROFILE_PICTURE';
 
-export const createUser = ({ userId, name, numberId, phone, referidNumber = '' }) => {
+export const createUser = ({
+  userId,
+  name,
+  numberId,
+  phone,
+  referidNumber = '',
+  ipAdress,
+}) => {
   return async dispatch => {
     firestoreDB
       .collection('Users')
@@ -15,12 +24,15 @@ export const createUser = ({ userId, name, numberId, phone, referidNumber = '' }
         phone,
         referidNumber,
         profilePicture: null,
+        created_at: moment().format(),
+        ipAdress,
+        termsAndConditions: true,
       });
 
     dispatch({
       type: CREATE_USER,
       userId,
-      name: name ? name: '',
+      name: name ? name : '',
       numberId: numberId ? numberId : '',
       phone,
       referidNumber: referidNumber ? referidNumber : '',

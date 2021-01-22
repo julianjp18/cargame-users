@@ -1,4 +1,5 @@
 import { firestoreDB } from "../../constants/Firebase";
+import moment from 'moment';
 export const CREATE_OFFER = "CREATE_OFFER";
 export const SHOW_OFFER = "SHOW_OFFER";
 export const CHANGE_PROFILE_PICTURE = "CHANGE_PROFILE_PICTURE";
@@ -45,6 +46,7 @@ export const createOffer = ({
     status,
     offerValue,
     typeServiceSelected,
+    dateStarted: moment().format("DD/MM/YYYY HH:mm:ss"),
   }).then((ref) => uid.push(ref.id));
 
   if (uid[0]) {
