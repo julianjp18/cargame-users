@@ -1,5 +1,5 @@
 import React, { useState, useReducer, useCallback } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Alert } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import moment from 'moment';
 import { getUserInfo } from '../../utils/helpers';
@@ -48,15 +48,24 @@ const formReducer = (state, action) => {
 const ShowOfferScreen = (props) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
+  const [valueDeclared, setValueDeclared] = useState();
   const user = state.auth;
   const offer = state.offer.offerSelected;
   const price = Number.parseInt(((13 * offer.offerValue) / 100)) + Number.parseInt(offer.offerValue);
-  const [priceForMP, setpriceForMP] = useState(price); 
+  const [priceForMP, setpriceForMP] = useState(price);
   const [totalPriceValue, settotalPriceValue] = useState(currencyFormat(price, 0));
 
   const startCheckout = () => {
-    dispatch(offersActions.saveTotalPrice(priceForMP));
-    props.navigation.navigate('PaymentScreen');
+    if (valueDeclared) {
+      dispatch(offersActions.saveTotalPrice(priceForMP));
+      props.navigation.navigate('PaymentScreen');
+    } else {
+      Alert.alert(
+        'Campo inválido',
+        'El valor declarado es requerido',
+        [{ text: 'Está bien' }]
+      );
+    }
   };
 
   getUserInfo().then((data) => {
@@ -92,6 +101,7 @@ const ShowOfferScreen = (props) => {
   });
 
   const totalPrice = (value) => {
+    setValueDeclared(value);
     const price = (Number.parseInt(13 * Number.parseInt(offer.offerValue)) / 100) + Number.parseInt((10 * value) / 100);
     const priceWithTax = (Number.parseInt(offer.offerValue) + price);
     setpriceForMP(priceWithTax);

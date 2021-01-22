@@ -10,7 +10,7 @@ import {
   KeyboardAvoidingView,
   YellowBox,
 } from "react-native";
-
+import * as Permissions from 'expo-permissions';
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../../components/UI/Button";
 import TextInput from "../../components/UI/Input";
@@ -63,6 +63,25 @@ const AuthScreen = (props) => {
     }
   }, [error]);
 
+  const verifyPermissions = async () => {
+    const resultNetworkState = await Permissions.askAsync(Permissions.ACCESS_NETWORK_STATE);
+    const resultWifiState = await Permissions.askAsync(Permissions.ACCESS_WIFI_STATE);
+    if (resultNetworkState.status !== 'granted' && resultWifiState.status !== 'granted') {
+      Alert.alert(
+        'Permisos insuficientes',
+        'Necesita los permisos de geolocalización para poder obtener localización en tiempo real.',
+        [{ text: 'Está bien' }]
+      );
+      return verifyPermissions();
+    }
+    return true;
+  };
+
+
+  const validPermissions = async () => {
+    const hasPermissions = await verifyPermissions();
+    if (!hasPermissions) return hasPermissions;
+  };
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
       dispatchFormState({
@@ -188,8 +207,8 @@ const AuthScreen = (props) => {
                   initialValue=""
                 />
               ) : (
-                <View />
-              )}
+                  <View />
+                )}
             </View>
             <View style={styles.forgotPasswordContainer}>
               <Text style={styles.forgotPassword}>
@@ -200,11 +219,11 @@ const AuthScreen = (props) => {
               {isLoading ? (
                 <ActivityIndicator size="large" color={primaryColor} />
               ) : (
-                <Button
-                  title={isSignUp ? "Quiero ser socio" : "Ingresar"}
-                  onPress={authHandler}
-                />
-              )}
+                  <Button
+                    title={isSignUp ? "Quiero ser socio" : "Ingresar"}
+                    onPress={authHandler}
+                  />
+                )}
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
@@ -212,8 +231,8 @@ const AuthScreen = (props) => {
       <Image style={styles.mainCarga} source={shortMainCargaUrl} />
     </View>
   ) : (
-    props.navigation.navigate("Dashboard")
-  );
+      props.navigation.navigate("Dashboard")
+    );
 };
 
 const styles = StyleSheet.create({

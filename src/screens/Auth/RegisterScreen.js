@@ -3,9 +3,11 @@ import {
   StyleSheet, View, Text,
   ActivityIndicator, Alert, ScrollView,
 } from 'react-native';
-import { AsyncStorage } from 'react-native';
+import { CheckBox } from 'react-native-elements';
+import * as Network from 'expo-network';
 import { KeyboardAwareView } from 'react-native-keyboard-aware-view';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import * as Linking from 'expo-linking';
 import Button from '../../components/UI/Button';
 import TextInput from '../../components/UI/Input';
 import * as userActions from '../../redux/actions/users';
@@ -44,6 +46,7 @@ const formReducer = (state, action) => {
 const RegisterScreen = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+  const [isSelected, setSelection] = useState(false);
   const dispatch = useDispatch();
   const [userId, setUserId] = useState();
 
@@ -68,24 +71,47 @@ const RegisterScreen = props => {
     formIsValid: false
   });
 
+  const termsAndConditionsOnPress = () => Linking.openURL('https://expo.io');
+
   const registerHandler = async () => {
-    if (userId) {
-      const action = userActions.createUser({
-        userId,
-        name: formState.inputValues.name,
-        numberId: formState.inputValues.numberId,
-        phone: formState.inputValues.phone,
-        referidNumber: formState.inputValues.referidNumber
-      });
-      setError(null);
-      setIsLoading(true);
-      try {
-        dispatch(action);
-        props.navigation.navigate('Dashboard');
-      } catch (err) {
-        setError(err.message);
-        setIsLoading(false);
+    const {
+      name,
+      numberId,
+      phone,
+      referidNumber,
+    } = formState.inputValues;
+
+    if (userId && isSelected) {
+
+      const ipAdress = await Network.getIpAddressAsync();
+
+      if (
+        name &&
+        numberId &&
+        phone
+      ) {
+        const action = userActions.createUser({
+          userId,
+          name,
+          numberId,
+          phone,
+          referidNumber: referidNumber ? referidNumber : '',
+          ipAdress,
+        });
+        setError(null);
+        setIsLoading(true);
+        try {
+          dispatch(action);
+          props.navigation.navigate('Dashboard');
+        } catch (err) {
+          setError(err.message);
+          setIsLoading(false);
+        }
+      } else {
+        Alert.alert('', 'Por favor completa todos los campos requeridos', error, [{ text: 'Está bien' }]);
       }
+    } else {
+      Alert.alert('', 'Por favor acepta los términos y condiciones', error, [{ text: 'Está bien' }]);
     }
 
   };
@@ -119,7 +145,7 @@ const RegisterScreen = props => {
       />
       <View style={styles.authContainer}>
         <KeyboardAwareView style={styles.scrollViewContainer}>
-          <View style={styles.scrollViewContainer}>
+          <ScrollView style={styles.scrollViewContent}>
             <TextInput
               id="name"
               label="Nombres y apellidos (*)"
@@ -172,13 +198,27 @@ const RegisterScreen = props => {
               minLength={6}
               maxLength={6}
               autoCapitalize="none"
-              errorText="¡UPS! Por favor ingresa un número de referido correcto."
               onInputChange={inputChangeHandler}
               leftIcon={
                 <FontAwesome name="pencil" size={20} color={primaryColor} />
               }
               initialValue=""
             />
+            <View
+              style={styles.checkboxContainer}
+              onPress={() => setSelection(!isSelected)}
+            >
+              <CheckBox
+                title={
+                  <Text style={styles.checkBoxText}>
+                    {`Estoy de acuerdo con los `}
+                    <Text style={styles.termsAndConditions} onPress={termsAndConditionsOnPress}>términos y condiciones</Text>
+                  </Text>
+                }
+                checked={isSelected}
+                onPress={() => setSelection(!isSelected)}
+              />
+            </View>
             <View style={styles.btnActionContainer}>
               {isLoading
                 ? (<ActivityIndicator size='large' color={primaryColor} />)
@@ -189,7 +229,7 @@ const RegisterScreen = props => {
                   />
                 )}
             </View>
-          </View>
+          </ScrollView>
         </KeyboardAwareView>
       </View>
     </View>
@@ -204,8 +244,17 @@ const styles = StyleSheet.create({
   authContainer: {
     marginTop: normalizeLength(5),
     paddingHorizontal: normalizeLength(10),
-    minWidth: normalizeLength(300),
+    minWidth: normalizeLength(350),
     minHeight: normalizeLength(400),
+    height: '100%'
+  },
+  scrollViewContainer: {
+    minWidth: normalizeLength(350),
+    height: '100%'
+  },
+  scrollViewContent: {
+    minWidth: normalizeLength(350),
+    height: '100%'
   },
   registerInfoText: {
     paddingBottom: normalizeLength(10),
@@ -220,8 +269,15 @@ const styles = StyleSheet.create({
     fontSize: normalizeLength(10),
     color: textPrimaryColor
   },
-  scrollViewContainer: {
-    paddingBottom: normalizeLength(-20)
+  checkboxContainer: {
+    marginBottom: normalizeLength(20),
+  },
+  checkBoxText: {
+    paddingLeft: normalizeLength(5)
+  },
+  termsAndConditions: {
+    color: primaryColor,
+    fontSize: normalizeLength(14)
   }
 });
 
