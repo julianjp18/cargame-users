@@ -32,7 +32,6 @@ export const showUserNotifications = (userId) => async dispatch => {
     });
   }
 
-
   dispatch({
     type: SHOW_NOTIFICATIONS,
     userNotifications: notificationsData
