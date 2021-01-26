@@ -8,8 +8,6 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
 import { primaryColor } from "../../constants/Colors";
 import { shortMapaUrl } from "./../../constants/Utils";
 import { ScrollView } from "react-native-gesture-handler";
@@ -21,6 +19,9 @@ import { normalizeLength } from "../../styles/layout";
 import * as offerActions from "../../redux/actions/offers";
 import * as notificationsActions from '../../redux/actions/notifications';
 import * as placesActions from '../../redux/actions/places';
+
+// Hooks
+import useCurrentPosition from '../../hooks/useCurrentPosition';
 
 const UserDestinationScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -77,43 +78,26 @@ const UserDestinationScreen = (props) => {
     }
   };
 
-  const verifyPermissions = async () => {
-    const result = await Permissions.askAsync(Permissions.LOCATION);
-    if (result.status !== 'granted') {
-      Alert.alert(
-        'Permisos insuficientes',
-        'Necesita los permisos de geolocalización para poder obtener localización en tiempo real.',
-        [{ text: 'Está bien' }]
-      );
-      return verifyPermissions();
-    }
-    return true;
+  /**
+   * Función de retorno al rechazar permisos de ubicación
+   */
+  const onDenyPermission = () => {
+    Alert.alert('No se puede obtener la localización', 'Por favor enciende la localización.', [{ text: 'Esta bien' }]);
   };
 
-  const validLocationTurnOn = () => {
-    if (!Location.hasServicesEnabledAsync()) {
-      Alert.alert('No se puede obtener la localización', 'Por favor enciende la localización.', [{ text: 'Esta bien' }]);
-      return validLocationTurnOn();
-    }
-    return true;
-  }
+  // Hook que obtiene la ubicación actual y valida sus permisos
+  const currentPosition = useCurrentPosition(onDenyPermission);
 
-  const getCurrentLocation = async () => {
-    const hasPermissions = await verifyPermissions();
-    if (!hasPermissions) return hasPermissions;
-
-    try {
-      const location = await Location.getLastKnownPositionAsync();
-      if (location) {
-        dispatch(placesActions.currentPosition({
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-        }));
-      }
-    } catch (err) {
-      validLocationTurnOn();
+  // Efecto para actualizar la ubicación actual
+  useEffect(() => {
+    if (currentPosition && currentPosition.location) {
+      dispatch(placesActions.currentPosition({
+        lat: currentPosition.location.latitude,
+        lng: currentPosition.location.longitude,
+      }));
     }
-  };
+  }, [currentPosition]);
+
 
   useEffect(() => {
     if (error) {
@@ -123,9 +107,33 @@ const UserDestinationScreen = (props) => {
     }
   }, [error]);
 
-  useEffect(() => {
-    getCurrentLocation();
-  }, []);
+  const setOriginLocation = ({ location, address }) => {
+    dispatch(placesActions.setOriginLocation({ location, address }));
+  };
+
+  const setDestinationLocation = ({ location, address }) => {
+    dispatch(placesActions.setDestinationLocation({ location, address }));
+  };
+
+  // Marcadores iniciales
+  const markers = {
+    origin: {
+      title: 'Dirección de recogida',
+      location: places.currentOriginCoords,
+      color: 'green'
+    },
+    destination: {
+      title: 'Dirección de entrega',
+      location: places.currentDestinyCoords,
+      color: 'blue'
+    }
+  };
+
+  // Dirección inicial
+  const directions = {
+    origin: places.currentOriginCoords,
+    destination: places.currentDestinyCoords
+  };
 
   return typeServiceId && (
     <View style={styles.supportContainer}>
@@ -144,29 +152,44 @@ const UserDestinationScreen = (props) => {
                   <View>
                     <LocationPicker
                       navigation={props.navigation}
-                      id="origin"
                       label="Dirección de recogida (*)"
                       errorText="¡UPS! Por favor ingresa una dirección válida."
-                      initialValue={
-                        places.currentOriginAddress
-                          ? places.currentOriginAddress
-                          : ''
-                      }
-                      isOriginCityService
+                      value={places.currentOriginAddress}
+                      data={{
+                        key: 'origin',
+                        markers,
+                        directions,
+                        location: places.currentOriginCoords,
+                        address: places.currentOriginAddress,
+                        configuration: {
+                          locationIcon: {
+                            color: 'green'
+                          }
+                        }
+                      }}
+                      handleEvent={setOriginLocation}
                     />
                   </View>
                   <View>
                     <LocationPicker
                       navigation={props.navigation}
-                      id="destination"
                       label="Dirección de entrega (*)"
                       errorText="¡UPS! Por favor ingresa una dirección válida."
-                      initialValue={
-                        places.currentDestinyAddress
-                          ? places.currentDestinyAddress
-                          : ''
-                      }
-                      isDestinyCityService
+                      value={places.currentDestinyAddress}
+                      data={{
+                        key: 'destination',
+                        markers,
+                        directions,
+                        location: places.currentDestinyCoords,
+                        address: places.currentDestinyAddress,
+                        configuration: {
+                          locationIcon: {
+                            color: 'blue'
+                          }
+                        }
+                      }}
+                      disabled={true}
+                      handleEvent={setDestinationLocation}
                     />
                   </View>
                 </View>
