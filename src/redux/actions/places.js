@@ -6,12 +6,29 @@ export const GET_CURRENT_ORIGIN_SERVICE = 'GET_CURRENT_ORIGIN_SERVICE';
 export const CHANGE_FIELD_SELECTED = 'CHANGE_FIELD_SELECTED';
 export const GET_CURRENT_DESTINY_SERVICE = 'GET_CURRENT_DESTINY_SERVICE';
 
-export const currentPosition = ({ latitude, longitude }) => dispatch => {
+export const setOriginLocation = ({ location, address }) => {
+  return {
+    type: GET_CURRENT_ORIGIN_SERVICE,
+    address,
+    location
+  };
+}
+
+export const setDestinationLocation = ({ location, address }) => {
+  return {
+    type: GET_CURRENT_DESTINY_SERVICE,
+    address,
+    location
+  };
+}
+
+
+export const currentPosition = (location) => dispatch => {
 
   dispatch({
     type: GET_CURRENT_POSITION,
-    latitude: latitude,
-    longitude: longitude,
+    latitude: location.lat,
+    longitude: location.lng,
   });
 };
 

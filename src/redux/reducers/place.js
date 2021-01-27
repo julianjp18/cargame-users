@@ -32,13 +32,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         currentOriginAddress: action.address,
-        currentOriginCoords: action.coords,
+        currentOriginCoords: action.location,
       };
     case GET_CURRENT_DESTINY_SERVICE:
       return {
         ...state,
         currentDestinyAddress: action.address,
-        currentDestinyCoords: action.coords,
+        currentDestinyCoords: action.location,
       };
     case CHANGE_FIELD_SELECTED:
       return {
