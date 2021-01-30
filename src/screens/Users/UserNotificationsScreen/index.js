@@ -62,7 +62,6 @@ const UserNotificationsScreen = (props) => {
       {user && (
         <ScrollView>
           <View style={styles.infoContainer}>
-            {console.log(notifications)}
             {notifications.length > 0 && notifications.map((notification) => (
               <ListItem
                 onPress={() => notification.status === 'RESUME' ? showResumeOfferScreen(notification) : showOfferScreen(notification)}
@@ -77,6 +76,7 @@ const UserNotificationsScreen = (props) => {
                 />
                 <ListItem.Content>
                   <ListItem.Title style={styles.titleListItem}>{notification.message}</ListItem.Title>
+                  <ListItem.Subtitle>{`${notification.currentCity} - ${notification.destinationCity}`}</ListItem.Subtitle>
                 </ListItem.Content>
                 {notification.status && (
                   <Icon
