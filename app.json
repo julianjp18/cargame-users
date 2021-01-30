@@ -28,7 +28,12 @@
       "favicon": "./assets/favicon.png"
     },
     "android": {
-      "package": "com.julianjp18.Cargame_Users"
+      "package": "com.julianjp18.Cargame_Users",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAx3ZM1YpfTSiV4dennpgT3hiZcJ2959s8"
+        }
+      }
     }
   }
 }
