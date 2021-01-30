@@ -41,12 +41,13 @@ export const createOffer = ({
     destinationAddress,
     destinationCity,
     driverId,
+    timesOffered: 0,
     pickUpAddress,
     pickUpDate,
     status,
     offerValue,
     typeServiceSelected,
-    dateStarted: moment().format("DD/MM/YYYY HH:mm:ss"),
+    dateStarted: '',
   }).then((ref) => uid.push(ref.id));
 
   if (uid[0]) {
