@@ -2,7 +2,9 @@
  * Hook para obtener un permiso
  * 
  */
-import { useState } from 'react';
+// Dependencias
+import { useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 
 // Util
 import askPermision, { PERMISSIONS } from '../permissions';
@@ -19,15 +21,33 @@ const usePermission = (name) => {
     // Estado de carga
     const [isLoading, setIsLoading] = useState(true);
 
-    useState(() => {
+    const _askPermission = async () => {
+        const _permission = await askPermision(name);
+        setData(_permission);
+        setIsLoading(false);
+    };
 
-        const _askPermission = async () => {
-            const _permission = await askPermision(name);
-            setData(_permission);
-            setIsLoading(false);
-        };
+    // Pide los permisos al montar el componente que lo usa
+    useState(() => {
         _askPermission();
     }, [])
+
+    // Efecto para reintentar solicitar los permisos
+    useEffect(() => {
+        if (!isLoading && !data) {
+            setIsLoading(true);
+            Alert.alert(
+                'Permisos',
+                'Para continuar debe aceptar los permisos',
+                [
+                    {
+                        text: 'Aceptar',
+                        onPress: () => _askPermission()
+                    }
+                ]
+            );
+        }
+    }, [data, isLoading]);
 
     return { data, isLoading };
 };
