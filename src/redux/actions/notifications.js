@@ -3,7 +3,18 @@ import moment from "moment";
 export const SHOW_NOTIFICATIONS = 'SHOW_NOTIFICATIONS';
 export const SAVE_DESTINATION_NOTIFICATION = 'SAVE_DESTINATION_NOTIFICATION';
 
-export const showUserNotifications = (userId) => async dispatch => {
+const offerData = async (offerId) => {
+  const resOffer = [];
+
+  await firestoreDB
+    .collection("OffersNotificationCenter")
+    .doc(offerId)
+    .get().then((doc) => resOffer.push(doc.data()));
+  console.log(resOffer);
+  return resOffer[0];
+};
+
+export const showUserNotifications = (userId) => async (dispatch) => {
 
   const data = await firestoreDB
     .collection('NotificationsUsers')
@@ -11,12 +22,25 @@ export const showUserNotifications = (userId) => async dispatch => {
 
   const notificationsData = [];
   if (data) {
-    data.forEach(notification => {
+    data.forEach(async (notification) => {
       if (
         notification.data().userId === "0" ||
         notification.data().userId === userId
       ) {
-        notificationsData.push({ ...notification.data(), id: notification.id });
+        if (notification.data().offerId != '') {
+          const { currentCity, destinationCity } = await firestoreDB
+            .collection("OffersNotificationCenter")
+            .doc(notification.data().offerId)
+            .get().then((doc) => doc.data());
+
+          notificationsData.push({
+            ...notification.data(),
+            currentCity,
+            destinationCity,
+            id: notification.id,
+          });
+        } else
+          notificationsData.push({ ...notification.data(), id: notification.id });
       }
     });
   }
@@ -31,7 +55,6 @@ export const showUserNotifications = (userId) => async dispatch => {
       notificationsData.push({ ...notification.data(), id: notification.id, message: 'Tu pago se encuentra confirmado, mira el resumen de tu servicio', userId });
     });
   }
-
 
   dispatch({
     type: SHOW_NOTIFICATIONS,

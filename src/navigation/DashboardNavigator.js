@@ -19,7 +19,7 @@ import EditPhoneNumberScreen from "../screens/Users/EditProfile/EditPhoneNumberS
 import StartupScreen from "../screens/StartupScreen";
 import UserServicesScreen from "../screens/Users/UserServicesScreen";
 import UserCompleteDescriptionScreen from '../screens/Users/UserNotificationsScreen/UserCompleteDescriptionScreen';
-import GoogleMapScreen from '../screens/GoogleMapScreen';
+import Location from '../screens/Location';
 import ServiceSelectedScreen from "../screens/Users/UserServicesScreen/ServiceSelectedScreen";
 import ShowOfferScreen from "../screens/Users/UserNotificationsScreen/ShowOfferScreen";
 import PaymentScreen from "../screens/Users/UserNotificationsScreen/PaymentScreen";
@@ -137,7 +137,7 @@ const MainNavigator = createSwitchNavigator({
   },
   Dashboard: UserTabNavigator,
   Map: {
-    screen: GoogleMapScreen,
+    screen: Location,
     navigationOptions: {
       headerTitle: '',
       headerShown: true
