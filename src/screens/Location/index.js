@@ -4,7 +4,7 @@
  */
 
 //  Dependencias
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { View, StyleSheet, Text } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
@@ -19,7 +19,7 @@ import SearchPlace from '../../components/UI/Map/SearchPlace';
 import { getAdressFromLocation } from '../../utils/location';
 
 // Estilos
-import { fullWidth, boxShadow } from '../../styles/layout';
+import { fullWidth } from '../../styles/layout';
 import { accentColor } from '../../constants/Colors';
 
 /**
@@ -152,7 +152,16 @@ const Location = ({ navigation }) => {
 
     // Estado para la dirección a mostrar, cuando se utilizan
     // Marcadores se actualiza con éste estado
-    const [address, setAddress] = useState(_initialData.address);
+    const [address, setAddress] = useState(_initialData.address || '');
+
+    // Efecto para reubicar el mapa en la ubicación actual al obtenerla
+    useEffect(() => {
+        if (!data.relocate.data && data.currentPosition.data) {
+            data.relocate.handlers.setRelocation(
+                data.currentPosition.data.location
+            );
+        }
+    }, [data.currentPosition]);
 
     // Manejadores
     const handlers = {
@@ -209,9 +218,7 @@ const Location = ({ navigation }) => {
                 data={data}
                 configuration={{ zoom: true, showCenterMarker: true }}
             />
-            {data.currentPosition.data &&
-                <LocationInput configuration={configuration} address={address} label={label} handlers={handlers} />
-            }
+            <LocationInput configuration={configuration} address={address} label={label} handlers={handlers} />
         </>
     )
 };

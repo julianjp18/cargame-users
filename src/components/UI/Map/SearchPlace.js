@@ -24,7 +24,13 @@ import ENV from '../../../../env';
  * @param {Function} leftComponent  Componente izquierdo
  * @param {Function} rightComponent Componente derecho
  */
-const SearchPlace = ({ address, configuration, handleEvent, leftComponent, rightComponent }) => {
+const SearchPlace = ({
+    address,
+    configuration,
+    handleEvent,
+    leftComponent,
+    rightComponent
+}) => {
 
     // Obtiene la ubicación actual
     const currentPosition = useCurrentPosition();
@@ -39,22 +45,25 @@ const SearchPlace = ({ address, configuration, handleEvent, leftComponent, right
         }
     }, [address]);
 
-    if (!currentPosition) { return null; }
     /**
      * Función que controla el evento al seleccionar una ubicación
      * @param {Object} place   Datos del lugar
      * @param {Object} details Detalles de ubicación
      */
     const _handleEvent = (place, details) => {
-        const location = place && place.geometry
-            ? place.geometry.location
-            : details && details.geometry
-                ? {
-                    latitude: details.geometry.location.lat,
-                    longitude: details.geometry.location.lng
-                }
-                : null;
-        const _address = place && place.description;
+
+        let location, _address;
+        if (place.geometry && place.geometry.isCurrentLocation) {
+            location = currentPosition && currentPosition.location;
+            _address = currentPosition && currentPosition.address;
+        }
+        else if (details && details.geometry) {
+            location = {
+                latitude: details.geometry.location.lat,
+                longitude: details.geometry.location.lng
+            };
+            _address = place && place.description;
+        }
 
         if (!location || !_address) { return null };
 
@@ -67,8 +76,17 @@ const SearchPlace = ({ address, configuration, handleEvent, leftComponent, right
         // Mínimo número de caracteres para realizar la busqueda
         minLength = 3,
         // Tiempo de rebote para la busqueda
-        debounce = 200
+        debounce = 200,
+        currentLocationLabel = 'Ubicación Actual'
     } = configuration || {};
+
+    // Lugares predefinidos
+    const predefinedPlaces = [
+        {
+            description: currentLocationLabel,
+            geometry: { isCurrentLocation: true }
+        }
+    ];
 
     return (
         <GooglePlacesAutocomplete
@@ -79,11 +97,7 @@ const SearchPlace = ({ address, configuration, handleEvent, leftComponent, right
             renderLeftButton={leftComponent}
             renderRightButton={rightComponent}
             onPress={_handleEvent}
-            predefinedPlaces={[
-                {
-                    description: currentPosition.address,
-                    geometry: { location: currentPosition.location }
-                }]}
+            predefinedPlaces={predefinedPlaces}
             query={{
                 key: ENV.googleApiKey,
                 language: "es"

@@ -11,9 +11,6 @@ import MapViewDirections from 'react-native-maps-directions';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
-// Componentes
-import Fallback from './Fallback';
-
 // Hooks
 import useMap from './useMap';
 import usePermission, { PERMISSIONS } from '../../../hooks/usePermission';
@@ -144,10 +141,7 @@ const Map = ({ data, configuration, children }) => {
     } = configuration;
 
     // Hook para comprobar permisos de ubicación
-    const {
-        data: permission,
-        isLoading: isLoadingPermission
-    } = usePermission(PERMISSIONS.LOCATION);
+    usePermission(PERMISSIONS.LOCATION);
 
     // Effecto para reubicar mapa
     useEffect(() => {
@@ -157,7 +151,6 @@ const Map = ({ data, configuration, children }) => {
                 longitudeDelta,
                 ...relocate
             }]);
-            relocateHandlers.setRelocation(null);
         }
     }, [relocate]);
 
@@ -172,16 +165,12 @@ const Map = ({ data, configuration, children }) => {
      * Centra el mapa en la ubicación actual
      */
     const centerCurrentLocation = async () => {
-        try {
-            centerMap([{
-                latitudeDelta,
-                longitudeDelta,
-                ...currentPosition.location
-            }]);
-        }
-        catch (error) {
-            // No se hace nada con este error
-        }
+        if (!currentPosition) { return; }
+        centerMap([{
+            latitudeDelta,
+            longitudeDelta,
+            ...currentPosition.location
+        }]);
     }
 
     /**
@@ -211,41 +200,35 @@ const Map = ({ data, configuration, children }) => {
         : currentPosition
             ? { ...currentPosition.location, latitudeDelta, longitudeDelta }
             : null;
-
     return (
         <View style={styles.container}>
-            { !permission || !initialRegion
-                ? <Fallback showMessage={!isLoadingPermission && !permission} />
-                : <>
-                    <MapView
-                        ref={mapRef}
-                        initialRegion={initialRegion}
-                        style={styles.map}
-                        zoomEnabled={zoom}
-                        zoomControlEnabled={zoom}
-                        onRegionChangeComplete={regionHandlers.change}
-                    >
-                        <Markers data={Object.values(markers)} />
-                        <Directions
-                            origin={directions.origin}
-                            destination={directions.destination}
-                            config={directions.config}
-                            handlers={directions.handlers}
-                        />
-                        {children}
-                    </MapView>
+            <MapView
+                ref={mapRef}
+                initialRegion={initialRegion}
+                style={styles.map}
+                zoomEnabled={zoom}
+                zoomControlEnabled={zoom}
+                onRegionChangeComplete={regionHandlers.change}
+            >
+                <Markers data={Object.values(markers)} />
+                <Directions
+                    origin={directions.origin}
+                    destination={directions.destination}
+                    config={directions.config}
+                    handlers={directions.handlers}
+                />
+                {children}
+            </MapView>
 
-                    {showCenterMarker &&
-                        <View style={styles.markerFixed}>
-                            <Entypo name="location-pin" size={40} color="black" />
-                        </View>
-                    }
-                    {showCurrentLocationMarker &&
-                        <TouchableOpacity style={styles.currentLocation} onPress={centerCurrentLocation}>
-                            <MaterialIcons name="my-location" size={40} color="green" />
-                        </TouchableOpacity>
-                    }
-                </>
+            {showCenterMarker &&
+                <View style={styles.markerFixed}>
+                    <Entypo name="location-pin" size={40} color="black" />
+                </View>
+            }
+            {currentPosition && showCurrentLocationMarker &&
+                <TouchableOpacity style={styles.currentLocation} onPress={centerCurrentLocation}>
+                    <MaterialIcons name="my-location" size={40} color="green" />
+                </TouchableOpacity>
             }
         </View>
     );
