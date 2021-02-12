@@ -35,10 +35,9 @@ const usePermission = (name) => {
     // Efecto para reintentar solicitar los permisos
     useEffect(() => {
         if (!isLoading && !data) {
-            setIsLoading(true);
             Alert.alert(
                 'Permisos',
-                'Para continuar debe aceptar los permisos',
+                'Por favor acepte los permisos',
                 [
                     {
                         text: 'Aceptar',

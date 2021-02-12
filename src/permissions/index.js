@@ -16,7 +16,7 @@ const _getStandardPermission = async (permission) => {
         status = (await Permissions.getAsync(permission)).status;
 
         // Si fue concedido responde true
-        if (status) { return status === 'granted'; }
+        if (status === 'granted') { return true; }
 
         // De lo contrario se pregunta por el permiso
         status = (await Permissions.askAsync(permission)).status;
@@ -24,7 +24,7 @@ const _getStandardPermission = async (permission) => {
         return status === 'granted';
     }
     catch (err) {
-        // TODO: nfv => Tratar error
+        // No se hace nada con este error
     }
     return !!status;
 }
