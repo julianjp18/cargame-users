@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import usePermission, { PERMISSIONS } from './usePermission';
 
 // Utils
-import { watchCurrentLocation, getAdressFromLocation } from '../utils/location';
+import { watchCurrentLocation, getPlaceFromLocation } from '../utils/location';
 
 /**
  * Hook para obtener la posición actual
@@ -34,8 +34,12 @@ const useCurrentPosition = (onDeny) => {
      */
     const handleEvent = async (location) => {
         if (!location || !location.coords) { return; }
-        const address = await getAdressFromLocation(location.coords);
-        setPosition({ location: location.coords, address });
+        const data = await getPlaceFromLocation(location.coords);
+        setPosition({
+            location: location.coords,
+            address: data.address,
+            city: data.city
+        });
     };
 
     // Efecto que obtiene la posición actual

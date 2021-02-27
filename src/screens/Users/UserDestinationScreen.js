@@ -107,12 +107,12 @@ const UserDestinationScreen = (props) => {
     }
   }, [error]);
 
-  const setOriginLocation = ({ location, address }) => {
-    dispatch(placesActions.setOriginLocation({ location, address }));
+  const setOriginLocation = ({ location, address, city }) => {
+    dispatch(placesActions.setOriginLocation({ location, address, city }));
   };
 
-  const setDestinationLocation = ({ location, address }) => {
-    dispatch(placesActions.setDestinationLocation({ location, address }));
+  const setDestinationLocation = ({ location, address, city }) => {
+    dispatch(placesActions.setDestinationLocation({ location, address, city }));
   };
 
   // Marcadores iniciales

@@ -6,19 +6,21 @@ export const GET_CURRENT_ORIGIN_SERVICE = 'GET_CURRENT_ORIGIN_SERVICE';
 export const CHANGE_FIELD_SELECTED = 'CHANGE_FIELD_SELECTED';
 export const GET_CURRENT_DESTINY_SERVICE = 'GET_CURRENT_DESTINY_SERVICE';
 
-export const setOriginLocation = ({ location, address }) => {
+export const setOriginLocation = ({ location, address, city }) => {
   return {
     type: GET_CURRENT_ORIGIN_SERVICE,
     address,
-    location
+    location,
+    city
   };
 }
 
-export const setDestinationLocation = ({ location, address }) => {
+export const setDestinationLocation = ({ location, address, city }) => {
   return {
     type: GET_CURRENT_DESTINY_SERVICE,
     address,
-    location
+    location,
+    city
   };
 }
 
