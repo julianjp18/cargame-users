@@ -26,6 +26,7 @@ export const createOffer = ({
   offerValue = '',
   dateOffered = '',
   typeServiceSelected,
+  user,
 }) => async (dispatch) => {
   const uid = [];
   await firestoreDB.collection("OffersNotificationCenter").add({
@@ -48,6 +49,7 @@ export const createOffer = ({
     offerValue,
     typeServiceSelected,
     dateStarted: '',
+    user,
   }).then((ref) => uid.push(ref.id));
 
   if (uid[0]) {

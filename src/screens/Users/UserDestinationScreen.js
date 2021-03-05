@@ -101,7 +101,7 @@ const UserDestinationScreen = (props) => {
 
   useEffect(() => {
     if (error) {
-      Alert.alert("¡Precaución, un error ha ocurrido!", error, [
+      Alert.alert("UPS, un error ha ocurrido!", error, [
         { text: "Está bien" },
       ]);
     }

@@ -63,7 +63,7 @@ const UserProfileScreen = props => {
         const controller = new AbortController();
         setError(null);
         try {
-          await dispatch(userActions.changeProfilePicture(asset.uri, user.driverId));
+          await dispatch(userActions.changeProfilePicture(asset.uri, user.userId));
           const savedImage = await MediaLibrary.saveToLibraryAsync(imagePath);
           controller.abort();
         } catch (err) {

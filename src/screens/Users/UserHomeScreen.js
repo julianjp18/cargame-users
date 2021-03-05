@@ -75,11 +75,12 @@ const UserHomeScreen = (props) => {
   const [date, setDate] = useState(new Date());
   const [mode] = useState("date");
   const [show, setShow] = useState(false);
+  const user = useSelector(state => state.user);
   const { userId, typeServiceSelected } = useSelector(state => state.auth);
   const [description, setDescription] = useState('');
   const [contact, setContact] = useState('');
   const [phone, setPhone] = useState('');
- 
+
   getUserInfo().then((data) => {
     const userInfo = JSON.parse(data);
     if (!userInfo.idToken || !userId) {
@@ -90,7 +91,7 @@ const UserHomeScreen = (props) => {
 
   useEffect(() => {
     if (error) {
-      Alert.alert("¡Precaución, un error ha ocurrido!", error, [
+      Alert.alert("¡UPS!, un error ha ocurrido!", error, [
         { text: "Está bien" },
       ]);
     }
@@ -116,11 +117,15 @@ const UserHomeScreen = (props) => {
         contact: contact,
         phone: phone,
         typeServiceSelected,
+        user: {
+          name: user.name,
+          phone: user.phone,
+        }
       });
-  
+
       setError(null);
       setIsLoading(true);
-  
+
       try {
         dispatch(action);
         props.navigation.navigate("DestinationList");
@@ -194,9 +199,9 @@ const UserHomeScreen = (props) => {
               minLength={5}
               required
               autoCapitalize="words"
-              errorText="¡Precaución! Por favor ingresa tu nombre y apellido correctamente."
+              errorText="Por favor ingresa tu nombre y apellido correctamente."
               onChange={(value) => setContact(value.nativeEvent.text)}
-              onInputChange={() => {}}
+              onInputChange={() => { }}
               value={contact}
             />
             <TextInput
@@ -207,9 +212,9 @@ const UserHomeScreen = (props) => {
               minLength={10}
               maxLength={10}
               autoCapitalize="none"
-              errorText="¡Precaución! Por favor ingresa un número de celular correcto."
+              errorText="Por favor ingresa un número de celular correcto."
               onChange={(value) => setPhone(value.nativeEvent.text)}
-              onInputChange={() => {}}
+              onInputChange={() => { }}
               value={phone}
             />
           </View>
@@ -217,17 +222,17 @@ const UserHomeScreen = (props) => {
             {isLoading ? (
               <ActivityIndicator size="large" color={primaryColor} />
             ) : (
-              <Button title="Siguiente" onPress={homedestinationHandler} />
-            )}
+                <Button title="Siguiente" onPress={homedestinationHandler} />
+              )}
           </View>
         </View>
       </ScrollView>
     </View>
   ) : (
-    <View>
-      <Text>Cargando...</Text>
-    </View>
-  );
+      <View>
+        <Text>Cargando...</Text>
+      </View>
+    );
 };
 
 // CSS de la formula.
