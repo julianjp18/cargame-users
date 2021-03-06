@@ -59,13 +59,16 @@ const getLocationFromAddress = async (address) => {
  * Obtiene la dirección de una ubicación
  * @param {Object} location Ubicación {latitude,longitude}
  */
-const getAdressFromLocation = async (location) => {
+const getPlaceFromLocation = async (location) => {
     let data;
     try {
         data = await Location.reverseGeocodeAsync(location);
         if (data && data.length > 0) {
-            const fullAddress = `${data[0].name || data[0].street}, ${data[0].region}, ${data[0].postalCode}`
-            data = fullAddress;
+            const address = `${data[0].name || data[0].street}, ${data[0].region}, ${data[0].postalCode}`
+            data = {
+                ...data[0],
+                address
+            };
         }
     }
     catch (err) {
@@ -77,5 +80,5 @@ export {
     getCurrentLocation,
     watchCurrentLocation,
     getLocationFromAddress,
-    getAdressFromLocation
+    getPlaceFromLocation
 };

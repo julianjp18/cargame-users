@@ -16,7 +16,7 @@ import Map, { useMap } from '../../components/UI/Map';
 import SearchPlace from '../../components/UI/Map/SearchPlace';
 
 // Utils
-import { getAdressFromLocation } from '../../utils/location';
+import { getPlaceFromLocation } from '../../utils/location';
 
 // Estilos
 import { fullWidth } from '../../styles/layout';
@@ -171,7 +171,7 @@ const Location = ({ navigation }) => {
          * @param {Object} location Ubicación
          * @param {String} address  Dirección
          */
-        placeSearch: ({ location, address }) => {
+        placeSearch: async ({ location, address }) => {
             const color = configuration &&
                 configuration.locationIcon &&
                 configuration.locationIcon.color || accentColor;
@@ -179,10 +179,11 @@ const Location = ({ navigation }) => {
             data.markers.handlers.add(locationKey, { location, title: address, color });
             // Actualiza la dirección
             data.directions.handlers.setData(locationKey, location);
-            // Agrega el lugar
-            locationHandler({ location, address });
             // Actualiza la ubicación en el mapa
             data.relocate.handlers.setRelocation(location);
+            const place = await getPlaceFromLocation(location);
+            // Agrega el lugar
+            locationHandler({ location, address, city: place ? place.city : null });
         },
         /**
          * Agrega marcadores en la ubicación actual del mapa
@@ -195,14 +196,16 @@ const Location = ({ navigation }) => {
             // Obtiene la ubicación
             const location = data.region.data;
             // Obtiene la dirección de la ubicación
-            const address = await getAdressFromLocation(location);
+            const place = await getPlaceFromLocation(location);
+            if (!place) { return; }
+            const { city, address } = place;
             // Agrega el marcador
             data.markers.handlers.add(locationKey, { location, title: address, color });
             // Actualiza la dirección
             data.directions.handlers.setData(locationKey, location);
             if (address) {
                 // Agrega el lugar
-                locationHandler({ location, address });
+                locationHandler({ location, address, city });
                 // Actualiza la dirección
                 setAddress(address);
             }

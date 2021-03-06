@@ -68,6 +68,10 @@ const UserDestinationScreen = (props) => {
         notificationsActions.saveNotificationDestinationOffer({
           offerId: offer.id,
           userId: offer.userId,
+          currentCity: getCountry(places.currentOriginAddress),
+          destinationCity: getCountry(places.currentDestinyAddress),
+          originAddress: places.currentOriginAddress.split(',')[0],
+          destinyAddress: places.currentDestinyAddress.split(',')[0],
         });
         dispatch(updateUserNotifications);
         props.navigation.navigate("SearchService");
@@ -107,12 +111,12 @@ const UserDestinationScreen = (props) => {
     }
   }, [error]);
 
-  const setOriginLocation = ({ location, address }) => {
-    dispatch(placesActions.setOriginLocation({ location, address }));
+  const setOriginLocation = ({ location, address, city }) => {
+    dispatch(placesActions.setOriginLocation({ location, address, city }));
   };
 
-  const setDestinationLocation = ({ location, address }) => {
-    dispatch(placesActions.setDestinationLocation({ location, address }));
+  const setDestinationLocation = ({ location, address, city }) => {
+    dispatch(placesActions.setDestinationLocation({ location, address, city }));
   };
 
   // Marcadores iniciales
@@ -197,8 +201,8 @@ const UserDestinationScreen = (props) => {
                   {isLoading ? (
                     <ActivityIndicator size="large" color={primaryColor} />
                   ) : (
-                      <Button title="Solicitar oferta" onPress={destinationHandler} />
-                    )}
+                    <Button title="Solicitar oferta" onPress={destinationHandler} />
+                  )}
                 </View>
               </View>
             </ScrollView>

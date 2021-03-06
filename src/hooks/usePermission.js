@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 
 // Util
-import askPermision, { PERMISSIONS } from '../permissions';
+import askPermision, { PERMISSIONS } from '../utils/permissions';
 
 /**
  * Hook para obtener un permiso

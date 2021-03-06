@@ -62,7 +62,14 @@ export const showUserNotifications = (userId) => async (dispatch) => {
   });
 };
 
-export const saveNotificationDestinationOffer = async ({ offerId, userId }) => {
+export const saveNotificationDestinationOffer = async ({
+  offerId,
+  userId,
+  currentCity,
+  destinationCity,
+  originAddress,
+  destinyAddress,
+}) => {
   await firestoreDB
     .collection("NotificationsUsers")
     .add({
@@ -71,5 +78,9 @@ export const saveNotificationDestinationOffer = async ({ offerId, userId }) => {
       typeMessage: 'Information',
       userId,
       offerId,
+      currentCity,
+      destinationCity,
+      originAddress,
+      destinyAddress,
     });
 };
