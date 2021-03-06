@@ -68,6 +68,10 @@ const UserDestinationScreen = (props) => {
         notificationsActions.saveNotificationDestinationOffer({
           offerId: offer.id,
           userId: offer.userId,
+          currentCity: getCountry(places.currentOriginAddress),
+          destinationCity: getCountry(places.currentDestinyAddress),
+          originAddress: places.currentOriginAddress.split(',')[0],
+          destinyAddress: places.currentDestinyAddress.split(',')[0],
         });
         dispatch(updateUserNotifications);
         props.navigation.navigate("SearchService");
@@ -197,8 +201,8 @@ const UserDestinationScreen = (props) => {
                   {isLoading ? (
                     <ActivityIndicator size="large" color={primaryColor} />
                   ) : (
-                      <Button title="Solicitar oferta" onPress={destinationHandler} />
-                    )}
+                    <Button title="Solicitar oferta" onPress={destinationHandler} />
+                  )}
                 </View>
               </View>
             </ScrollView>
