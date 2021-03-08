@@ -9,7 +9,9 @@ import {
 const initialState = {
   currentOriginAddress: false,
   currentOriginCoords: false,
+  currentOriginCity: null,
   currentDestinyAddress: null,
+  currentDestinyCity: null,
   currentDestinyCoords: null,
   currentPosition: null,
   getPositionPicked: {
@@ -33,12 +35,14 @@ export default (state = initialState, action) => {
         ...state,
         currentOriginAddress: action.address,
         currentOriginCoords: action.location,
+        currentOriginCity: action.city
       };
     case GET_CURRENT_DESTINY_SERVICE:
       return {
         ...state,
         currentDestinyAddress: action.address,
         currentDestinyCoords: action.location,
+        currentDestinyCity: action.city
       };
     case CHANGE_FIELD_SELECTED:
       return {
