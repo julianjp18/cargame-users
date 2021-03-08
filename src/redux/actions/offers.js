@@ -1,5 +1,4 @@
 import { firestoreDB } from "../../constants/Firebase";
-import moment from 'moment';
 export const CREATE_OFFER = "CREATE_OFFER";
 export const SHOW_OFFER = "SHOW_OFFER";
 export const CHANGE_PROFILE_PICTURE = "CHANGE_PROFILE_PICTURE";
@@ -26,6 +25,7 @@ export const createOffer = ({
   offerValue = '',
   dateOffered = '',
   typeServiceSelected,
+  user,
 }) => async (dispatch) => {
   const uid = [];
   await firestoreDB.collection("OffersNotificationCenter").add({
@@ -48,6 +48,7 @@ export const createOffer = ({
     offerValue,
     typeServiceSelected,
     dateStarted: '',
+    user,
   }).then((ref) => uid.push(ref.id));
 
   if (uid[0]) {
