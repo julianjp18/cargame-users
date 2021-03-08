@@ -29,6 +29,17 @@ export const createUser = ({
         termsAndConditions: true,
       });
 
+    if (referidNumber != '') {
+      firestoreDB
+        .collection('Referrals')
+        .doc()
+        .set({
+          identification: numberId,
+          referralId: referidNumber,
+          created_at: moment().format(),
+        });
+    }
+
     dispatch({
       type: CREATE_USER,
       userId,
