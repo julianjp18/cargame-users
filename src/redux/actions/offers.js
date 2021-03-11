@@ -139,6 +139,7 @@ export const saveOfferSelected = (offerId) => async dispatch => {
     pickUpDate,
     offerValue,
     driverId,
+    typeServiceSelected,
   } = await data.then((doc) => doc.data());
 
   const driverData = firestoreDB
@@ -166,6 +167,8 @@ export const saveOfferSelected = (offerId) => async dispatch => {
           name,
           phone,
         },
+        driverId,
+        typeServiceSelected,
       },
     });
   }
@@ -187,6 +190,7 @@ export const saveResumeOfferSelected = (offerId) => async dispatch => {
     driverId,
     phone,
     contact,
+    typeServiceSelected,
   } = await data.then((doc) => doc.data());
 
   const driverData = firestoreDB
@@ -213,16 +217,25 @@ export const saveResumeOfferSelected = (offerId) => async dispatch => {
           name: driver.name,
           phone: driver.phone,
         },
+        driverId,
+        typeServiceSelected,
       },
     });
   }
 };
 
-export const saveTotalPrice = (price) => async dispatch => {
+export const saveTotalPrice = (price, offerId, driverId) => async dispatch => {
+  const updateData = firestoreDB.collection('HistoryOffersNotificationCenter').doc(`${offerId}_${driverId}`).update({
+    totalPrice: price,
+    driverId,
+  });
+
   dispatch({
     type: FINAL_TOTAL_PRICE_OFFER,
     finalTotalPriceOffer: price,
   });
+
+  return await updateData.then(() => true).catch(() => false);
 };
 
 export const cancelOffer = (offerId, notificationId) => async dispatch => {
