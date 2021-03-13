@@ -1,5 +1,4 @@
 import { firestoreDB } from "../../constants/Firebase";
-import moment from 'moment';
 export const CREATE_OFFER = "CREATE_OFFER";
 export const SHOW_OFFER = "SHOW_OFFER";
 export const CHANGE_PROFILE_PICTURE = "CHANGE_PROFILE_PICTURE";
@@ -26,6 +25,7 @@ export const createOffer = ({
   offerValue = '',
   dateOffered = '',
   typeServiceSelected,
+  user,
 }) => async (dispatch) => {
   const uid = [];
   await firestoreDB.collection("OffersNotificationCenter").add({
@@ -48,6 +48,7 @@ export const createOffer = ({
     offerValue,
     typeServiceSelected,
     dateStarted: '',
+    user,
   }).then((ref) => uid.push(ref.id));
 
   if (uid[0]) {
@@ -138,6 +139,7 @@ export const saveOfferSelected = (offerId) => async dispatch => {
     pickUpDate,
     offerValue,
     driverId,
+    typeServiceSelected,
   } = await data.then((doc) => doc.data());
 
   const driverData = firestoreDB
@@ -165,6 +167,8 @@ export const saveOfferSelected = (offerId) => async dispatch => {
           name,
           phone,
         },
+        driverId,
+        typeServiceSelected,
       },
     });
   }
@@ -186,6 +190,7 @@ export const saveResumeOfferSelected = (offerId) => async dispatch => {
     driverId,
     phone,
     contact,
+    typeServiceSelected,
   } = await data.then((doc) => doc.data());
 
   const driverData = firestoreDB
@@ -212,16 +217,25 @@ export const saveResumeOfferSelected = (offerId) => async dispatch => {
           name: driver.name,
           phone: driver.phone,
         },
+        driverId,
+        typeServiceSelected,
       },
     });
   }
 };
 
-export const saveTotalPrice = (price) => async dispatch => {
+export const saveTotalPrice = (price, offerId, driverId) => async dispatch => {
+  const updateData = firestoreDB.collection('HistoryOffersNotificationCenter').doc(`${offerId}_${driverId}`).update({
+    totalPrice: price,
+    driverId,
+  });
+
   dispatch({
     type: FINAL_TOTAL_PRICE_OFFER,
     finalTotalPriceOffer: price,
   });
+
+  return await updateData.then(() => true).catch(() => false);
 };
 
 export const cancelOffer = (offerId, notificationId) => async dispatch => {

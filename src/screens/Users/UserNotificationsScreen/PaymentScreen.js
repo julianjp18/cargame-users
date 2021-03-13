@@ -32,6 +32,7 @@ const changeWebViewStyle = `(function() {
   document.getElementsByClassName('text')[0].style.marginTop = '200px';
   document.getElementsByClassName('text')[0].style.fontSize = '30';
   document.getElementsByClassName('mercadopago-button')[0].style.fontSize = '30';
+  ";
 })();`;
 
 const PaymentScreen = (props) => {
@@ -43,8 +44,17 @@ const PaymentScreen = (props) => {
 
   const getPreferenceData = async (email = user.email) => {
     try {
+      console.log(
+        {
+          title: `Payment for service - currentCity: ${offer.currentCity}, destinationCity: ${offer.destinationCity}, ${offer.typeServiceSelected}`,
+          description: `currentCity: ${offer.currentCity}, destinationCity: ${offer.destinationCity}, offerId: ${offer.offerId}, date: ${offer.pickUpDate}`,
+          quantity: 1,
+          currency_id: 'COP',
+          unit_price: Number.parseInt(finalTotalPriceOffer),
+        }
+      );
       const response = await fetch(
-        `http://192.168.1.44:3001/get-preference-id`, {
+        `https://cargame-server.herokuapp.com/get-preference-id`, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         mode: 'cors', // no-cors, *cors, same-origin
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -58,7 +68,7 @@ const PaymentScreen = (props) => {
         body: JSON.stringify({
           email,
           item: {
-            title: 'Payment for service',
+            title: `Payment for service - currentCity: ${offer.currentCity}, destinationCity: ${offer.destinationCity}, ${offer.typeServiceSelected}`,
             description: `currentCity: ${offer.currentCity}, destinationCity: ${offer.destinationCity}, offerId: ${offer.offerId}, date: ${offer.pickUpDate}`,
             quantity: 1,
             currency_id: 'COP',
@@ -112,12 +122,12 @@ const PaymentScreen = (props) => {
             injectedJavaScript={changeWebViewStyle}
           />
         ) : (
-            <ActivityIndicator
-              size="large"
-              color={primaryColor}
-              style={styles.activityIndicatorContainer}
-            />
-          )}
+          <ActivityIndicator
+            size="large"
+            color={primaryColor}
+            style={styles.activityIndicatorContainer}
+          />
+        )}
       </View>
     </View>
   );

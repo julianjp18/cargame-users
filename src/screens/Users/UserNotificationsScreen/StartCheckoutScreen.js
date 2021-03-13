@@ -52,11 +52,11 @@ const StartCheckoutScreen = (props) => {
   const getPreferenceData = async (email, offer) => {
     try {
       const response = await fetch(
-        `http://192.168.1.44:3001/get-preference-id`, {
+        `https://cargame-server.herokuapp.com/get-preference-id`, {
         email,
         items: [
           {
-            title: 'Payment for service',
+            title: `Payment for service - currentCity: ${offer.currentCity}, destinationCity: ${offer.destinationCity}, ${offer.typeServiceSelected}`,
             description: `currentCity: ${offer.currentCity}, destinationCity: ${offer.destinationCity}, offerId: ${offer.offerId}, date: ${offer.pickUpDate}`,
             quantity: 1,
             currency_id: 'COP',
@@ -390,10 +390,10 @@ const StartCheckoutScreen = (props) => {
             </View>
           </ScrollView>
         ) : (
-            <View style={styles.activityIndicator}>
-              <ActivityIndicator size="large" />
-            </View>
-          )}
+          <View style={styles.activityIndicator}>
+            <ActivityIndicator size="large" />
+          </View>
+        )}
       </View>
     </View>
   );

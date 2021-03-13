@@ -10,7 +10,7 @@ const offerData = async (offerId) => {
     .collection("OffersNotificationCenter")
     .doc(offerId)
     .get().then((doc) => resOffer.push(doc.data()));
-  console.log(resOffer);
+
   return resOffer[0];
 };
 

@@ -76,10 +76,11 @@ const UserHomeScreen = (props) => {
   const [mode] = useState("date");
   const [show, setShow] = useState(false);
   const { userId, typeServiceSelected } = useSelector(state => state.auth);
+  const user = useSelector(state => state.user);
   const [description, setDescription] = useState('');
   const [contact, setContact] = useState('');
   const [phone, setPhone] = useState('');
- 
+
   getUserInfo().then((data) => {
     const userInfo = JSON.parse(data);
     if (!userInfo.idToken || !userId) {
@@ -116,11 +117,15 @@ const UserHomeScreen = (props) => {
         contact: contact,
         phone: phone,
         typeServiceSelected,
+        user: {
+          name: user.name,
+          phone: user.phone,
+        },
       });
-  
+
       setError(null);
       setIsLoading(true);
-  
+
       try {
         dispatch(action);
         props.navigation.navigate("DestinationList");
@@ -196,7 +201,7 @@ const UserHomeScreen = (props) => {
               autoCapitalize="words"
               errorText="¡Precaución! Por favor ingresa tu nombre y apellido correctamente."
               onChange={(value) => setContact(value.nativeEvent.text)}
-              onInputChange={() => {}}
+              onInputChange={() => { }}
               value={contact}
             />
             <TextInput
@@ -209,7 +214,7 @@ const UserHomeScreen = (props) => {
               autoCapitalize="none"
               errorText="¡Precaución! Por favor ingresa un número de celular correcto."
               onChange={(value) => setPhone(value.nativeEvent.text)}
-              onInputChange={() => {}}
+              onInputChange={() => { }}
               value={phone}
             />
           </View>
