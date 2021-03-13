@@ -32,13 +32,16 @@ export const showUserNotifications = (userId) => async (dispatch) => {
             .collection("OffersNotificationCenter")
             .doc(notification.data().offerId)
             .get().then((doc) => doc.data());
+          console.log(currentCity, destinationCity);
+          if (currentCity && destinationCity) {
+            notificationsData.push({
+              ...notification.data(),
+              currentCity,
+              destinationCity,
+              id: notification.id,
+            });
+          }
 
-          notificationsData.push({
-            ...notification.data(),
-            currentCity,
-            destinationCity,
-            id: notification.id,
-          });
         } else
           notificationsData.push({ ...notification.data(), id: notification.id });
       }
