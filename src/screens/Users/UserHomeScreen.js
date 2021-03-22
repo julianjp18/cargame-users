@@ -9,6 +9,7 @@ import {
   Text,
   Platform,
   ActivityIndicator,
+  KeyboardAvoidingView,
   Alert,
   Picker,
 } from "react-native";
@@ -145,88 +146,90 @@ const UserHomeScreen = (props) => {
   return typeServiceSelected ? (
     <View style={styles.homeContainer}>
       <WelcomeDescription />
-      <ScrollView>
-        <View style={styles.inputTextAreaContainer}>
-          <TextInput
-            id="description"
-            label="Descripción (*)"
-            keyboardType="default"
-            value={description}
-            onChange={(value) => setDescription(value.nativeEvent.text)}
-            maxLength={2000}
-            placeholder="Aquí debes escribir que vas a enviar incluyendo tamaños y medidas. Ej: 1 cama doble, 1 nevera grande, 2 cajas medianas de 30 x 40cm.."
-            isTextArea
-          />
-        </View>
-
-        <View style={styles.arriveDateContainer}>
-          <Text style={styles.label}>Franja horaria</Text>
-          <Picker
-            id="timezone"
-            selectedValue={timezone}
-            style={styles.TravelContent}
-            onValueChange={(itemValue) => setTimezone(itemValue)}
-          >
-            <Picker.Item label="Mañana" value="morning" />
-            <Picker.Item label="Tarde" value="evening" />
-            <Picker.Item label="Noche" value="night" />
-          </Picker>
-
-          {linearGradientTitle("Fecha de recogida")}
-          <Text onPress={showDatePickerModal} style={styles.dateTravelContent}>
-            {moment(date).format("ll")}
-          </Text>
-          {show && (
-            <DateTimePicker
-              id="collectedDate"
-              testID="pickup-date"
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              display="default"
-              onChange={onChange}
-            />
-          )}
-        </View>
-
-        <View style={styles.userInfoContainer}>
-          {linearGradientTitle("Datos de quien recibe")}
-          <View style={styles.userInfoContent}>
+      <KeyboardAvoidingView behavior="padding">
+        <ScrollView>
+          <View style={styles.inputTextAreaContainer}>
             <TextInput
-              id="contact"
-              label="Nombres y apellidos de quien recibe(*)"
+              id="description"
+              label="Descripción (*)"
               keyboardType="default"
-              minLength={5}
-              required
-              autoCapitalize="words"
-              errorText="¡Precaución! Por favor ingresa tu nombre y apellido correctamente."
-              onChange={(value) => setContact(value.nativeEvent.text)}
-              onInputChange={() => { }}
-              value={contact}
-            />
-            <TextInput
-              id="phone"
-              label="Celular (*)"
-              keyboardType="numeric"
-              required
-              minLength={10}
-              maxLength={10}
-              autoCapitalize="none"
-              errorText="¡Precaución! Por favor ingresa un número de celular correcto."
-              onChange={(value) => setPhone(value.nativeEvent.text)}
-              onInputChange={() => { }}
-              value={phone}
+              value={description}
+              onChange={(value) => setDescription(value.nativeEvent.text)}
+              maxLength={2000}
+              placeholder="Aquí debes escribir que vas a enviar incluyendo tamaños y medidas. Ej: 1 cama doble, 1 nevera grande, 2 cajas medianas de 30 x 40cm.."
+              isTextArea
             />
           </View>
-          <View style={styles.userBoton}>
-            {isLoading ? (
-              <ActivityIndicator size="large" color={primaryColor} />
-            ) : (
-              <Button title="Siguiente" onPress={homedestinationHandler} />
+
+          <View style={styles.arriveDateContainer}>
+            <Text style={styles.label}>Franja horaria</Text>
+            <Picker
+              id="timezone"
+              selectedValue={timezone}
+              style={styles.TravelContent}
+              onValueChange={(itemValue) => setTimezone(itemValue)}
+            >
+              <Picker.Item label="Mañana" value="morning" />
+              <Picker.Item label="Tarde" value="evening" />
+              <Picker.Item label="Noche" value="night" />
+            </Picker>
+
+            {linearGradientTitle("Fecha de recogida")}
+            <Text onPress={showDatePickerModal} style={styles.dateTravelContent}>
+              {moment(date).format("ll")}
+            </Text>
+            {show && (
+              <DateTimePicker
+                id="collectedDate"
+                testID="pickup-date"
+                value={date}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={onChange}
+              />
             )}
           </View>
-        </View>
-      </ScrollView>
+
+          <View style={styles.userInfoContainer}>
+            {linearGradientTitle("Datos de quien recibe")}
+            <View style={styles.userInfoContent}>
+              <TextInput
+                id="contact"
+                label="Nombres y apellidos de quien recibe(*)"
+                keyboardType="default"
+                minLength={5}
+                required
+                autoCapitalize="words"
+                errorText="¡Precaución! Por favor ingresa tu nombre y apellido correctamente."
+                onChange={(value) => setContact(value.nativeEvent.text)}
+                onInputChange={() => { }}
+                value={contact}
+              />
+              <TextInput
+                id="phone"
+                label="Celular (*)"
+                keyboardType="numeric"
+                required
+                minLength={10}
+                maxLength={10}
+                autoCapitalize="none"
+                errorText="¡Precaución! Por favor ingresa un número de celular correcto."
+                onChange={(value) => setPhone(value.nativeEvent.text)}
+                onInputChange={() => { }}
+                value={phone}
+              />
+            </View>
+            <View style={styles.userBoton}>
+              {isLoading ? (
+                <ActivityIndicator size="large" color={primaryColor} />
+              ) : (
+                <Button title="Siguiente" onPress={homedestinationHandler} />
+              )}
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   ) : (
     <View>
