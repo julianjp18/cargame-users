@@ -252,10 +252,20 @@ export const cancelOffer = (offerId, notificationId) => async dispatch => {
   const notificationIdData = firestoreDB.collection("NotificationsDriver").doc(notificationId).get();
 
   const notificationDriverId = [];
-  await notificationIdData.then((doc) => notificationDriverId.push(doc.id));
+  await notificationIdData.then((doc) => notificationDriverId.push({ id: doc.id, ...doc.data() }));
+
+  firestoreDB
+    .collection('OffersCanceled')
+    .doc()
+    .set({
+      driverId: notificationDriverId[0].driverId,
+      offerId: notificationDriverId[0].offerId,
+      userId: notificationDriverId[0].userId,
+      dateCanceled: moment().format(),
+    });
 
   return firestoreDB.collection("NotificationsDriver")
-    .doc(notificationDriverId[0])
+    .doc(notificationDriverId[0].id)
     .delete().then(() => {
       return true;
     }).catch((error) => {
