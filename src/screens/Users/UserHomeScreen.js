@@ -144,9 +144,9 @@ const UserHomeScreen = (props) => {
 
   // definicion del formulario de ofertas.
   return typeServiceSelected ? (
-    <View style={styles.homeContainer}>
-      <WelcomeDescription />
-      <KeyboardAvoidingView behavior="padding">
+    <KeyboardAvoidingView behavior="padding">
+      <View style={styles.homeContainer}>
+        <WelcomeDescription />
         <ScrollView>
           <View style={styles.inputTextAreaContainer}>
             <TextInput
@@ -229,8 +229,8 @@ const UserHomeScreen = (props) => {
             </View>
           </View>
         </ScrollView>
-      </KeyboardAvoidingView>
-    </View>
+      </View>
+    </KeyboardAvoidingView>
   ) : (
     <View>
       <Text>Cargando...</Text>
