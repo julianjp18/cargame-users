@@ -10,7 +10,7 @@ const offerData = async (offerId) => {
     .collection("OffersNotificationCenter")
     .doc(offerId)
     .get().then((doc) => resOffer.push(doc.data()));
-  console.log(resOffer);
+
   return resOffer[0];
 };
 
@@ -32,13 +32,16 @@ export const showUserNotifications = (userId) => async (dispatch) => {
             .collection("OffersNotificationCenter")
             .doc(notification.data().offerId)
             .get().then((doc) => doc.data());
+          console.log(currentCity, destinationCity);
+          if (currentCity && destinationCity) {
+            notificationsData.push({
+              ...notification.data(),
+              currentCity,
+              destinationCity,
+              id: notification.id,
+            });
+          }
 
-          notificationsData.push({
-            ...notification.data(),
-            currentCity,
-            destinationCity,
-            id: notification.id,
-          });
         } else
           notificationsData.push({ ...notification.data(), id: notification.id });
       }
@@ -62,7 +65,14 @@ export const showUserNotifications = (userId) => async (dispatch) => {
   });
 };
 
-export const saveNotificationDestinationOffer = async ({ offerId, userId }) => {
+export const saveNotificationDestinationOffer = async ({
+  offerId,
+  userId,
+  currentCity,
+  destinationCity,
+  originAddress,
+  destinyAddress,
+}) => {
   await firestoreDB
     .collection("NotificationsUsers")
     .add({
@@ -71,5 +81,9 @@ export const saveNotificationDestinationOffer = async ({ offerId, userId }) => {
       typeMessage: 'Information',
       userId,
       offerId,
+      currentCity,
+      destinationCity,
+      originAddress,
+      destinyAddress,
     });
 };

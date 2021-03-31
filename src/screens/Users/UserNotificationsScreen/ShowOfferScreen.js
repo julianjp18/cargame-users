@@ -57,7 +57,7 @@ const ShowOfferScreen = (props) => {
 
   const startCheckout = () => {
     if (valueDeclared) {
-      dispatch(offersActions.saveTotalPrice(priceForMP));
+      dispatch(offersActions.saveTotalPrice(priceForMP, offer.offerId, offer.driverId));
       props.navigation.navigate('PaymentScreen');
     } else {
       Alert.alert(

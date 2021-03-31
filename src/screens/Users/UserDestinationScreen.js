@@ -32,13 +32,6 @@ const UserDestinationScreen = (props) => {
 
   const typeServiceId = useSelector((state) => state.auth.typeServiceSelected);
 
-  const getCountry = (address) => {
-    const splitAddress = address.split(',');
-    if (splitAddress.length === 4)
-      return splitAddress[2];
-    return splitAddress[1];
-  };
-
   // mapea los campos del formulario de oferta
   const destinationHandler = async () => {
 
@@ -51,8 +44,8 @@ const UserDestinationScreen = (props) => {
     } else {
       const saveDestinationAction = offerActions.addDestinationToOffer({
         id: offer.id,
-        currentCity: getCountry(places.currentOriginAddress),
-        destinationCity: getCountry(places.currentDestinyAddress),
+        currentCity: places.currentOriginCity,
+        destinationCity: places.currentDestinyCity,
         originAddress: places.currentOriginAddress.split(',')[0],
         destinyAddress: places.currentDestinyAddress.split(',')[0],
       });
@@ -68,6 +61,10 @@ const UserDestinationScreen = (props) => {
         notificationsActions.saveNotificationDestinationOffer({
           offerId: offer.id,
           userId: offer.userId,
+          currentCity: places.currentOriginCity,
+          destinationCity: places.currentDestinyCity,
+          originAddress: places.currentOriginAddress.split(',')[0],
+          destinyAddress: places.currentDestinyAddress.split(',')[0],
         });
         dispatch(updateUserNotifications);
         props.navigation.navigate("SearchService");
@@ -197,8 +194,8 @@ const UserDestinationScreen = (props) => {
                   {isLoading ? (
                     <ActivityIndicator size="large" color={primaryColor} />
                   ) : (
-                      <Button title="Solicitar oferta" onPress={destinationHandler} />
-                    )}
+                    <Button title="Solicitar oferta" onPress={destinationHandler} />
+                  )}
                 </View>
               </View>
             </ScrollView>

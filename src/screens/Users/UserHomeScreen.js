@@ -77,6 +77,7 @@ const UserHomeScreen = (props) => {
   const [show, setShow] = useState(false);
   const user = useSelector(state => state.user);
   const { userId, typeServiceSelected } = useSelector(state => state.auth);
+  const user = useSelector(state => state.user);
   const [description, setDescription] = useState('');
   const [contact, setContact] = useState('');
   const [phone, setPhone] = useState('');
@@ -120,7 +121,7 @@ const UserHomeScreen = (props) => {
         user: {
           name: user.name,
           phone: user.phone,
-        }
+        },
       });
 
       setError(null);
@@ -222,17 +223,17 @@ const UserHomeScreen = (props) => {
             {isLoading ? (
               <ActivityIndicator size="large" color={primaryColor} />
             ) : (
-                <Button title="Siguiente" onPress={homedestinationHandler} />
-              )}
+              <Button title="Siguiente" onPress={homedestinationHandler} />
+            )}
           </View>
         </View>
       </ScrollView>
     </View>
   ) : (
-      <View>
-        <Text>Cargando...</Text>
-      </View>
-    );
+    <View>
+      <Text>Cargando...</Text>
+    </View>
+  );
 };
 
 // CSS de la formula.

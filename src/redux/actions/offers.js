@@ -1,5 +1,4 @@
 import { firestoreDB } from "../../constants/Firebase";
-import moment from 'moment';
 export const CREATE_OFFER = "CREATE_OFFER";
 export const SHOW_OFFER = "SHOW_OFFER";
 export const CHANGE_PROFILE_PICTURE = "CHANGE_PROFILE_PICTURE";
@@ -140,6 +139,7 @@ export const saveOfferSelected = (offerId) => async dispatch => {
     pickUpDate,
     offerValue,
     driverId,
+    typeServiceSelected,
   } = await data.then((doc) => doc.data());
 
   const driverData = firestoreDB
@@ -167,6 +167,8 @@ export const saveOfferSelected = (offerId) => async dispatch => {
           name,
           phone,
         },
+        driverId,
+        typeServiceSelected,
       },
     });
   }
@@ -188,6 +190,7 @@ export const saveResumeOfferSelected = (offerId) => async dispatch => {
     driverId,
     phone,
     contact,
+    typeServiceSelected,
   } = await data.then((doc) => doc.data());
 
   const driverData = firestoreDB
@@ -214,16 +217,25 @@ export const saveResumeOfferSelected = (offerId) => async dispatch => {
           name: driver.name,
           phone: driver.phone,
         },
+        driverId,
+        typeServiceSelected,
       },
     });
   }
 };
 
-export const saveTotalPrice = (price) => async dispatch => {
+export const saveTotalPrice = (price, offerId, driverId) => async dispatch => {
+  const updateData = firestoreDB.collection('HistoryOffersNotificationCenter').doc(`${offerId}_${driverId}`).update({
+    totalPrice: price,
+    driverId,
+  });
+
   dispatch({
     type: FINAL_TOTAL_PRICE_OFFER,
     finalTotalPriceOffer: price,
   });
+
+  return await updateData.then(() => true).catch(() => false);
 };
 
 export const cancelOffer = (offerId, notificationId) => async dispatch => {
@@ -240,10 +252,20 @@ export const cancelOffer = (offerId, notificationId) => async dispatch => {
   const notificationIdData = firestoreDB.collection("NotificationsDriver").doc(notificationId).get();
 
   const notificationDriverId = [];
-  await notificationIdData.then((doc) => notificationDriverId.push(doc.id));
+  await notificationIdData.then((doc) => notificationDriverId.push({ id: doc.id, ...doc.data() }));
+
+  firestoreDB
+    .collection('OffersCanceled')
+    .doc()
+    .set({
+      driverId: notificationDriverId[0].driverId,
+      offerId: notificationDriverId[0].offerId,
+      userId: notificationDriverId[0].userId,
+      dateCanceled: moment().format(),
+    });
 
   return firestoreDB.collection("NotificationsDriver")
-    .doc(notificationDriverId[0])
+    .doc(notificationDriverId[0].id)
     .delete().then(() => {
       return true;
     }).catch((error) => {
