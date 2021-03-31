@@ -72,13 +72,13 @@ const UserDashboardScreen = (props) => {
   ]);
   const dispatch = useDispatch();
   const { userId } = useSelector(state => state.auth);
-  
-  useEffect(() =>{
+
+  useEffect(() => {
     dispatch(userActions.showUser(userId));
     dispatch(userNotificationsActions.showUserNotifications(userId));
     dispatch(travelsActions.getTripsInProgressByUserId(userId));
     dispatch(travelsActions.getTripsMadeByUserId(userId));
-  },[userId]);
+  }, [userId]);
 
   getUserInfo().then((data) => {
     const userInfo = JSON.parse(data);
@@ -91,16 +91,16 @@ const UserDashboardScreen = (props) => {
   return (
     <View style={styles.servicesContainer}>
       <WelcomeHeader />
-      <View style={styles.brandImageContainer}>
-        <Image style={styles.brandImage} source={shortBrandSoatUrl} />
-      </View>
-      <View style={styles.categoriesContainer}>
-        <ScrollView>
+      <ScrollView>
+        <View style={styles.brandImageContainer}>
+          <Image style={styles.brandImage} source={shortBrandSoatUrl} />
+        </View>
+        <View style={styles.categoriesContainer}>
           {CATEGORIES_LIST.map((category, i) => (
             categoriesList(props.navigation, dispatch, category, i)
           ))}
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     </View>
   );
 };
