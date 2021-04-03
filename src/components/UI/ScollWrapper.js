@@ -1,18 +1,35 @@
 
 
 import React from "react";
-import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import {
+    Dimensions,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    View
+} from "react-native";
+
 
 const ScrollWrapper = ({ style, children }) => {
 
     const behavior = Platform.OS === 'android' ? 'padding' : 'position'
     return (
-        <ScrollView style={style}>
+        <View style={styles.containerContent}>
             <KeyboardAvoidingView behavior={behavior} keyboardVerticalOffset={30}>
-                {children}
+                <ScrollView style={style}>
+                    {children}
+                </ScrollView>
             </KeyboardAvoidingView>
-        </ScrollView>
+        </View>
     );
 };
+
+const { height } = Dimensions.get('window');
+const styles = StyleSheet.create({
+    containerContent: {
+        height
+    }
+});
 
 export default ScrollWrapper;
