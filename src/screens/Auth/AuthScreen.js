@@ -145,6 +145,18 @@ const AuthScreen = (props) => {
       } else {
         action = authActions.signin(email, password);
         nextPage = "Dashboard";
+        const controller = new AbortController();
+        setError(null);
+        setIsLoading(true);
+        try {
+          dispatch(action);
+          controller.abort();
+          props.navigation.navigate(nextPage);
+        } catch (err) {
+          setError(err.message);
+        }
+        setIsLoading(false);
+        controller.abort();
       }
     } else {
       setError(
@@ -215,8 +227,8 @@ const AuthScreen = (props) => {
                   initialValue=""
                 />
               ) : (
-                  <View />
-                )}
+                <View />
+              )}
             </View>
             <View style={styles.forgotPasswordContainer}>
               <Text style={styles.forgotPassword}>
@@ -227,11 +239,11 @@ const AuthScreen = (props) => {
               {isLoading ? (
                 <ActivityIndicator size="large" color={primaryColor} />
               ) : (
-                  <Button
-                    title={isSignUp ? "Quiero ser socio" : "Ingresar"}
-                    onPress={authHandler}
-                  />
-                )}
+                <Button
+                  title={isSignUp ? "Quiero ser socio" : "Ingresar"}
+                  onPress={authHandler}
+                />
+              )}
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
@@ -239,8 +251,8 @@ const AuthScreen = (props) => {
       <Image style={styles.mainCarga} source={shortMainCargaUrl} />
     </View>
   ) : (
-      props.navigation.navigate("Dashboard")
-    );
+    props.navigation.navigate("Dashboard")
+  );
 };
 
 const styles = StyleSheet.create({

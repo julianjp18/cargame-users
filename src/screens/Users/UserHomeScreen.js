@@ -78,7 +78,7 @@ const UserHomeScreen = (props) => {
   const [show, setShow] = useState(false);
   const user = useSelector(state => state.user);
   const { userId, typeServiceSelected } = useSelector(state => state.auth);
-  const user = useSelector(state => state.user);
+
   const [description, setDescription] = useState('');
   const [contact, setContact] = useState('');
   const [phone, setPhone] = useState('');
