@@ -74,6 +74,7 @@ const UserDashboardScreen = (props) => {
   const { userId } = useSelector(state => state.auth);
 
   useEffect(() => {
+    console.log('UserId', userId);
     dispatch(userActions.showUser(userId));
     dispatch(userNotificationsActions.showUserNotifications(userId));
     dispatch(travelsActions.getTripsInProgressByUserId(userId));

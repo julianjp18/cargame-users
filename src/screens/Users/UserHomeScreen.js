@@ -76,8 +76,9 @@ const UserHomeScreen = (props) => {
   const [date, setDate] = useState(new Date());
   const [mode] = useState("date");
   const [show, setShow] = useState(false);
-  const { userId, typeServiceSelected } = useSelector(state => state.auth);
   const user = useSelector(state => state.user);
+  const { userId, typeServiceSelected } = useSelector(state => state.auth);
+
   const [description, setDescription] = useState('');
   const [contact, setContact] = useState('');
   const [phone, setPhone] = useState('');
@@ -92,7 +93,7 @@ const UserHomeScreen = (props) => {
 
   useEffect(() => {
     if (error) {
-      Alert.alert("¡Precaución, un error ha ocurrido!", error, [
+      Alert.alert("¡UPS!, un error ha ocurrido!", error, [
         { text: "Está bien" },
       ]);
     }

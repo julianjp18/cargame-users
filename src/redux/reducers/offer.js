@@ -4,8 +4,12 @@ import {
   ADD_DESTINATION_OFFER,
   OFFER_SELECTED,
   FINAL_TOTAL_PRICE_OFFER,
+  SAVE_OFFER_SELECTED,
 } from "../actions/offers";
-const initialState = null;
+const initialState = {
+  offerSelected: {},
+  finalTotalPriceOffer: null
+};
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -35,6 +39,7 @@ export default (state = initialState, action) => {
         currentAddress: action.currentAddress,
         destinationAddress: action.destinationAddress,
       };
+    case SAVE_OFFER_SELECTED:
     case OFFER_SELECTED:
       return {
         ...state,

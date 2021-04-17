@@ -13,6 +13,7 @@ export const createUser = ({
   phone,
   referidNumber = '',
   ipAdress,
+  city,
 }) => {
   return async dispatch => {
     firestoreDB
@@ -27,6 +28,7 @@ export const createUser = ({
         created_at: moment().format(),
         ipAdress,
         termsAndConditions: true,
+        city,
       });
 
     if (referidNumber != '') {
@@ -48,6 +50,7 @@ export const createUser = ({
       phone,
       referidNumber: referidNumber ? referidNumber : '',
       profilePicture: null,
+      city,
     });
   };
 };
