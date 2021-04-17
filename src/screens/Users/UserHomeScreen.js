@@ -2,16 +2,14 @@
 // Autor  : Flavio Cortes
 // Detalle: formulario de ofertas
 
-import React, { useState, useEffect, useReducer, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
   Text,
   Platform,
   ActivityIndicator,
-  KeyboardAvoidingView,
   Alert,
-  Picker,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -20,9 +18,11 @@ import { ScrollView } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
 import moment from "moment";
 import WelcomeDescription from '../../components/WelcomeDescription';
+import Picker from '../../components/UI/Picker';
 
 import TextInput from "../../components/UI/Input";
 import Button from "../../components/UI/Button";
+import ScrollWrapper from '../../components/UI/ScollWrapper';
 import { primaryColor, accentColor } from "../../constants/Colors";
 import { getUserInfo } from "../../utils/helpers";
 
@@ -71,13 +71,14 @@ const UserHomeScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const dispatch = useDispatch();
-  const [timezone, setTimezone] = useState("manana");
+  const [timezone, setTimezone] = useState("morning");
   moment.locale('es');
   const [date, setDate] = useState(new Date());
   const [mode] = useState("date");
   const [show, setShow] = useState(false);
-  const { userId, typeServiceSelected } = useSelector(state => state.auth);
   const user = useSelector(state => state.user);
+  const { userId, typeServiceSelected } = useSelector(state => state.auth);
+
   const [description, setDescription] = useState('');
   const [contact, setContact] = useState('');
   const [phone, setPhone] = useState('');
@@ -92,7 +93,7 @@ const UserHomeScreen = (props) => {
 
   useEffect(() => {
     if (error) {
-      Alert.alert("¡Precaución, un error ha ocurrido!", error, [
+      Alert.alert("¡UPS!, un error ha ocurrido!", error, [
         { text: "Está bien" },
       ]);
     }
@@ -144,93 +145,91 @@ const UserHomeScreen = (props) => {
 
   // definicion del formulario de ofertas.
   return typeServiceSelected ? (
-    <KeyboardAvoidingView behavior="padding">
+    <ScrollWrapper>
       <View style={styles.homeContainer}>
         <WelcomeDescription />
-        <ScrollView>
-          <View style={styles.inputTextAreaContainer}>
+        <View style={styles.inputTextAreaContainer}>
+          <TextInput
+            id="description"
+            label="Descripción (*)"
+            keyboardType="default"
+            value={description}
+            onChange={(value) => setDescription(value.nativeEvent.text)}
+            maxLength={2000}
+            placeholder="Aquí debes escribir que vas a enviar incluyendo tamaños y medidas. Ej: 1 cama doble, 1 nevera grande, 2 cajas medianas de 30 x 40cm.."
+            isTextArea
+          />
+        </View>
+
+        <View style={styles.arriveDateContainer}>
+          <Text style={styles.label}>Franja horaria</Text>
+
+          <Picker
+            pickerValues={[
+              { title: 'Mañana', value: 'morning' },
+              { title: 'Tarde', value: 'evening' },
+              { title: 'Noche', value: 'night' }
+            ]}
+            value={timezone}
+            onChange={setTimezone}/>
+
+          {linearGradientTitle("Fecha de recogida")}
+          <Text onPress={showDatePickerModal} style={styles.dateTravelContent}>
+            {moment(date).format("ll")}
+          </Text>
+          {show && (
+            <DateTimePicker
+              id="collectedDate"
+              testID="pickup-date"
+              value={date}
+              mode={mode}
+              is24Hour={true}
+              display="default"
+              onChange={onChange}
+            />
+          )}
+        </View>
+
+        <View style={styles.userInfoContainer}>
+          {linearGradientTitle("Datos de quien recibe")}
+          <View style={styles.userInfoContent}>
             <TextInput
-              id="description"
-              label="Descripción (*)"
+              id="contact"
+              label="Nombres y apellidos de quien recibe(*)"
               keyboardType="default"
-              value={description}
-              onChange={(value) => setDescription(value.nativeEvent.text)}
-              maxLength={2000}
-              placeholder="Aquí debes escribir que vas a enviar incluyendo tamaños y medidas. Ej: 1 cama doble, 1 nevera grande, 2 cajas medianas de 30 x 40cm.."
-              isTextArea
+              minLength={5}
+              required
+              autoCapitalize="words"
+              errorText="¡Precaución! Por favor ingresa tu nombre y apellido correctamente."
+              onChange={(value) => setContact(value.nativeEvent.text)}
+              onInputChange={() => { }}
+              value={contact}
+            />
+            <TextInput
+              id="phone"
+              label="Celular (*)"
+              keyboardType="numeric"
+              required
+              minLength={10}
+              maxLength={10}
+              autoCapitalize="none"
+              errorText="¡Precaución! Por favor ingresa un número de celular correcto."
+              onChange={(value) => setPhone(value.nativeEvent.text)}
+              onInputChange={() => { }}
+              value={phone}
             />
           </View>
-
-          <View style={styles.arriveDateContainer}>
-            <Text style={styles.label}>Franja horaria</Text>
-            <Picker
-              id="timezone"
-              selectedValue={timezone}
-              style={styles.TravelContent}
-              onValueChange={(itemValue) => setTimezone(itemValue)}
-            >
-              <Picker.Item label="Mañana" value="morning" />
-              <Picker.Item label="Tarde" value="evening" />
-              <Picker.Item label="Noche" value="night" />
-            </Picker>
-
-            {linearGradientTitle("Fecha de recogida")}
-            <Text onPress={showDatePickerModal} style={styles.dateTravelContent}>
-              {moment(date).format("ll")}
-            </Text>
-            {show && (
-              <DateTimePicker
-                id="collectedDate"
-                testID="pickup-date"
-                value={date}
-                mode={mode}
-                is24Hour={true}
-                display="default"
-                onChange={onChange}
-              />
+          <View style={styles.userBoton}>
+            {isLoading ? (
+              <ActivityIndicator size="large" color={primaryColor} />
+            ) : (
+              <Button title="Siguiente" onPress={homedestinationHandler} />
             )}
           </View>
-
-          <View style={styles.userInfoContainer}>
-            {linearGradientTitle("Datos de quien recibe")}
-            <View style={styles.userInfoContent}>
-              <TextInput
-                id="contact"
-                label="Nombres y apellidos de quien recibe(*)"
-                keyboardType="default"
-                minLength={5}
-                required
-                autoCapitalize="words"
-                errorText="¡Precaución! Por favor ingresa tu nombre y apellido correctamente."
-                onChange={(value) => setContact(value.nativeEvent.text)}
-                onInputChange={() => { }}
-                value={contact}
-              />
-              <TextInput
-                id="phone"
-                label="Celular (*)"
-                keyboardType="numeric"
-                required
-                minLength={10}
-                maxLength={10}
-                autoCapitalize="none"
-                errorText="¡Precaución! Por favor ingresa un número de celular correcto."
-                onChange={(value) => setPhone(value.nativeEvent.text)}
-                onInputChange={() => { }}
-                value={phone}
-              />
-            </View>
-            <View style={styles.userBoton}>
-              {isLoading ? (
-                <ActivityIndicator size="large" color={primaryColor} />
-              ) : (
-                <Button title="Siguiente" onPress={homedestinationHandler} />
-              )}
-            </View>
-          </View>
-        </ScrollView>
+        </View>
       </View>
-    </KeyboardAvoidingView>
+    </ScrollWrapper>
+
   ) : (
     <View>
       <Text>Cargando...</Text>

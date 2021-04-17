@@ -57,7 +57,7 @@ const AuthScreen = (props) => {
 
   useEffect(() => {
     if (error) {
-      Alert.alert("¡Error en la comunicación intentalo de nuevo!", error, [
+      Alert.alert("¡UPS! algo ha ocurrido.", error, [
         { text: "Está bien" },
       ]);
     }
@@ -82,6 +82,7 @@ const AuthScreen = (props) => {
     const hasPermissions = await verifyPermissions();
     if (!hasPermissions) return hasPermissions;
   };
+
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
       dispatchFormState({
@@ -113,34 +114,53 @@ const AuthScreen = (props) => {
     let passwordError = false;
     const email = formState.inputValues.email;
     const password = formState.inputValues.password;
-    if (isSignUp) {
-      if (password === formState.inputValues.repeatPassword) {
-        action = authActions.signup(email, password);
+    if (email && password) {
+      if (isSignUp) {
+        if (password === formState.inputValues.repeatPassword) {
 
-        nextPage = "Member";
+          action = authActions.signup(email, password);
+          nextPage = "Member";
+        } else {
+          passwordError = true;
+        }
+
+        if (passwordError) {
+          setError(
+            "¡UPS! Las contraseñas no coinciden. Intentalo nuevamente."
+          );
+        } else {
+          const controller = new AbortController();
+          setError(null);
+          setIsLoading(true);
+          try {
+            dispatch(action);
+            controller.abort();
+            props.navigation.navigate(nextPage);
+          } catch (err) {
+            setError(err.message);
+          }
+          setIsLoading(false);
+          controller.abort();
+        }
       } else {
-        passwordError = true;
-      }
-    } else {
-      action = authActions.signin(email, password);
-      nextPage = "Dashboard";
-    }
-    if (!passwordError) {
-      const controller = new AbortController();
-      setError(null);
-      setIsLoading(true);
-      try {
-        dispatch(action);
+        action = authActions.signin(email, password);
+        nextPage = "Dashboard";
+        const controller = new AbortController();
+        setError(null);
+        setIsLoading(true);
+        try {
+          dispatch(action);
+          controller.abort();
+          props.navigation.navigate(nextPage);
+        } catch (err) {
+          setError(err.message);
+        }
+        setIsLoading(false);
         controller.abort();
-        props.navigation.navigate(nextPage);
-      } catch (err) {
-        setError(err.message);
       }
-      setIsLoading(false);
-      controller.abort();
     } else {
       setError(
-        "¡Precaución! Las contraseñas no coinciden. Intentalo nuevamente."
+        "Por favor complete todos los campos"
       );
     }
   };
@@ -171,7 +191,7 @@ const AuthScreen = (props) => {
                   <AntDesign name="user" size={20} color={primaryColor} />
                 }
                 autoCapitalize="none"
-                errorText="¡Precación! Por favor ingresa un correo válido."
+                errorText="Por favor ingresa un correo válido."
                 onInputChange={inputChangeHandler}
                 initialValue=""
               />
@@ -186,7 +206,7 @@ const AuthScreen = (props) => {
                 }
                 minLength={6}
                 autoCapitalize="none"
-                errorText={`¡Precación! Por favor ingresa una contraseña válida. Debe contener mínimo 6 carácteres`}
+                errorText={`Por favor ingresa una contraseña válida. Debe contener mínimo 6 carácteres`}
                 onInputChange={inputChangeHandler}
                 initialValue=""
               />
@@ -202,13 +222,13 @@ const AuthScreen = (props) => {
                   }
                   minLength={6}
                   autoCapitalize="none"
-                  errorText={`¡Precación! Por favor ingresa una contraseña válida. Debe contener mínimo 6 carácteres`}
+                  errorText={`Por favor ingresa una contraseña válida. Debe contener mínimo 6 carácteres`}
                   onInputChange={inputChangeHandler}
                   initialValue=""
                 />
               ) : (
-                  <View />
-                )}
+                <View />
+              )}
             </View>
             <View style={styles.forgotPasswordContainer}>
               <Text style={styles.forgotPassword}>
@@ -219,11 +239,11 @@ const AuthScreen = (props) => {
               {isLoading ? (
                 <ActivityIndicator size="large" color={primaryColor} />
               ) : (
-                  <Button
-                    title={isSignUp ? "Quiero ser socio" : "Ingresar"}
-                    onPress={authHandler}
-                  />
-                )}
+                <Button
+                  title={isSignUp ? "Quiero ser socio" : "Ingresar"}
+                  onPress={authHandler}
+                />
+              )}
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
@@ -231,8 +251,8 @@ const AuthScreen = (props) => {
       <Image style={styles.mainCarga} source={shortMainCargaUrl} />
     </View>
   ) : (
-      props.navigation.navigate("Dashboard")
-    );
+    props.navigation.navigate("Dashboard")
+  );
 };
 
 const styles = StyleSheet.create({

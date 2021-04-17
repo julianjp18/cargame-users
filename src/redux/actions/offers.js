@@ -5,6 +5,7 @@ export const CHANGE_PROFILE_PICTURE = "CHANGE_PROFILE_PICTURE";
 export const ADD_DESTINATION_OFFER = "ADD_DESTINATION_OFFER";
 export const OFFER_SELECTED = "OFFER_SELECTED";
 export const FINAL_TOTAL_PRICE_OFFER = "FINAL_TOTAL_PRICE_OFFER";
+export const SAVE_OFFER_SELECTED = 'SAVE_OFFER_SELECTED';
 
 // definicion base de datos de Ofertas.
 export const createOffer = ({
@@ -22,7 +23,7 @@ export const createOffer = ({
   driverId = null,
   pickUpAddress = null,
   status = 'ACTIVE',
-  offerValue = '',
+  offerValue = 0,
   dateOffered = '',
   typeServiceSelected,
   user,
@@ -132,46 +133,29 @@ export const saveOfferSelected = (offerId) => async dispatch => {
     .doc(offerId)
     .get();
 
-  const {
-    currentCity,
-    destinationCity,
-    timeZone,
-    pickUpDate,
-    offerValue,
-    driverId,
-    typeServiceSelected,
-  } = await data.then((doc) => doc.data());
+  const responseData = await data.then((doc) => doc.data());
 
-  const driverData = firestoreDB
-    .collection("Drivers")
-    .doc(driverId)
-    .get();
+  let responseDriver = {};
+  if (responseData.driverId) {
+    const driverData = firestoreDB
+      .collection("Drivers")
+      .doc(responseData.driverId)
+      .get();
 
-  const {
-    name,
-    phone
-  } = await driverData.then((doc) => doc.data());
+    responseDriver = await driverData.then((doc) => doc.data());
 
-
-  if (currentCity && destinationCity) {
-    dispatch({
-      type: OFFER_SELECTED,
-      offerSelected: {
-        currentCity,
-        destinationCity,
-        timeZone,
-        pickUpDate,
-        offerValue,
-        offerId,
-        driver: {
-          name,
-          phone,
-        },
-        driverId,
-        typeServiceSelected,
-      },
-    });
   }
+
+  dispatch({
+    type: SAVE_OFFER_SELECTED,
+    offerSelected: {
+      ...responseData,
+      driver: {
+        name: responseDriver ? responseDriver.name : '',
+        phone: responseDriver ? responseDriver.phone : '',
+      },
+    },
+  });
 };
 
 export const saveResumeOfferSelected = (offerId) => async dispatch => {
@@ -180,45 +164,24 @@ export const saveResumeOfferSelected = (offerId) => async dispatch => {
     .doc(offerId)
     .get();
 
-  const {
-    currentCity,
-    destinationCity,
-    timeZone,
-    pickUpDate,
-    offerValue,
-    description,
-    driverId,
-    phone,
-    contact,
-    typeServiceSelected,
-  } = await data.then((doc) => doc.data());
+  const responseData = await data.then((doc) => doc.data());
 
   const driverData = firestoreDB
     .collection("Drivers")
-    .doc(driverId)
+    .doc(responseData.driverId)
     .get();
 
   const driver = await driverData.then((doc) => doc.data());
 
-  if (currentCity && destinationCity) {
+  if (responseData.currentCity && responseData.destinationCity) {
     dispatch({
       type: OFFER_SELECTED,
       offerSelected: {
-        currentCity,
-        destinationCity,
-        timeZone,
-        pickUpDate,
-        offerValue,
-        offerId,
-        description,
-        phone,
-        contact,
+        ...responseData,
         driver: {
           name: driver.name,
           phone: driver.phone,
         },
-        driverId,
-        typeServiceSelected,
       },
     });
   }
@@ -242,7 +205,7 @@ export const cancelOffer = (offerId, notificationId) => async dispatch => {
 
   const updateData = firestoreDB.collection('OffersNotificationCenter').doc(offerId).update({
     driverId: '',
-    offerValue: '',
+    offerValue: 0,
     dateOffered: '',
     status: 'ACTIVE',
   });
@@ -252,10 +215,20 @@ export const cancelOffer = (offerId, notificationId) => async dispatch => {
   const notificationIdData = firestoreDB.collection("NotificationsDriver").doc(notificationId).get();
 
   const notificationDriverId = [];
-  await notificationIdData.then((doc) => notificationDriverId.push(doc.id));
+  await notificationIdData.then((doc) => notificationDriverId.push({ id: doc.id, ...doc.data() }));
+
+  firestoreDB
+    .collection('OffersCanceled')
+    .doc()
+    .set({
+      driverId: notificationDriverId[0].driverId,
+      offerId: notificationDriverId[0].offerId,
+      userId: notificationDriverId[0].userId,
+      dateCanceled: moment().format(),
+    });
 
   return firestoreDB.collection("NotificationsDriver")
-    .doc(notificationDriverId[0])
+    .doc(notificationDriverId[0].id)
     .delete().then(() => {
       return true;
     }).catch((error) => {

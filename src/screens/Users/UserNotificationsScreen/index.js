@@ -13,11 +13,12 @@ import UserHeader from "../../../components/UserHeader";
 
 const UserNotificationsScreen = (props) => {
   const dispatch = useDispatch();
+  const { userId } = useSelector(state => state.auth);
   const user = useSelector(state => state.user);
   const [notifications] = useState(useSelector(state => state.notifications.userNotifications));
 
   useEffect(() => {
-    dispatch(userNotificationsActions.showUserNotifications(user.userId));
+
   }, [user]);
 
   getUserInfo().then((data) => {
@@ -34,7 +35,7 @@ const UserNotificationsScreen = (props) => {
       dispatch(offersActions.saveOfferSelected(notification.offerId));
       setTimeout(() => {
         props.navigation.navigate('ShowOffer');
-      }, 2000);
+      }, 1000);
     } catch (err) {
       console.log(err.message);
     }
@@ -52,7 +53,7 @@ const UserNotificationsScreen = (props) => {
     }
   };
 
-  return user.userId && (
+  return userId && (
     <View style={styles.servicesContainer}>
       <UserHeader
         title="Notificaciones"
@@ -64,7 +65,7 @@ const UserNotificationsScreen = (props) => {
           <View style={styles.infoContainer}>
             {notifications.length > 0 && notifications.map((notification) => (
               <ListItem
-                onPress={() => notification.status === 'RESUME' ? showResumeOfferScreen(notification) : showOfferScreen(notification)}
+                onPress={() => notification.notificationStatus === 'RESUME' ? showResumeOfferScreen(notification) : showOfferScreen(notification)}
                 key={`${notification.userId}-${notification.offerId}-${notification.date}`}
                 containerStyle={styles.listContainer}
                 bottomDivider
@@ -78,7 +79,7 @@ const UserNotificationsScreen = (props) => {
                   <ListItem.Title style={styles.titleListItem}>{notification.message}</ListItem.Title>
                   <ListItem.Subtitle>{`${notification.currentCity} - ${notification.destinationCity}`}</ListItem.Subtitle>
                 </ListItem.Content>
-                {notification.status && (
+                {notification.notificationStatus && (
                   <Icon
                     name='angle-right'
                     type='font-awesome'

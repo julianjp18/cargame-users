@@ -2,6 +2,7 @@ import React, { useState, useEffect, useReducer, useCallback } from 'react';
 import {
   StyleSheet, View, Text,
   ActivityIndicator, Alert, ScrollView,
+  Picker,
 } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import * as Network from 'expo-network';
@@ -47,6 +48,7 @@ const RegisterScreen = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [isSelected, setSelection] = useState(false);
+  const [selectedCity, setselectedCity] = useState();
   const dispatch = useDispatch();
   const [userId, setUserId] = useState();
 
@@ -83,32 +85,36 @@ const RegisterScreen = props => {
 
     if (userId && isSelected) {
 
-      const ipAdress = await Network.getIpAddressAsync();
+      if (selectedCity !== 'empty') {
+        const ipAdress = await Network.getIpAddressAsync();
 
-      if (
-        name &&
-        numberId &&
-        phone
-      ) {
-        const action = userActions.createUser({
-          userId,
-          name,
-          numberId,
-          phone,
-          referidNumber: referidNumber ? referidNumber : '',
-          ipAdress,
-        });
-        setError(null);
-        setIsLoading(true);
-        try {
-          dispatch(action);
-          props.navigation.navigate('Dashboard');
-        } catch (err) {
-          setError(err.message);
-          setIsLoading(false);
+        if (
+          name &&
+          numberId &&
+          phone
+        ) {
+          const action = userActions.createUser({
+            userId,
+            name,
+            numberId,
+            phone,
+            referidNumber: referidNumber ? referidNumber : '',
+            ipAdress,
+          });
+          setError(null);
+          setIsLoading(true);
+          try {
+            dispatch(action);
+            props.navigation.navigate('Dashboard');
+          } catch (err) {
+            setError(err.message);
+            setIsLoading(false);
+          }
+        } else {
+          Alert.alert('', 'Por favor completa todos los campos requeridos', error, [{ text: 'Está bien' }]);
         }
       } else {
-        Alert.alert('', 'Por favor completa todos los campos requeridos', error, [{ text: 'Está bien' }]);
+        Alert.alert('', 'Por favor selecciona una ciudad', error, [{ text: 'Está bien' }]);
       }
     } else {
       Alert.alert('', 'Por favor acepta los términos y condiciones', error, [{ text: 'Está bien' }]);
@@ -191,6 +197,15 @@ const RegisterScreen = props => {
                 <FontAwesome name="phone" size={20} color={primaryColor} />
               }
             />
+            <Picker
+              selectedValue={selectedCity}
+              onValueChange={(itemValue, itemIndex) =>
+                setselectedCity(itemValue)
+              }>
+              <Picker.Item label="Selecciona una ciudad" value="empty" />
+              <Picker.Item label="Bogotá D.C." value="Bogotá D.C." />
+              <Picker.Item label="Villavicencio" value="Villavicencio" />
+            </Picker>
             <TextInput
               id="referidNumber"
               label="Número de referido"

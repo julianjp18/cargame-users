@@ -78,9 +78,9 @@ const UserServicesScreen = props => {
           <ScrollView>
             <View style={styles.infoContainer}>
               {tripsInProgress.length > 0 ? tripsInProgress.map((tripInProgress) => (
-                <TouchableOpacity key={`${tripInProgress.offerValue}-${tripInProgress.pickUpDate}-${tripInProgress.destinationCity}`}>
+                <TouchableOpacity key={`${tripInProgress.offerValue}-${tripInProgress.pickUpDate}`}>
                   <ListItem
-                    onPress={() => viewService(tripInProgress)}
+                    onPress={() => viewTravel(tripInProgress)}
                     containerStyle={styles.listContainer}
                     bottomDivider
                   >
@@ -90,10 +90,8 @@ const UserServicesScreen = props => {
                       color={primaryColor}
                     />
                     <ListItem.Content>
-                      <ListItem.Title style={styles.titleListItem}>
-                        <Text style={styles.titleListText}>Destino: {tripInProgress.destinationCity}</Text>
-                        <Text style={styles.titleListText}>{"\n"}Fecha de recogida: {tripInProgress.pickUpDate}</Text>
-                      </ListItem.Title>
+                      <ListItem.Title style={styles.titleListText}>Destino: {tripInProgress.destinationCity}</ListItem.Title>
+                      <ListItem.Subtitle style={styles.titleListText}>Fecha de recogida: {tripInProgress.pickUpDate}</ListItem.Subtitle>
                     </ListItem.Content>
                     <ListItem.Chevron />
                   </ListItem>
@@ -101,52 +99,46 @@ const UserServicesScreen = props => {
               )) : (
                 <View style={styles.notFoundContainer}>
                   <AntDesign name="flag" size={100} color={primaryColor} />
-                  <Text style={styles.notFoundText}>No has realizado Servicios por el momento</Text>
+                  <Text style={styles.notFoundText}>
+                    No has realizado viajes por el momento
+                  </Text>
                 </View>
               )}
             </View>
           </ScrollView>
         ) : (
-            <ScrollView>
-              <View style={styles.infoContainer}>
-                {tripsMade.length > 0 ? tripsMade.map((tripMade) => (
-                  <TouchableOpacity key={`${tripMade.offerValue}-${tripMade.pickupDate}.${tripMade.destinationCity}`}>
-                    <ListItem
-                      onPress={() => viewService(tripMade)}
-                      containerStyle={styles.listContainer}
-                      bottomDivider
-                    >
-                      <Icon
-                        name='bells'
-                        type='antdesign'
-                        color={primaryColor}
-                      />
-                      <ListItem.Content>
-                        <ListItem.Title style={styles.titleListItem}>
-                          <View>
-                            <Text>
-                              Destino: {tripMade.destinationCity}
-                            </Text>
-                            <Text>
-                              Fecha de recogida: {tripMade.pickupDate}
-                            </Text>
-                          </View>
-                        </ListItem.Title>
-                      </ListItem.Content>
-                      <ListItem.Chevron />
-                    </ListItem>
-                  </TouchableOpacity>
-                )) : (
-                  <View style={styles.notFoundContainer}>
-                    <AntDesign name="flag" size={100} color={primaryColor} />
-                    <Text style={styles.notFoundText}>
-                      No has finalizado Servicios por el momento
+          <ScrollView>
+            <View style={styles.infoContainer}>
+              {tripsMade.length > 0 ? tripsMade.map((tripMade) => (
+                <TouchableOpacity key={`${tripMade.offerValue}-${tripMade.pickUpDate}`}>
+                  <ListItem
+                    onPress={() => viewTravel(tripMade)}
+                    containerStyle={styles.listContainer}
+                    bottomDivider
+                  >
+                    <Icon
+                      name='bells'
+                      type='antdesign'
+                      color={primaryColor}
+                    />
+                    <ListItem.Content>
+                      <ListItem.Title style={styles.titleListItem}>Destino: {tripMade.destinationCity}</ListItem.Title>
+                      <ListItem.Subtitle style={styles.subtitleListItem}>Fecha de recogida: {tripMade.pickUpDate}</ListItem.Subtitle>
+                    </ListItem.Content>
+                    <ListItem.Chevron />
+                  </ListItem>
+                </TouchableOpacity>
+              )) : (
+                <View style={styles.notFoundContainer}>
+                  <AntDesign name="flag" size={100} color={primaryColor} />
+                  <Text style={styles.notFoundText}>
+                    No has finalizado viajes por el momento
                     </Text>
-                  </View>
-                )}
-              </View>
-            </ScrollView>
-          )}
+                </View>
+              )}
+            </View>
+          </ScrollView>
+        )}
       </View>
     </View>
   );

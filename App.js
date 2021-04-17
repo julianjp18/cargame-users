@@ -54,7 +54,7 @@ const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 const App = () => {
   const [fontLoaded, setFontLoaded] = useState(false);
 
-  if(!fontLoaded){
+  if (!fontLoaded) {
     return (
       <AppLoading
         startAsync={fecthFonts}
