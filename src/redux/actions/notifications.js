@@ -1,41 +1,83 @@
+
 import { firestoreDB } from '../../constants/Firebase';
 import moment from "moment";
 export const SHOW_NOTIFICATIONS = 'SHOW_NOTIFICATIONS';
 export const SAVE_DESTINATION_NOTIFICATION = 'SAVE_DESTINATION_NOTIFICATION';
 
-const offerData = async (offerId) => {
-  const resOffer = [];
 
-  await firestoreDB
+const refreshNotificationsUserData = async (data, id) => {
+  if (data.offerId != '') {
+    const { currentCity, destinationCity } = await firestoreDB
+      .collection("OffersNotificationCenter")
+      .doc(data.offerId)
+      .get().then((doc) => doc.data());
+
+    if (currentCity && destinationCity) {
+      return {
+        ...data,
+        notificationStatus: data.status,
+        currentCity,
+        destinationCity,
+        id,
+      };
+    }
+
+  } else
+    return {
+      ...data,
+      notificationStatus: data.typeMessage,
+      id,
+    };
+};
+
+const refreshNotificationsConfirmationPayments = async (data, id) => {
+  const { offerId, status, date } = data;
+
+
+  const responseData = await firestoreDB
     .collection("OffersNotificationCenter")
     .doc(offerId)
-    .get().then((doc) => resOffer.push(doc.data()));
+    .get().then((doc) => doc.data());
 
-  return resOffer[0];
+  if (responseData) {
+    return {
+      ...data,
+      notificationStatus: status,
+      offerId,
+      date,
+      id,
+      message: 'Tu pago se encuentra confirmado, mira el resumen de tu servicio',
+    };
+
+  } else {
+    return {};
+  }
 };
 
 export const showUserNotifications = (userId) => async (dispatch) => {
 
   const data = await firestoreDB
     .collection('NotificationsUsers')
-    .get().then((allNotifications) => allNotifications);
+    .where("userId", "==", userId);
 
-  const notificationsData = [];
-  if (data) {
-    data.forEach(async (notification) => {
+  data.onSnapshot(async (notificationsUsers) => {
+    const notificationsData = [];
+    notificationsUsers.forEach(async (notification) => {
+      const responseNotification = notification.data();
       if (
-        notification.data().userId === "0" ||
-        notification.data().userId === userId
+        responseNotification.userId === "0" ||
+        responseNotification.userId === userId
       ) {
-        if (notification.data().offerId != '') {
+        if (responseNotification.offerId != '') {
           const { currentCity, destinationCity } = await firestoreDB
             .collection("OffersNotificationCenter")
-            .doc(notification.data().offerId)
+            .doc(responseNotification.offerId)
             .get().then((doc) => doc.data());
-          console.log(currentCity, destinationCity);
+
           if (currentCity && destinationCity) {
             notificationsData.push({
-              ...notification.data(),
+              ...responseNotification,
+              notificationStatus: responseNotification.status,
               currentCity,
               destinationCity,
               id: notification.id,
@@ -43,26 +85,110 @@ export const showUserNotifications = (userId) => async (dispatch) => {
           }
 
         } else
-          notificationsData.push({ ...notification.data(), id: notification.id });
+          notificationsData.push({
+            ...responseNotification,
+            notificationStatus: responseNotification.status,
+            id: notification.id,
+          });
       }
     });
-  }
 
+    const dataConfirmationPayments = await firestoreDB
+      .collection('ConfirmationPayments')
+      .where("userId", "==", userId)
+      .get().then((allNotifications) => allNotifications);
+
+    if (dataConfirmationPayments) {
+      dataConfirmationPayments.forEach(notification => {
+        const { offerId, status, date } = notification.data();
+
+        var docRef = firestoreDB.collection("OffersNotificationCenter").doc(offerId);
+
+        docRef.get().then((doc) => {
+          if (doc.exists) {
+            notificationsData.push({
+              ...doc.data(),
+              notificationStatus: status,
+              offerId,
+              date,
+              id: notification.id,
+              message: 'Tu pago se encuentra confirmado, mira el resumen de tu servicio',
+              userId,
+            });
+
+          } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+          }
+        }).catch((error) => {
+          console.log("Error getting document:", error);
+        });
+      });
+    }
+
+    dispatch({
+      type: SHOW_NOTIFICATIONS,
+      userNotifications: notificationsData
+    });
+  });
+
+  /*
   const dataConfirmationPayments = await firestoreDB
     .collection('ConfirmationPayments')
-    .where("userId", "==", userId)
-    .get().then((allNotifications) => allNotifications);
+    .where("userId", "==", userId);
 
-  if (dataConfirmationPayments) {
-    dataConfirmationPayments.forEach(notification => {
-      notificationsData.push({ ...notification.data(), id: notification.id, message: 'Tu pago se encuentra confirmado, mira el resumen de tu servicio', userId });
+  dataConfirmationPayments.onSnapshot(async (confirmationPayments) => {
+    const notificationsData = [];
+    confirmationPayments.forEach(notification => {
+      const refresh = refreshNotificationsConfirmationPayments(notification.data(), notification.id);
+      if (refresh) {
+        notificationsData.push(refresh);
+      }
     });
-  }
 
-  dispatch({
-    type: SHOW_NOTIFICATIONS,
-    userNotifications: notificationsData
-  });
+    const data = await firestoreDB
+      .collection('NotificationsUsers')
+      .where("userId", "==", userId)
+      .get().then((allNotifications) => allNotifications);
+
+    if (data) {
+      data.forEach(async (notification) => {
+        const responseNotification = notification.data();
+        if (
+          responseNotification.userId === "0" ||
+          responseNotification.userId === userId
+        ) {
+          if (responseNotification.offerId != '') {
+            const { currentCity, destinationCity } = await firestoreDB
+              .collection("OffersNotificationCenter")
+              .doc(responseNotification.offerId)
+              .get().then((doc) => doc.data());
+
+            if (currentCity && destinationCity) {
+              notificationsData.push({
+                ...responseNotification,
+                notificationStatus: responseNotification.status,
+                currentCity,
+                destinationCity,
+                id: notification.id,
+              });
+            }
+
+          } else
+            notificationsData.push({
+              ...responseNotification,
+              notificationStatus: responseNotification.status,
+              id: notification.id,
+            });
+        }
+      });
+    }
+
+    dispatch({
+      type: SHOW_NOTIFICATIONS,
+      userNotifications: notificationsData
+    });
+  });*/
 };
 
 export const saveNotificationDestinationOffer = async ({

@@ -37,6 +37,7 @@ const LogOutListItem = props => (
 );
 
 const UserProfileScreen = props => {
+  const { userId } = useSelector(state => state.auth);
   const user = useSelector(state => state.user);
   const userEmail = useSelector(state => state.auth.email);
   const [error, setError] = useState();
@@ -63,7 +64,7 @@ const UserProfileScreen = props => {
         const controller = new AbortController();
         setError(null);
         try {
-          await dispatch(userActions.changeProfilePicture(asset.uri, user.userId));
+          await dispatch(userActions.changeProfilePicture(asset.uri, userId));
           const savedImage = await MediaLibrary.saveToLibraryAsync(imagePath);
           controller.abort();
         } catch (err) {
@@ -173,13 +174,13 @@ const UserProfileScreen = props => {
           </View>
         </ScrollView>
       ) : (
-          <View>
-            <View style={styles.activityIndicator}>
-              <ActivityIndicator size="large" />
-            </View>
-            <LogOutListItem dispatch={dispatch} navigation={props.navigation} />
+        <View>
+          <View style={styles.activityIndicator}>
+            <ActivityIndicator size="large" />
           </View>
-        )}
+          <LogOutListItem dispatch={dispatch} navigation={props.navigation} />
+        </View>
+      )}
 
     </View>
   );

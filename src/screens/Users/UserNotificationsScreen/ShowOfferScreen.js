@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useCallback } from "react";
+import React, { useState, useReducer, useCallback, useEffect } from "react";
 import { StyleSheet, Text, View, Alert } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import moment from 'moment';
@@ -51,9 +51,13 @@ const ShowOfferScreen = (props) => {
   const [valueDeclared, setValueDeclared] = useState();
   const user = state.auth;
   const offer = state.offer.offerSelected;
-  const price = Number.parseInt(((13 * offer.offerValue) / 100)) + Number.parseInt(offer.offerValue);
+  const price = offer.offerValue === 0 ? 0 : Number.parseInt(((13 * offer.offerValue) / 100)) + Number.parseInt(offer.offerValue);
   const [priceForMP, setpriceForMP] = useState(price);
   const [totalPriceValue, settotalPriceValue] = useState(currencyFormat(price, 0));
+
+  useEffect(() => {
+    settotalPriceValue(currencyFormat(price, 0));
+  }, []);
 
   const startCheckout = () => {
     if (valueDeclared) {
@@ -101,11 +105,13 @@ const ShowOfferScreen = (props) => {
   });
 
   const totalPrice = (value) => {
-    setValueDeclared(value);
-    const price = (Number.parseInt(13 * Number.parseInt(offer.offerValue)) / 100) + Number.parseInt((10 * value) / 100);
-    const priceWithTax = (Number.parseInt(offer.offerValue) + price);
-    setpriceForMP(priceWithTax);
-    settotalPriceValue(currencyFormat(priceWithTax, 0));
+    if (offer.offerValue !== 0) {
+      setValueDeclared(value);
+      const price = (Number.parseInt(13 * Number.parseInt(offer.offerValue)) / 100) + Number.parseInt((10 * value) / 100);
+      const priceWithTax = (Number.parseInt(offer.offerValue) + price);
+      setpriceForMP(priceWithTax);
+      settotalPriceValue(currencyFormat(priceWithTax, 0));
+    }
   };
 
   return (
@@ -127,7 +133,7 @@ const ShowOfferScreen = (props) => {
                   <Text style={styles.serviceTitle}>Tu servicio:</Text>
                 </View>
                 <View style={styles.col2ServiceTitle}>
-                  <Text style={styles.servicePrice}>{totalPriceValue}</Text>
+                  <Text style={styles.servicePrice}>{totalPriceValue !== '$' ? totalPriceValue : '$ 0'}</Text>
                 </View>
               </View>
             </View>
@@ -151,91 +157,103 @@ const ShowOfferScreen = (props) => {
                 </Text>
               </View>
             </View>
-            <View style={styles.valueDeclaredContainer}>
-              <View style={styles.valueDeclaredInputContent}>
-                <TextInput
-                  id="valueDeclared"
-                  label="Valor declarado (*)"
-                  keyboardType="numeric"
-                  required
-                  min={0}
-                  max={1000000}
-                  minLength={1}
-                  maxLength={10}
-                  autoCapitalize="none"
-                  errorText="¡UPS! Por favor ingresa un valor mayor a 0 y menor que 1.000.000"
-                  onInputChange={inputChangeHandler}
-                  initialValue=""
-                  leftIcon={
-                    <FontAwesome name="dollar" size={20} color={primaryColor} />
-                  }
-                />
-              </View>
-            </View>
-            <View style={styles.discountCodeContainer}>
+            {(offer.offerValue !== '' && offer.offerValue !== 0) ? (
+              <>
+                <View style={styles.valueDeclaredContainer}>
+                  <View style={styles.valueDeclaredInputContent}>
+                    <TextInput
+                      id="valueDeclared"
+                      label="Valor declarado (*)"
+                      keyboardType="numeric"
+                      required
+                      min={0}
+                      max={1000000}
+                      minLength={1}
+                      maxLength={10}
+                      autoCapitalize="none"
+                      errorText="¡UPS! Por favor ingresa un valor mayor a 0 y menor que 1.000.000"
+                      onInputChange={inputChangeHandler}
+                      initialValue=""
+                      leftIcon={
+                        <FontAwesome name="dollar" size={20} color={primaryColor} />
+                      }
+                    />
+                  </View>
+                </View>
 
-            </View>
-            <View style={styles.subtotalsContainer}>
-              <View style={styles.rowSubtotals}>
-                <View style={styles.col1Subtotals}>
-                  <Text style={styles.subtotalsText}>Subtotal: </Text>
+                <View style={styles.discountCodeContainer}>
+
                 </View>
-                <View style={styles.col2Subtotals}>
-                  <Text style={styles.subtotalsNumber}>
-                    {currencyFormat(price, 0)}
-                  </Text>
+                <View style={styles.subtotalsContainer}>
+                  <View style={styles.rowSubtotals}>
+                    <View style={styles.col1Subtotals}>
+                      <Text style={styles.subtotalsText}>Subtotal: </Text>
+                    </View>
+                    <View style={styles.col2Subtotals}>
+                      <Text style={styles.subtotalsNumber}>
+                        {currencyFormat(price, 0)}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.row}>
+                    <View style={styles.col1Subtotals}>
+                      <Text style={styles.subtotalsText}>% Valor declarado: </Text>
+                    </View>
+                    <View style={styles.col2Subtotals}>
+                      <Text style={styles.subtotalsNumber}>
+                        {currencyFormat((10 * formState.inputValues.valueDeclared) / 100, 0)}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.row}>
+                    <View style={styles.col1Subtotals}>
+                      <Text style={styles.subtotalsText}>Código promo: </Text>
+                    </View>
+                    <View style={styles.col2Subtotals}>
+                      <Text style={styles.subtotalsNumber}>{0}</Text>
+                    </View>
+                  </View>
+                </View>
+                <View style={styles.totalContainer}>
+                  <View style={styles.row}>
+                    <View style={styles.col1}>
+                      <Text style={styles.totalTitle}>VALOR A PAGAR:</Text>
+                    </View>
+                    <View style={styles.col2}>
+                      <Text style={styles.totalPrice}>
+                        {totalPriceValue}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+                <View style={styles.buttonsContainer}>
+                  <View style={styles.row}>
+                    <View style={styles.col1}>
+                      <Button
+                        title='Declinar'
+                        colorOne={'white'}
+                        colorTwo={'white'}
+                        fontColor={primaryColor}
+                        onPress={() => declineOffer()}
+                      />
+                    </View>
+                    <View style={styles.col2}>
+                      <Button
+                        title='Hacer el pago'
+                        onPress={startCheckout}
+                      />
+                    </View>
+                  </View>
+                </View>
+
+              </>
+            ) : (
+              <View style={styles.valueDeclaredContainer}>
+                <View style={styles.valueDeclaredInputContent}>
+                  <Text style={styles.notAssignedOfferText}>Oferta no asignada a conductor</Text>
                 </View>
               </View>
-              <View style={styles.row}>
-                <View style={styles.col1Subtotals}>
-                  <Text style={styles.subtotalsText}>% Valor declarado: </Text>
-                </View>
-                <View style={styles.col2Subtotals}>
-                  <Text style={styles.subtotalsNumber}>
-                    {currencyFormat((10 * formState.inputValues.valueDeclared) / 100, 0)}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.row}>
-                <View style={styles.col1Subtotals}>
-                  <Text style={styles.subtotalsText}>Código promo: </Text>
-                </View>
-                <View style={styles.col2Subtotals}>
-                  <Text style={styles.subtotalsNumber}>{0}</Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.totalContainer}>
-              <View style={styles.row}>
-                <View style={styles.col1}>
-                  <Text style={styles.totalTitle}>VALOR A PAGAR:</Text>
-                </View>
-                <View style={styles.col2}>
-                  <Text style={styles.totalPrice}>
-                    {totalPriceValue}
-                  </Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.buttonsContainer}>
-              <View style={styles.row}>
-                <View style={styles.col1}>
-                  <Button
-                    title='Declinar'
-                    colorOne={'white'}
-                    colorTwo={'white'}
-                    fontColor={primaryColor}
-                    onPress={() => declineOffer()}
-                  />
-                </View>
-                <View style={styles.col2}>
-                  <Button
-                    title='Hacer el pago'
-                    onPress={startCheckout}
-                  />
-                </View>
-              </View>
-            </View>
+            )}
           </ScrollView>
         </View>
       )}
@@ -322,6 +340,12 @@ const styles = StyleSheet.create({
     paddingLeft: normalizeLength(60),
     paddingRight: normalizeLength(30),
     paddingBottom: normalizeLength(20)
+  },
+  notAssignedOfferText: {
+    paddingTop: normalizeLength(10),
+    paddingBottom: normalizeLength(20),
+    fontWeight: 'bold',
+    color: primaryColor
   },
   totalContainer: {
     backgroundColor: '#FED043',
