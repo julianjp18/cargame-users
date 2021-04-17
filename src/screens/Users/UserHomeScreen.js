@@ -10,7 +10,6 @@ import {
   Platform,
   ActivityIndicator,
   Alert,
-  Picker,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -19,6 +18,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
 import moment from "moment";
 import WelcomeDescription from '../../components/WelcomeDescription';
+import Picker from '../../components/UI/Picker';
 
 import TextInput from "../../components/UI/Input";
 import Button from "../../components/UI/Button";
@@ -71,7 +71,7 @@ const UserHomeScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const dispatch = useDispatch();
-  const [timezone, setTimezone] = useState("manana");
+  const [timezone, setTimezone] = useState("morning");
   moment.locale('es');
   const [date, setDate] = useState(new Date());
   const [mode] = useState("date");
@@ -162,16 +162,15 @@ const UserHomeScreen = (props) => {
 
         <View style={styles.arriveDateContainer}>
           <Text style={styles.label}>Franja horaria</Text>
+
           <Picker
-            id="timezone"
-            selectedValue={timezone}
-            style={styles.TravelContent}
-            onValueChange={(itemValue) => setTimezone(itemValue)}
-          >
-            <Picker.Item label="Mañana" value="morning" />
-            <Picker.Item label="Tarde" value="evening" />
-            <Picker.Item label="Noche" value="night" />
-          </Picker>
+            pickerValues={[
+              { title: 'Mañana', value: 'morning' },
+              { title: 'Tarde', value: 'evening' },
+              { title: 'Noche', value: 'night' }
+            ]}
+            value={timezone}
+            onChange={setTimezone}/>
 
           {linearGradientTitle("Fecha de recogida")}
           <Text onPress={showDatePickerModal} style={styles.dateTravelContent}>

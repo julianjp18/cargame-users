@@ -17,7 +17,7 @@ const ScrollWrapper = ({ style, children }) => {
     return (
         <View style={styles.containerContent}>
             <KeyboardAvoidingView behavior={behavior} keyboardVerticalOffset={30}>
-                <ScrollView style={style}>
+                <ScrollView style={{ ...styles.containerContent, ...(style || {}) }} >
                     {children}
                 </ScrollView>
             </KeyboardAvoidingView>
