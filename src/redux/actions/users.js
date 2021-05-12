@@ -15,6 +15,15 @@ export const createUser = ({
   ipAdress,
   city,
 }) => {
+  console.log(
+    userId,
+    name,
+    numberId,
+    phone,
+    referidNumber = '',
+    ipAdress,
+    city,
+  );
   return async dispatch => {
     firestoreDB
       .collection('Users')

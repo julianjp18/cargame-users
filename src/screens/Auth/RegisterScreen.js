@@ -100,7 +100,9 @@ const RegisterScreen = props => {
             phone,
             referidNumber: referidNumber ? referidNumber : '',
             ipAdress,
+            city: selectedCity,
           });
+
           setError(null);
           setIsLoading(true);
           try {
