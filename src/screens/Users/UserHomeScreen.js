@@ -83,13 +83,20 @@ const UserHomeScreen = (props) => {
   const [contact, setContact] = useState('');
   const [phone, setPhone] = useState('');
 
-  getUserInfo().then((data) => {
-    const userInfo = JSON.parse(data);
-    if (!userInfo.idToken || !userId) {
-      dispatch(authActions.logout());
-      props.navigation.navigate('Index');
-    }
-  });
+  useEffect(() => {
+    const validUser = async () => {
+      await getUserInfo().then((data) => {
+        const userInfo = JSON.parse(data);
+
+        if (!userInfo.idToken) {
+          dispatch(authActions.logout());
+          props.navigation.navigate('Index');
+        }
+      });
+    };
+
+    validUser();
+  }, []);
 
   useEffect(() => {
     if (error) {
@@ -171,7 +178,7 @@ const UserHomeScreen = (props) => {
               { title: 'Noche', value: 'night' }
             ]}
             value={timezone}
-            onChange={setTimezone}/>
+            onChange={setTimezone} />
 
           {linearGradientTitle("Fecha de recogida")}
           <Text onPress={showDatePickerModal} style={styles.dateTravelContent}>

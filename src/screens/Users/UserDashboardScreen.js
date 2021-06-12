@@ -82,13 +82,20 @@ const UserDashboardScreen = (props) => {
     }
   }, [userId]);
 
-  getUserInfo().then((data) => {
-    const userInfo = JSON.parse(data);
-    if (!userInfo.idToken) {
-      dispatch(authActions.logout());
-      props.navigation.navigate('Index');
-    }
-  });
+  useEffect(() => {
+    const validUser = async () => {
+      await getUserInfo().then((data) => {
+        const userInfo = JSON.parse(data);
+
+        if (!userInfo.idToken) {
+          dispatch(authActions.logout());
+          props.navigation.navigate('Index');
+        }
+      });
+    };
+
+    validUser();
+  }, []);
 
   return (
     <View style={styles.servicesContainer}>
